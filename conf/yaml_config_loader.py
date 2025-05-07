@@ -1,6 +1,6 @@
 import yaml
 from yaml import CLoader
-from utilityx.conf.file_config_loader import FileConfigLoader
+from conf.file_config_loader import FileConfigLoader
 
 
 class YamlConfigLoader(FileConfigLoader):

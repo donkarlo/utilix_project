@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 from typing import Union
-from utilityx.osx.os_path import OsPath
+from osx.os_path import OsPath
 
 
 class FileConfigLoader(ABC):
