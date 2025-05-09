@@ -1,5 +1,5 @@
-from datax.format.Format import Format
-from datax.type.Type import Type
+from data.format.Format import Format
+from data.type.Type import Type
 
 
 class Data():
