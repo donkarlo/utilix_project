@@ -1,6 +1,0 @@
-conf
-data
-osx
-python
-seqs
-test

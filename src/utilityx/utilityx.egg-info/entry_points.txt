@@ -1,2 +1,0 @@
-[console_scripts]
-boot = utilityx.__main__:main
