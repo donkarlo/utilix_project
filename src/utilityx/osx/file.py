@@ -1,4 +1,3 @@
 class File:
-    def __init__(self,path:str, config:str):
-        self._config = config
+    def __init__(self,path:str):
         self._path = path

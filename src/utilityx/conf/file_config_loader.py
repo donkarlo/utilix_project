@@ -26,6 +26,7 @@ class FileConfigLoader(ABC):
         #init
         self._props = None
         self._do_init_props()
+
     @abstractmethod
     def _do_init_props(self):
         pass

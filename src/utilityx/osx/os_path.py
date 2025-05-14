@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 class OsPath:
     def __init__(self, raw_path:str):
@@ -8,6 +9,9 @@ class OsPath:
         '''
         self.__raw_path = raw_path
         self._native_os_path = None
+
+        # Lazy loadings
+        self._all_abs_file_paths_rec = None
 
     def get_native_os_path(self) -> str:
         '''
@@ -44,6 +48,10 @@ class OsPath:
         '''
         return os.path.isdir(self.get_native_os_path())
 
-if __name__ == '__main__':
-    path = OsPath('H://docs//git\\text.txt')
-    print(path.get_native_os_path())
+    def get_all_abs_file_paths_rec(self):
+        if self._all_abs_file_paths_rec is None:
+            root = Path(self.get_native_os_path())
+            all_files_and_folders_rec = list(root.rglob("*"))  # includes files and folders
+            self._all_abs_file_paths_rec = [f for f in all_files_and_folders_rec if f.is_file()]  # only files
+        return self._all_abs_file_paths_rec
+

@@ -1,6 +1,6 @@
 from utilityx.data.access import Access
-from utilityx.data.format.Format import Format
-from utilityx.data.type import Type
+from utilityx.data.format.format import Format
+from utilityx.data.type import type
 
 
 class DataSource:
