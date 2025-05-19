@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
 
+from sympy import Union
+
+
 class OsPath:
     def __init__(self, raw_path:str):
         '''
@@ -48,7 +51,11 @@ class OsPath:
         '''
         return os.path.isdir(self.get_native_os_path())
 
-    def get_all_abs_file_paths_rec(self):
+    def get_real_file_type(self, path_to_file_type:Union[str, 'OsPath']) -> bool:
+
+        pass
+
+    def get_all_abs_file_paths_rec(self)->list:
         if self._all_abs_file_paths_rec is None:
             root = Path(self.get_native_os_path())
             all_files_and_folders_rec = list(root.rglob("*"))  # includes files and folders
