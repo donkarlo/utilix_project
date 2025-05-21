@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
-
-from sympy import Union
+from typing import Union
 
 
 class OsPath:
