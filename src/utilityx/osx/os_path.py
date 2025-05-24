@@ -50,7 +50,7 @@ class OsPath:
         '''
         return os.path.isdir(self.get_native_os_path())
 
-    def get_real_file_type(self, path_to_file_type:Union[str, 'OsPath']) -> bool:
+    def get_real_file_type_regardless_of_extension(self, path_to_file_type:Union[str, 'OsPath']) -> bool:
 
         pass
 
