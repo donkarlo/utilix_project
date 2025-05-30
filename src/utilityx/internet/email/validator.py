@@ -1,7 +1,6 @@
 import string
 from typing import Union
-
-from sportradar.entity.email.email import Email
+from utilityx.internet.email.email import Email
 
 
 class Validator:
@@ -10,10 +9,10 @@ class Validator:
 
         if isinstance(input_email, str):
             self._email = Email(input_email)
-        elif isinstance(input_email, "Email"):
+        elif isinstance(input_email, Email):
             self._email = input_email
         else:
-            raise TypeError("Invalid type. Either str or Email is expected")
+            raise TypeError("Invalid type. Either string or Email is expected")
 
         #lazy loading
         self._validity = None
@@ -32,9 +31,9 @@ class Validator:
 
     def _has_allowed_symbols(self)->bool:
         allowed = set(string.ascii_lowercase + string.digits + '.-_')
-        parts:dict = self._email._get_parts()
+        parts:dict = self._email.get_parts()
         for part_value in parts.values():
-            if not set(parts[part_value]) <= allowed:
+            if not set(part_value) <= allowed:
                 return False
         return True
 

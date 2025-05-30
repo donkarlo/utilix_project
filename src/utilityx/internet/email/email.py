@@ -1,7 +1,15 @@
 from typing import Union
 
 class Email:
+    '''
+    This class responisbility is to hold the structure of an email
+    '''
     def __init__(self, input_email: str):
+        '''
+
+        Args:
+            input_email:str
+        '''
         self._input_email = input_email
         self._refined = None
 

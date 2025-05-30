@@ -11,3 +11,8 @@ boot = "utilityx.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --tb=short --strict-markers"
+
+testpaths = ["tests"]

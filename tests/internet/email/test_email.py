@@ -1,10 +1,6 @@
 import pytest
 from utilityx.internet.email.email import Email
 
-# @pytest.fixture
-# def get_sample_email():
-#     return Email("mohammad.rahmani.xyz@gmail.com")
-
 
 class TestEmail:
     def test_get_id_and_domain_for_valid_email(self):
@@ -18,7 +14,7 @@ class TestEmail:
 
     def test_get_id_domain_consistency(self):
         email = Email("a.b@x.y")
-        assert email.get_id() == "a. b"
+        assert email.get_id() == "a.b"
         assert email.get_domain() == "x.y"
 
     def test__get_parts_structure(self):
