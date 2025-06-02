@@ -1,15 +1,15 @@
 import string
 from typing import Union
-from utilityx.internet.email.email import Email
+from utilityx.internet.email.email_address import EmailAddress
 
 
-class Validator:
-    def __init__(self, input_email:Union[str, Email]):
+class EmailAddressValidator:
+    def __init__(self, input_email:Union[str, EmailAddress]):
         self._input_email = input_email
 
         if isinstance(input_email, str):
-            self._email = Email(input_email)
-        elif isinstance(input_email, Email):
+            self._email = EmailAddress(input_email)
+        elif isinstance(input_email, EmailAddress):
             self._email = input_email
         else:
             raise TypeError("Invalid type. Either string or Email is expected")

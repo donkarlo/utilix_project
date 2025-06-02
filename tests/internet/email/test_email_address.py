@@ -1,24 +1,36 @@
 import pytest
-from utilityx.internet.email.email import Email
+from utilityx.internet.email.email_address import EmailAddress
 
 
-class TestEmail:
+class TestEmailAddress:
+
+    @pytest.mark.parametrize(
+        "input_email",
+        [
+            1, (1,3), {"email":1},
+        ]
+    )
+    def test___init__(self, input_email:str):
+        with pytest.raises(TypeError) as exc_info:
+            EmailAddress(input_email)  # Passing int should raise TypeError
+        assert isinstance(exc_info.value, TypeError)
+
     def test_get_id_and_domain_for_valid_email(self):
-        email = Email("mohammad.rahmani.xyz@gmail.com")
+        email = EmailAddress("mohammad.rahmani.xyz@gmail.com")
         assert email.get_id() == "mohammad.rahmani.xyz"
         assert email.get_domain() == "gmail.com"
 
     def test_refinement_lowers_case(self):
-        email = Email("UPPER.CASE@DOMAIN.COM")
+        email = EmailAddress("UPPER.CASE@DOMAIN.COM")
         assert email.get_refined() == "upper.case@domain.com"
 
     def test_get_id_domain_consistency(self):
-        email = Email("a.b@x.y")
+        email = EmailAddress("a.b@x.y")
         assert email.get_id() == "a.b"
         assert email.get_domain() == "x.y"
 
     def test__get_parts_structure(self):
-        email = Email("foo@bar.com")
+        email = EmailAddress("foo@bar.com")
         parts = email.get_parts()
         assert parts == {"id": "foo", "domain": "bar.com"}
 
@@ -32,7 +44,7 @@ class TestEmail:
         ]
     )
     def test_parsing_multiple_emails(self, input_email, expected_id, expected_domain):
-        email = Email(input_email)
+        email = EmailAddress(input_email)
         assert email.get_id() == expected_id
         assert email.get_domain() == expected_domain
 
@@ -46,5 +58,5 @@ class TestEmail:
         ]
     )
     def test_get_parts(self, input_email, expected_parts:dict):
-        email = Email(input_email)
+        email = EmailAddress(input_email)
         assert email.get_parts() == expected_parts

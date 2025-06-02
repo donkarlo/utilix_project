@@ -10,6 +10,9 @@ class Email:
         Args:
             input_email:str
         '''
+        if not isinstance(input_email, str):
+            raise TypeError("Invalid type. As an email string is expected")
+
         self._input_email = input_email
         self._refined = None
 
@@ -20,7 +23,11 @@ class Email:
         self._set_parts()  # separate method, sets values
 
     def get_refined(self) -> str:
-        '''Lowercases the input email string.'''
+        '''
+
+        Returns: str
+
+        '''
         if self._refined is None:
             self._refined = self._input_email.lower()
         return self._refined
