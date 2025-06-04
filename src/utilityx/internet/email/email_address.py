@@ -1,6 +1,7 @@
 from typing import Union
+from beartype import beartype
 
-class Email:
+class EmailAddress:
     '''
     This class responisbility is to hold the structure of an email
     '''

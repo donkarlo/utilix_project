@@ -1,9 +1,11 @@
 import string
 from typing import Union
+from abc import ABC,abstractmethod
+
 from utilityx.internet.email.email_address import EmailAddress
+from beartype import beartype
 
-
-class EmailAddressValidator:
+class EmailAddressValidator(ABC):
     def __init__(self, input_email:Union[str, EmailAddress]):
         self._input_email = input_email
 
@@ -18,10 +20,15 @@ class EmailAddressValidator:
         self._validity = None
         self._error_msgs:list[str] = []
 
+    @abstractmethod
+    def _do_get_validity(self)->bool:
+        pass
+
     def get_validity(self)->bool:
         if self._validity is None:
             self._validity = self._has_two_parts()
             self._validity &= self._has_allowed_symbols()
+            self._validity &= self._do_get_validity()
         return self._validity
 
     def _has_two_parts(self)->bool:
@@ -29,11 +36,12 @@ class EmailAddressValidator:
             return True
         return False
 
-    def _has_allowed_symbols(self)->bool:
-        allowed = set(string.ascii_lowercase + string.digits + '.-_')
-        parts:dict = self._email.get_parts()
+    def _has_allowed_symbols(self) -> bool:
+        parts = self._email.get_parts()
+        if parts is None:
+            return False
         for part_value in parts.values():
-            if not set(part_value) <= allowed:
+            if not part_value.isascii():
                 return False
         return True
 

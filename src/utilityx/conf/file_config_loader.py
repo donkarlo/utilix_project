@@ -1,6 +1,7 @@
 from abc import ABC,abstractmethod
-from typing import Union
+from typing import Union, Any
 from utilityx.osx.os_path import OsPath
+from collections.abc import Hashable
 
 
 class FileConfigLoader(ABC):
@@ -78,3 +79,22 @@ class FileConfigLoader(ABC):
         :return:
         '''
         return self._props[key]
+
+    def __setitem__(self, key:Hashable, value)->None:
+        '''
+
+        Args:
+            key:
+            value:
+
+        Returns: None
+
+        '''
+        self._props[key] = value
+
+    def __iter__(self)->Any:
+        '''
+
+        Returns:
+        '''
+        return iter(self._props)

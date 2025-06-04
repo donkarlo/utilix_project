@@ -7,10 +7,20 @@ class TestEmailAddress:
     @pytest.mark.parametrize(
         "input_email",
         [
-            1, (1,3), {"email":1},
+            1,
+            (1,3),
+            {"email":1},
         ]
     )
     def test___init__(self, input_email:str):
+        '''
+        for all param values TypeError must be caught
+        Args:
+            input_email:
+
+        Returns:
+
+        '''
         with pytest.raises(TypeError) as exc_info:
             EmailAddress(input_email)  # Passing int should raise TypeError
         assert isinstance(exc_info.value, TypeError)
@@ -57,6 +67,17 @@ class TestEmailAddress:
             ("user.test", None)
         ]
     )
-    def test_get_parts(self, input_email, expected_parts:dict):
+    def test_get_parts(self, input_email, expected_parts:dict[str, str]):
+        '''
+
+        Args:
+            input_email(str): input email
+            expected_parts(dict):
+                - 'id' (str): the user part of the email
+                - 'domain' (str): the domain part of the email
+
+        Returns:
+
+        '''
         email = EmailAddress(input_email)
         assert email.get_parts() == expected_parts
