@@ -5,5 +5,5 @@ class Terminal(View):
     def __init__(self):
         pass
 
-    def get_one_input_with_hint_message(self, hint_message:str):
+    def ask_input_with_hint_message(self, hint_message:str):
         return input(hint_message)
