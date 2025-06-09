@@ -2,9 +2,10 @@ from abc import ABC,abstractmethod
 from typing import Union, Any
 from utilityx.osx.os_path import OsPath
 from collections.abc import Hashable
+from utilityx.data.source import Source
 
 
-class FileConfigLoader(ABC):
+class Conf(ABC):
     '''
        This is to load configs files. Currently it works only for yaml files
        @todo: does the path exists?
@@ -14,15 +15,15 @@ class FileConfigLoader(ABC):
     def __new__(cls, *args, **kwargs):
         '''Defines how __init__ should behave'''
         if cls._instance is None:
-            cls._instance = super(FileConfigLoader,cls).__new__(cls)
+            cls._instance = super(Conf, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self, os_path:OsPath):
+    def __init__(self, source:Union[OsPath, Source, str]):
         '''
         to load the configs
-        :param os_path:
+        :param source:
         '''
-        self._os_path = os_path
+        self._source = source
 
         #init
         self._props = None
@@ -60,8 +61,8 @@ class FileConfigLoader(ABC):
         '''
         return self._props
 
-    def get_os_path(self)->OsPath:
-        return self._os_path
+    def get_source(self)->OsPath:
+        return self._source
 
     def __call__(self, key:Union[list, str]=None):
         '''
