@@ -1,6 +1,4 @@
-from typing import Sequence
-
-
 class Seqx:
-    def __init__(self, seq:Sequence[Any,...]):
-        pass
+    def __init__(self, seq):
+        self._seq = seq
+

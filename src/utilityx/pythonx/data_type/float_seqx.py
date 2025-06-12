@@ -1,6 +1,6 @@
-from utilityx.pythonx.data_type.seqx import Seqx
+from utilityx.pythonx.data_type.number_seqx import NumberSeq
 
 
-class Seqx(Seqx):
+class Seqx(NumberSeq):
     def __init__(self, seq:Sequence[float,...]):
         super().__init__(seq)
