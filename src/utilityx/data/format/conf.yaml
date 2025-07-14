@@ -1,0 +1,4 @@
+format:
+  text: 0
+  image: 1
+  yaml: 2
