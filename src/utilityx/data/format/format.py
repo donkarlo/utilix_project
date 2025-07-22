@@ -1,3 +1,4 @@
 class Format:
-    def __init__(self, id:int):
-        self._id = id
+    def __init__(self, id:int, content:str):
+        self.__id = id
+        self._content = content

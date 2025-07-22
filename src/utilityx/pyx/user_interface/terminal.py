@@ -1,4 +1,4 @@
-from utilityx.pythonx.user_interface.view import View
+from utilityx.pyx.user_interface.view import View
 
 class Terminal(View):
 

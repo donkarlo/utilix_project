@@ -1,8 +1,8 @@
 from abc import ABC,abstractmethod
 from typing import Union, Any
-from utilityx.osx.os_path import OsPath
+from utilityx.osx.filesys.os_path import OsPath
 from collections.abc import Hashable
-from utilityx.data.source import Source
+from utilityx.data.source.source import Source
 
 
 class Conf(ABC):

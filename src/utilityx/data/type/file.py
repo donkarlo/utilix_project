@@ -4,9 +4,8 @@ from utilityx.osx.filesys.os_path import OsPath
 
 
 class File(Type):
-    def __init__(self, path:OsPath, format:Format):
+    def __init__(self, path:OsPath):
         self._os_path = path
-        self._format = format
 
     def get_os_path(self)->OsPath:
         return self._os_path

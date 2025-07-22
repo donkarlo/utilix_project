@@ -1,8 +1,8 @@
 from abc import abstractmethod, ABC
 
-from utilityx.data.access import Access
-from utilityx.data.format.format import SupportingFormat
-from utilityx.data.type.type import SupportingType
+from utilityx.data.access.access import Access
+from utilityx.data.format.supporting_format import SupportingFormat
+from utilityx.data.type.supporting_type import SupportingType
 
 
 class Source:
