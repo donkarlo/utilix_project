@@ -16,6 +16,10 @@ class Source:
     def get_str_content(self)->str:
         pass
 
+    @abstractmethod
+    def add_and_save_content(self, content:Union[str])->bool:
+        pass
+
     def get_type(self)->int:
         return self._type
 
