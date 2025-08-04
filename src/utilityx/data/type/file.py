@@ -1,5 +1,4 @@
-from utilityx.data.format.format import Format
-from utilityx.data.type.type import Type
+from utilityx.data.type import Type
 from utilityx.osx.filesys.os_path import OsPath
 
 

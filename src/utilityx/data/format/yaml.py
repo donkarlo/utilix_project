@@ -1,7 +1,7 @@
 from ruamel.yaml import CommentedMap
 from ruamel.yaml import YAML
 from io import StringIO
-from utilityx.data.format.format import Format
+from utilityx.data.format import Format
 from utilityx.data.format.supporting_format import SupportingFormat
 
 
