@@ -22,7 +22,7 @@ def main():
             print(f"📁 REPOSITORY: {entry}")
             print("=" * 60)
 
-            choice = input("    → Press [Enter] to continue, 's' to skip, or type a custom commit message: ").strip()
+            choice = input("    → Press [Enter] to continue, 's' to skip, or storage a custom commit message: ").strip()
             if choice.lower() == 's':
                 print("    → Skipped.")
                 continue

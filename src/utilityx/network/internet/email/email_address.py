@@ -12,7 +12,7 @@ class EmailAddress:
             input_email:str
         '''
         if not isinstance(input_email, str):
-            raise TypeError("Invalid type. As an email string is expected")
+            raise TypeError("Invalid storage. As an email string is expected")
 
         self._input_email = input_email
         self._refined = None

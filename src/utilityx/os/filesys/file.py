@@ -1,6 +1,6 @@
-from utilityx.osx.filesys.format.supporting_format import Formats
+from utilityx.os.filesys.format.supporting_format import Formats
 
-from utilityx.osx.filesys.os_path import OsPath
+from utilityx.os.filesys.os_path import OsPath
 
 
 class File:

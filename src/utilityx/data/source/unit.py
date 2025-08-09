@@ -8,9 +8,10 @@ class Unit(ABC):
         pass
 
     @abstractmethod
-    def translate_from_string_to_unit_structure(self)->Unit:
+    def translate_from_string_to_unit_structure(self, content:str)->Unit:
         pass
 
     @abstractmethod
     def get_string(self):
-        pass_none()
+        """converts to  string"""
+        pass

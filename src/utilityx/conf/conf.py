@@ -1,8 +1,8 @@
 from abc import ABC,abstractmethod
 from typing import Union, Any
-from utilityx.osx.filesys.os_path import OsPath
+from utilityx.os.filesys.os_path import OsPath
 from collections.abc import Hashable
-from utilityx.data.source import Source
+from utilityx.data.source.interface import SourceDecorator
 
 
 class Conf(ABC):
@@ -15,10 +15,11 @@ class Conf(ABC):
     def __new__(cls, *args, **kwargs):
         '''Defines how __init__ should behave'''
         if cls._instance is None:
-            cls._instance = super(Conf, cls).__new__(cls)
+            #Go so high in hierarchy until you reach a class that has __new__ method overriden. in this case ABC doesnt have __new__ overriden so it calls objecy class __new__ method
+            cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, source:Union[OsPath, Source, str]):
+    def __init__(self, source:Union[OsPath, SourceDecorator, str]):
         '''
         to load the configs
         :param source:
@@ -65,20 +66,26 @@ class Conf(ABC):
         return self._source
 
     def __call__(self, key:Union[list, str]=None):
-        '''
-        :param key: if the key is none then all _props are returned, if it is a flat list then the related subtree is returned if it is str then the first level node is returned
-        :return:
-        '''
+        """
+        Args:
+            key: if the key is none then all _props are returned, if it is a flat list then the related subtree is returned if it is str then the first level node is returned
+
+        Returns:
+
+        """
         if isinstance(key,None):
             return self._props
         elif isinstance(key,str):
             return self.get_prop(key)
 
     def __getitem__(self, key):
-        '''
-        :param key:
-        :return:
-        '''
+        """
+        Args:
+            key:
+
+        Returns:
+
+        """
         return self._props[key]
 
     def __setitem__(self, key:Hashable, value)->None:

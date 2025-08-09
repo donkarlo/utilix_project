@@ -1,5 +1,5 @@
-from utilityx.data.type import Type
-from utilityx.osx.filesys.os_path import OsPath
+from utilityx.data.storage import Type
+from utilityx.os.filesys.os_path import OsPath
 
 
 class File(Type):

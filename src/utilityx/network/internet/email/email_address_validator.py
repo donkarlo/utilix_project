@@ -1,8 +1,7 @@
-import string
 from typing import Union
 from abc import ABC,abstractmethod
 
-from utilityx.internet.email.email_address import EmailAddress
+from utilityx.network.internet.email.email_address import EmailAddress
 from beartype import beartype
 
 class EmailAddressValidator(ABC):
@@ -14,7 +13,7 @@ class EmailAddressValidator(ABC):
         elif isinstance(input_email, EmailAddress):
             self._email = input_email
         else:
-            raise TypeError("Invalid type. Either string or Email is expected")
+            raise TypeError("Invalid storage. Either string or Email is expected")
 
         #lazy loading
         self._validity = None

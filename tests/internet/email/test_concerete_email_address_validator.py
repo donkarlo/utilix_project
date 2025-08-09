@@ -1,5 +1,5 @@
 import pytest
-from utilityx.internet.email.concrete_email_address_validator import ConcereteEmailAddressValidator
+from utilityx.network.internet.email.concrete_email_address_validator import ConcereteEmailAddressValidator
 class TestConcereteEmailAddressValidator:
     @pytest.mark.parametrize(
         "input_email",

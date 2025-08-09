@@ -6,7 +6,7 @@ from typing import Union
 class OsPath:
     def __init__(self, raw_path:str):
         '''
-        I don't care about osx, I fix the path and I give native OS path, just call get_native_os_path()
+        I don't care about os, I fix the path and I give native OS path, just call get_native_os_path()
         :param raw_path:str
         '''
         self.__raw_path = raw_path
@@ -18,7 +18,7 @@ class OsPath:
     def get_native_os_path(self) -> str:
         '''
         It removes the trailing slashes in case they are folders
-        Converts / or \ to native osx paths
+        Converts / or \ to native os paths
         :return:
         '''
         if self._native_os_path is None:

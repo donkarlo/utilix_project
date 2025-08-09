@@ -1,5 +1,5 @@
 import pytest
-from utilityx.internet.email.email_address import EmailAddress
+from utilityx.network.internet.email.email_address import EmailAddress
 
 
 class TestEmailAddress:
