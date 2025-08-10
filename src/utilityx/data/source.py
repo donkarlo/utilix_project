@@ -30,4 +30,12 @@ class Source(Interface):
         return self._access
 
     def add_to_content(self, content:str)->bool:
+        """
+        Adds at the end of content only
+        Args:
+            content:
+
+        Returns:
+
+        """
         self._content += content

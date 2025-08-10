@@ -1,4 +1,15 @@
-class Format:
-    def __init__(self, id:int, content:str):
+from abc import abstractmethod, ABC
+
+
+class Format(ABC):
+    def __init__(self, id:int):
+        """
+        Responsible to hold the format, maybe in future how to interprete a block of string data
+        Args:
+            id:
+        """
         self.__id = id
-        self._content = content
+
+    @abstractmethod
+    def get_modeled(self, content:str):
+        pass

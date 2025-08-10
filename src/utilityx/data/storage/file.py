@@ -1,8 +1,8 @@
-from utilityx.data.storage import Type
+from utilityx.data.storage import Storage
 from utilityx.os.filesys.os_path import OsPath
 
 
-class File(Type):
+class File(Storage):
     def __init__(self, path:OsPath):
         self._os_path = path
 
