@@ -1,5 +1,4 @@
-from aix.data.data_source import DataSource
-
+from abc import abstractmethod
 from utilityx.data.source import Source
 
 
@@ -9,10 +8,9 @@ class Partial(Decorator):
     """
     def __init__(self, inner:Source):
         super().__init__(inner)
-        pass
 
     @abstractmethod
-    def add_content_at(self, index:int)->bool:
+    def add_to_memory_content_at(self, index:int, content:str)->bool:
         pass
 
     @abstractmethod

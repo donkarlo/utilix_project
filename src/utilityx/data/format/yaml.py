@@ -6,7 +6,7 @@ from utilityx.data.format.supporting_format import SupportingFormat
 
 
 class Yaml(Format):
-    def __init__(self, content:[CommentedMap]):
+    def __init__(self, content:CommentedMap):
         content = self._get_str_content(content)
         super().__init__(SupportingFormat.YAML, content)
 

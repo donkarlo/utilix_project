@@ -4,24 +4,23 @@ from utilityx.data.storage.format import SupportingFormat
 from utilityx.data.source.interface import Interface
 
 class Source(Interface):
-    def __init__(self, type:SupportingType, format:SupportingFormat, access:Access):
-        self._type = type
+    def __init__(self, storage:SupportingType, format:SupportingFormat):
+        self._storage = storage
         self._format = format
-        self._access = access
 
         # from source to python variable
-        self._content = None
+        self._memory_content = None
 
-
-    def load_content(self) -> str:
+    @abstractmethod
+    def load_to_memory_content(self) -> str:
         pass
 
-    def save_content(self) -> bool:
-        print("Saving:", self._content)
+    def save_memory_content(self) -> bool:
+        print("Saving:", self._memory_content)
         return True
 
     def get_type(self)->SupportingType:
-        return self._type
+        return self._storage
 
     def get_format(self)->SupportingFormat:
         return self._format
@@ -29,13 +28,16 @@ class Source(Interface):
     def get_access(self)->Access:
         return self._access
 
-    def add_to_content(self, content:str)->bool:
+    def add_to_memory_content(self, memory_content:str)->bool:
         """
         Adds at the end of content only
         Args:
-            content:
+            memory_content:
 
         Returns:
 
         """
-        self._content += content
+        self._memory_content += memory_content
+
+    def add_to_storage_content(self,):
+        pass

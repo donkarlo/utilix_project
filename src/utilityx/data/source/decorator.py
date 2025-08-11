@@ -16,7 +16,7 @@ class SourceDecorator(Source):
 
     def save_content(self)->bool:
         """
-        saves self._content
+        saves self._memory_content
         No validity check will be performed here. Just the given string will be added
         Returns: success
         """
