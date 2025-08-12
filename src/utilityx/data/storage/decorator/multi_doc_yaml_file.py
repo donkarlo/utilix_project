@@ -1,16 +1,16 @@
 from typing import Iterator
 
-from utilityx.data.format.supporting_format import SupportingFormat
+from utilityx.data.unit.supporting_format import SupportingFormat
 from utilityx.data.source.interface import SourceDecorator
 from utilityx.data.storage.file import File
 from utilityx.data.storage.supporting_storage import SupportingStorage
-from utilityx.data.source.decorator import Decorator
+from utilityx.data.storage.decorator import Decorator
 
 from utilityx.data.source import Source
-from utilityx.data.source.decorator.partial import Partial
+from utilityx.data.storage.decorator import Partial
 
-from utilityx.data.source.decorator.united import United
-from utilityx.os.filesys.os_path import OsPath
+from utilityx.data.storage.decorator import United
+from utilityx.os.filesys import OsPath
 from ruamel.yaml import YAML, CommentedMap
 
 

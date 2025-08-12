@@ -1,4 +1,4 @@
-from utilityx.data.source.decorator.multi_doc_yaml_file import MultiDocYamlFile
+from utilityx.data.storage.decorator import MultiDocYamlFile
 
 
 class Factory:

@@ -1,11 +1,11 @@
 from ruamel.yaml import CommentedMap
 from ruamel.yaml import YAML
 from io import StringIO
-from utilityx.data.format import Format
-from utilityx.data.format.supporting_format import SupportingFormat
+from utilityx.data.unit import Unit
+from utilityx.data.unit.supporting_format import SupportingFormat
 
 
-class Yaml(Format):
+class Yaml(Unit):
     def __init__(self, content:CommentedMap):
         content = self._get_str_content(content)
         super().__init__(SupportingFormat.YAML, content)

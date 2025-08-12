@@ -1,14 +1,15 @@
-from utilityx.data.format.supporting_format import SupportingFormat
-from utilityx.data.source.interface import Source
+from utilityx.data.unit.supporting_format import SupportingFormat
+
+from src.utilityx.data.storage import Storage
 
 
-class SourceDecorator(Source):
-    def __init__(self, inner: Source):
+class Decorator(Storage):
+    def __init__(self, inner: Storage):
         """
         Args:
             inner: The inner object to be decorated
         """
-        self._inner:Source = inner
+        self._inner:Storage = inner
 
     def load_content(self)->str:
         """to set self._loaded_str_content"""
@@ -16,7 +17,7 @@ class SourceDecorator(Source):
 
     def save_content(self)->bool:
         """
-        saves self._memory_content
+        saves self._cache
         No validity check will be performed here. Just the given string will be added
         Returns: success
         """

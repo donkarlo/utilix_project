@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 from typing import Union, Any
-from utilityx.os.filesys.os_path import OsPath
+from utilityx.os.filesys import OsPath
 from collections.abc import Hashable
 from utilityx.data.source.interface import SourceDecorator
 

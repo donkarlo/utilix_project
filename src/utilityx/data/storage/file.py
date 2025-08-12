@@ -1,5 +1,5 @@
 from utilityx.data.storage import Storage
-from utilityx.os.filesys.os_path import OsPath
+from utilityx.os.filesys import OsPath
 
 
 class File(Storage):

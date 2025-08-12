@@ -1,13 +1,11 @@
-from utilityx.data.source.interface import SourceDecorator, Source
-from utilityx.data.source.decorator.partial import Partial
-from utilityx.data.source.unit import Unit
+from src.utilityx.data.storage import Storage
 
 
 class United(Decorator):
     """
     A kind of source full of simillar  units such as a multi doc yaml file
     """
-    def __init__(self, inner:Source):
+    def __init__(self, inner:Storage):
         super().__init__(inner)
         self._units = []
 
