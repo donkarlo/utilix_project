@@ -7,15 +7,9 @@ class interface(ABC):
     """
 
     @abstractmethod
-    def load_cache(self) -> str:
-        """to set self._cache"""
+    def load_to_ram_memory(self) -> str:
         pass
 
     @abstractmethod
-    def save_cache(self) -> bool:
-        """
-        saves self._cache
-        No validity check will be performed here. Just the given string will be added
-        Returns: success
-        """
+    def _do_save_ram_memory_to_storage(self):
         pass

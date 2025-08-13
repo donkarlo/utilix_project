@@ -1,7 +1,10 @@
 from enum import Enum
 
 
-class ModificationSet(Enum):
+class RoleSet(Enum):
+    """
+
+    """
     READ = 0
     WRITE = 1
     DELETE = 2 # delete what? a whole storage? A whole file?

@@ -1,6 +1,6 @@
 from abc import ABC,abstractmethod
 from typing import Union, Any
-from utilityx.os.filesys import OsPath
+from utilityx.os.path import Path
 from collections.abc import Hashable
 from utilityx.data.source.interface import SourceDecorator
 
@@ -19,7 +19,7 @@ class Conf(ABC):
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, source:Union[OsPath, SourceDecorator, str]):
+    def __init__(self, source:Union[Path, SourceDecorator, str]):
         '''
         to load the configs
         :param source:
@@ -62,7 +62,7 @@ class Conf(ABC):
         '''
         return self._props
 
-    def get_source(self)->OsPath:
+    def get_source(self)->Path:
         return self._source
 
     def __call__(self, key:Union[list, str]=None):

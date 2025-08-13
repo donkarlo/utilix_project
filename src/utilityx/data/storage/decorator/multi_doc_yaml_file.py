@@ -1,6 +1,6 @@
 from typing import Iterator
 
-from utilityx.data.unit.supporting_format import SupportingFormat
+from utilityx.data.type.supporting_format import SupportingFormat
 from utilityx.data.source.interface import SourceDecorator
 from utilityx.data.storage.file import File
 from utilityx.data.storage.supporting_storage import SupportingStorage
@@ -10,14 +10,14 @@ from utilityx.data.source import Source
 from utilityx.data.storage.decorator import Partial
 
 from utilityx.data.storage.decorator import United
-from utilityx.os.filesys import OsPath
+from utilityx.os.path import Path
 from ruamel.yaml import YAML, CommentedMap
 
 
-class MultiDocYamlFile(Decorator):
+class MultiDocYamlFile:
 
 
-    def __init__(self, inner:Source, file:File):
+    def __init__(self, inner:Source):
         super().__init__(inner)
         self._file = file
         self._yaml = YAML()
@@ -32,11 +32,3 @@ class MultiDocYamlFile(Decorator):
     def add_doc(self, doc:str)->bool:
         #@TODO: check if doc is a valid yaml sytring for an independent document
         pass
-
-if __name__ == "__main__":
-    file = File(OsPath("/home/donkarlo/Dropbox/projs/research/data/self-aware-drones/ctumrs/two-drones/normal-scenario/uav1-gps-lidar-uav2-gps-lidar.yaml"))
-    path = MultiDocYamlFile(file)
-    tpl = next(path.fetch_next_with_counter())
-
-    source = Source()
-    print(type(tpl[1]))

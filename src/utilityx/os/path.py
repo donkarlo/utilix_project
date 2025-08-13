@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import Union
 
 
-class OsPath:
+class Path:
+    """"""
     def __init__(self, raw_path:str):
         '''
         I don't care about os, I fix the path and I give native OS path, just call get_native_os_path()
@@ -50,7 +51,7 @@ class OsPath:
         '''
         return os.path.isdir(self.get_native_os_path())
 
-    def get_real_file_type_regardless_of_extension(self, path_to_file_type:Union[str, 'OsPath']) -> bool:
+    def get_real_file_type_regardless_of_extension(self, path_to_file_type:Union[str, 'Path']) -> bool:
 
         pass
 

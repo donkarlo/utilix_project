@@ -1,42 +1,26 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABC
 
 from utilityx.data.storage.access import Access
 
 
-class Storage:
+class Storage(ABC):
     """
-    Only discess the where the source is and how to unlock it
+    An storage is for saving active_memory in a storage such as file and load it into active_memory
+    cache can be regarded as active memory. The RAM
+    - it is still abstract because we will work with file , DB etc
+
     """
     def __init__(self, access:Access):
         self._access = access
 
+
         # from source to python variable
-        self._cache = None
+        self._ram_memory:str = None
 
-    @abstractmethod
-    def load_to_cache(self) -> str:
-        pass
+    def set_ram_memory(self, content:str):
+        self._ram_memory = content
 
-    @abstractmethod
-    def save_cache(self) -> bool:
-        pass
-
-    def get_type(self) -> SupportingType:
-        return self._storage
-
-    def get_format(self) -> SupportingFormat:
-        return self._format
-
-    def get_access(self) -> Access:
-        return self._access
-
-    def add_to_cache(self, additional_cache_content: str) -> bool:
-        """
-        Adds at the end of content only
-        Args:
-            additional_cache_content:
-
-        Returns:
-
-        """
-        self._cache += additional_cache_content
+    def save_ram_memory_to_storage(self, clean_ram_memory:bool):
+        self._do_save_ram_memory_to_storage()
+        if clean_ram_memory == True:
+            self._ram_memory = None

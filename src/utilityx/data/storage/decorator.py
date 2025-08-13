@@ -1,4 +1,4 @@
-from utilityx.data.unit.supporting_format import SupportingFormat
+from utilityx.data.type.supporting_format import SupportingFormat
 
 from src.utilityx.data.storage import Storage
 
@@ -17,7 +17,7 @@ class Decorator(Storage):
 
     def save_content(self)->bool:
         """
-        saves self._cache
+        saves self._ram_memory
         No validity check will be performed here. Just the given string will be added
         Returns: success
         """
