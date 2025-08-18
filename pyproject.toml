@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64"]
+requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,12 +7,31 @@ name = "utilityx"
 version = "1.0.0"
 dependencies = [
   "ruamel.yaml>=0.17.40,<0.18",
-  # optional but faster on CPython:
+  # optional but faster on CPython < 3.13:
   "ruamel.yaml.clib>=0.2.7; python_version<'3.13' and platform_python_implementation=='CPython'",
 ]
 
+# for development environment: pip install -e .[dev]
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.10",
+  "build>=1.2.1",     # convenience: lets you run `python -m build`
+]
+
+[tool.mypy]
+python_version = "3.13"
+disallow_untyped_defs = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+strict_equality = true
+ignore_missing_imports = true
+
 [project.scripts]
 boot = "utilityx.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}     # explicit src-layout
 
 [tool.setuptools.packages.find]
 where = ["src"]

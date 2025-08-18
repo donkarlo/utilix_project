@@ -16,7 +16,7 @@ class Path:
         # Lazy loadings
         self._all_abs_file_paths_rec = None
 
-    def get_native_os_path(self) -> str:
+    def get_native_path(self) -> str:
         '''
         It removes the trailing slashes in case they are folders
         Converts / or \ to native os paths
@@ -26,15 +26,15 @@ class Path:
             self._native_os_path = os.path.normpath(self.__raw_path)
         return self._native_os_path
 
-    def get_abs_path(self)->str:
+    def get_native_absolute_path(self)->str:
         '''get absolute path'''
-        return os.path.abspath(self.get_native_os_path())
+        return os.path.abspath(self.get_native_path())
 
     def get_native_os_path_with_trailing_slash(self) -> str:
         '''
         :return: str
         '''
-        native_path:str = self.get_native_os_path()
+        native_path:str = self.get_native_path()
         if self.is_dir():
             return native_path+os.sep
         return native_path
@@ -43,13 +43,13 @@ class Path:
         '''
         :return:
         '''
-        return os.path.isfile(self.get_native_os_path())
+        return os.path.isfile(self.get_native_path())
 
     def is_dir(self)->bool:
         '''
         :return:
         '''
-        return os.path.isdir(self.get_native_os_path())
+        return os.path.isdir(self.get_native_path())
 
     def get_real_file_type_regardless_of_extension(self, path_to_file_type:Union[str, 'Path']) -> bool:
 
@@ -57,7 +57,7 @@ class Path:
 
     def get_all_abs_file_paths_rec(self)->list:
         if self._all_abs_file_paths_rec is None:
-            root = Path(self.get_native_os_path())
+            root = Path(self.get_native_path())
             all_files_and_folders_rec = list(root.rglob("*"))  # includes files and folders
             self._all_abs_file_paths_rec = [f for f in all_files_and_folders_rec if f.is_file()]  # only files
         return self._all_abs_file_paths_rec

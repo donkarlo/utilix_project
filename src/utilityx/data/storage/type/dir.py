@@ -1,6 +1,6 @@
-from utilityx.data.storage import Storage
+from utilityx.data.storage.basic import Basic
 
 
-class Dir(Storage):
+class Dir(Basic):
     def __init__(self,path:Union[str, OsPath]):
         self._path = path

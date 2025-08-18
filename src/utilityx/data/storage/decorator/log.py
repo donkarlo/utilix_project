@@ -1,4 +1,4 @@
-from src.utilityx.data.storage.decorator import Decorator
+from utilityx.data.storage.basic import Decorator
 
 
 class Log(Decorator):

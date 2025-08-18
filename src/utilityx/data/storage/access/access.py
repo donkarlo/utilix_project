@@ -1,4 +1,4 @@
-from utilityx.data.storage.security.modification_set import ModificationSet
+from utilityx.data.storage.access.modification.modification import ModificationSet
 
 
 class Access:

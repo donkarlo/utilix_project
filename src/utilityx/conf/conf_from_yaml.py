@@ -8,6 +8,6 @@ class ConfFromYaml(Conf):
         '''
         Returns:
         '''
-        file_path = self.get_source().get_native_os_path()
+        file_path = self.get_source().get_native_path()
         with open(file_path, "r") as file:
             self._props:dict = yaml.load(file, Loader=CLoader)

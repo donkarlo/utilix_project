@@ -1,6 +1,4 @@
-from typing import Iterable
-
-from utilityx.data.storage.access.modification import RoleSet
+from utilityx.data.storage.basic import RoleSet
 
 
 class Modification:

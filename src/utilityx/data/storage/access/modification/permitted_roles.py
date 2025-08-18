@@ -1,5 +1,4 @@
-from utilityx.data.storage import Storage
-from utilityx.data.storage.access.modification.role_set import RoleSet
+from utilityx.data.storage.basic import RoleSet
 
 
 class PermittedRoles:

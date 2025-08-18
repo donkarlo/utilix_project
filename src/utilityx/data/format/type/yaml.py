@@ -4,11 +4,11 @@ from ruamel.yaml.parser import ParserError
 from ruamel.yaml.scanner import ScannerError
 from ruamel.yaml.constructor import ConstructorError
 from io import StringIO
-from utilityx.data.type import Type
-from utilityx.data.type.supporting_format import SupportingFormat
+from utilityx.data.format.format import Format
+from utilityx.data.format.format import SupportingFormat
 
 
-class Yaml(Type):
+class Yaml(Format):
     """
     This is just to represent single yaml, for multiple a composite zis needed
     """
