@@ -1,12 +1,23 @@
+from abc import abstractmethod, ABC
+from utilityx.data.format.value.value import Value
+
 class Value(ABC):
-    """All values must be either a subclass of this or raw string"""
+    """
+    All values must be either a subclass of this or raw string
+    - For example CommentedMap from yaml is a value
+    """
     def __init__(self):
         self._keys_values:dict= None
+        #everything must be convertable to a string
         self._string_value = None
 
     @abstractmethod
     def __str__(self) -> str:
         """Return a string representation of the object."""
+        pass
+
+    @abstractmethod
+    def __eq__(self, other:Value)->bool:
         pass
 
     def get_keys_values(self)->dict:

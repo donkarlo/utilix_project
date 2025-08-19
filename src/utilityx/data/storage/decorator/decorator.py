@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, override
+
+from utilityx.data.storage.access.access import Access
 from utilityx.data.storage.decorator.decorator import Decorator as StorageDecorator
 
 
@@ -24,6 +26,22 @@ class Decorator(StorageInterface):
     @override
     def save(self) -> bool:
         return self._inner.save()
+
+    @override
+    def set_ram(self,content:str)->None:
+        self._inner.ram = content
+
+    @override
+    def add_to_ram(self, content:str) -> None:
+        self._inner.ram = self._inner.ram + content
+
+    @override
+    def earase_storage(self) -> bool:
+        self._inner.earase_storage()
+
+    @override
+    def earase_ram(self) -> bool:
+        self._inner.ram = None
 
     def __getattr__(self, name: str) -> Any:
         """

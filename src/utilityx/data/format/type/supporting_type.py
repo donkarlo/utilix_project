@@ -1,8 +1,9 @@
 from enum import IntEnum
 from typing import Union
 from functools import cache
+from utilityx.data.format.type.supporting_type import SupportingType
 
-class SupportingFormat(IntEnum):
+class SupportingType(IntEnum):
     """
     To infom mostly factories what class is needed
     """
@@ -11,7 +12,7 @@ class SupportingFormat(IntEnum):
     YAML = 2
 
     @classmethod
-    def is_supporting_format(cls, format: Union[int, str, "SupportingFormat"]) -> bool:
+    def is_supporting_type(cls, format: Union[int, str, SupportingFormat]) -> bool:
         if isinstance(format, int):
             #Formats.is_supporting_format(1)
             return format in cls._value2member_map_
@@ -26,10 +27,10 @@ class SupportingFormat(IntEnum):
     @staticmethod
     @cache
     def get_all_as_str_int_tuple() -> tuple[tuple[str, int], ...]:
-        return tuple((member.name, member.value) for member in SupportingFormat)
+        return tuple((member.name, member.value) for member in SupportingType)
 
     @staticmethod
     @cache
     def get_all_as_str_tuple() -> tuple[str, ...]:
-        return tuple(member.name for member in SupportingFormat)
+        return tuple(member.name for member in SupportingType)
       # ('FILE', 'DIR', 'DB')

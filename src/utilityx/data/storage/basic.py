@@ -11,15 +11,21 @@ class Basic(StorageInterface):
 
     """
     def __init__(self, access:Access):
-        self._access = access
+        self.access = access
         # from source to python variable
-        self._ram: str = None
+        self.ram: str = None
+
+    def get_ram(self)->str:
+        return self.ram
+
+    def get_access(self)->Access:
+        return self.access
 
     def set_ram(self, content:str):
-        self._ram = content
+        self.ram = content
 
     def add_to_ram(self, content:str):
-        self._ram += content
+        self.ram += content
 
     def earase_ram(self):
-        self._ram = None
+        self.ram = None

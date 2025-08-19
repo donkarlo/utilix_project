@@ -1,42 +1,120 @@
 from enum import IntEnum
-from typing import Union
 from functools import cache
+from typing import Protocol, Any, TypeVar, Callable
 
-from utilityx.data.storage.basic import Basic
+from utilityx.data.storage.basic import Basic  # base class (assumed)
 
 
 class StaticFactory(IntEnum):
-    """
-    This class might be only useful in factory methods
-    @TODO write the static factory later
-    """
     FILE = 0
-    DIR = 1
-    DB = 2
-
-    @staticmethod
-    def get_storage(name: str) -> Union[Basic, None]:
+    DIR  = 1
+    DB   = 2
 
 
-    @classmethod
-    def is_supporting_type(cls, type: Union[int, str, "StaticFactory"]) -> bool:
-        if isinstance(type, int):
-            #Types.is_supporting_type(1)
-            return type in cls._value2member_map_
-        if isinstance(type, str):
-            #Types.is_supporting_type("file")
-            return type.upper() in cls.__members__
-        if isinstance(type, cls):
-            #Types.is_supporting_type(Types.DB)
-            return True
-        return False
+# Storage builder protocol and registry
+TStorage = TypeVar("TStorage", bound=Basic)
 
-    @staticmethod
-    @cache
-    def get_all_as_str_int_tuple() -> tuple[tuple[str, int], ...]:
-        return tuple((member.name, member.value) for member in StaticFactory)
+class StorageBuilder(Protocol):
+    def __call__(self, *args: Any, **kwargs: Any) -> TStorage: ...
 
-    @staticmethod
-    @cache
-    def get_all_as_str_tuple() -> tuple[str, ...]:
-        return tuple(member.name for member in StaticFactory)
+
+_REGISTRY: dict[StaticFactory, StorageBuilder] = {}
+
+
+def register_factory(kind: StaticFactory) -> Callable[[StorageBuilder], StorageBuilder]:
+    """Decorator to register a builder function for a specific kind."""
+    def _wrap(fn: StorageBuilder) -> StorageBuilder:
+        _REGISTRY[kind] = fn
+        return fn
+    return _wrap
+
+
+# Default builders
+@register_factory(StaticFactory.FILE)
+def _build_file(path: str, **kwargs: Any) -> Basic:
+    """
+    Example:
+        get_storage(StaticFactory.FILE, "/tmp/data.bin", mode="rw")
+    """
+    from utilityx.data.storage.type import File
+    return File(path=path, **kwargs)
+
+
+@register_factory(StaticFactory.DIR)
+def _build_dir(path: str, **kwargs: Any) -> Basic:
+    """
+    Example:
+        get_storage("dir", "/var/data", create_if_missing=True)
+    """
+    from utilityx.data.storage.type import Dir
+    return Dir(path=path, **kwargs)
+
+
+@register_factory(StaticFactory.DB)
+def _build_db(conn: str, **kwargs: Any) -> Basic:
+    """
+    Example:
+        get_storage(StaticFactory.DB, "postgresql://user:pass@host/db", pool_size=10)
+    """
+    from utilityx.data.storage.type import Db
+    return Db(conn=conn, **kwargs)
+
+
+# Public API
+def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -> Basic:
+    """
+    Flexible factory that dispatches to type-specific builders.
+
+    Examples:
+        f = get_storage(StaticFactory.FILE, "/tmp/a.bin")
+        d = get_storage("dir", "/data", create_if_missing=True)
+        db = get_storage(StaticFactory.DB, "sqlite:///x.db", timeout=5)
+
+    The required arguments are defined by each registered builder:
+    - FILE, DIR: expect `path: str`
+    - DB: expects `conn: str`
+    """
+    member = _coerce(kind)
+    if member is None:
+        raise ValueError(f"Unsupported kind: {kind!r}")
+
+    builder = _REGISTRY.get(member)
+    if builder is None:
+        raise RuntimeError(f"No builder registered for kind: {member.name}")
+
+    try:
+        return builder(*args, **kwargs)
+    except TypeError as e:
+        # Clear error if arguments do not match the builder signature
+        raise TypeError(f"{member.name} builder argument mismatch: {e}") from e
+
+
+def is_supporting_type(kind: int | str | StaticFactory) -> bool:
+    return _coerce(kind) is not None
+
+
+@cache
+def get_all_as_str_int_tuple() -> tuple[tuple[str, int], ...]:
+    return tuple((m.name, m.value) for m in StaticFactory)
+
+
+@cache
+def get_all_as_str_tuple() -> tuple[str, ...]:
+    return tuple(m.name for m in StaticFactory)
+
+
+def _coerce(kind: int | str | StaticFactory) -> StaticFactory | None:
+    """Map int/str/enum to StaticFactory, rejecting bool (bool is a subclass of int)."""
+    if isinstance(kind, StaticFactory):
+        return kind
+    if isinstance(kind, int) and not isinstance(kind, bool):
+        try:
+            return StaticFactory(kind)
+        except ValueError:
+            return None
+    if isinstance(kind, str):
+        try:
+            return StaticFactory[kind.upper()]
+        except KeyError:
+            return None
+    return None

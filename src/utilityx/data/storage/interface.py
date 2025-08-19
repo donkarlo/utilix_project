@@ -7,7 +7,7 @@ class Interface(ABC):
         """
 
     @abstractmethod
-    def load(self) -> str:
+    def load(self) -> None:
         """
         Loadsfrom storage to RAM
         Returns:
@@ -16,15 +16,29 @@ class Interface(ABC):
         pass
 
     @abstractmethod
-    def save(self)->bool:
+    def save(self)->None:
         """saves what is inside ram into the storage"""
         pass
 
     @abstractmethod
-    def earase(self)->bool:
+    def earase_storage(self)->None:
         """
         earase the value of the storage and not the storage i.e. not the file or DB etc
         Returns:
 
         """
         pass
+
+    @abstractmethod
+    def earase_ram(self) -> None:
+        pass
+
+    @abstractmethod
+    def set_ram(self)->None:
+        pass
+
+    @abstractmethod
+    def add_to_ram(self)->None:
+        pass
+
+

@@ -5,7 +5,6 @@ from ruamel.yaml.scanner import ScannerError
 from ruamel.yaml.constructor import ConstructorError
 from io import StringIO
 from utilityx.data.format.format import Format
-from utilityx.data.format.format import SupportingFormat
 
 
 class Yaml(Format):
@@ -13,19 +12,19 @@ class Yaml(Format):
     This is just to represent single yaml, for multiple a composite zis needed
     """
 
-    def set_string_content_from_commented_map(self, content:CommentedMap)->str:
-        yaml = YAML()
-        yaml.explicit_start = True  # optional
-        yaml.default_flow_style = False  # for multi-line readability
-        stream = StringIO()
-        yaml.dump(content, stream)
-        self._content = stream.getvalue()
+    def validate(self, value:str)->bool:
+        """
+        
+        Args:
+            value: 
 
-    def validate(self, string_content:str)->bool:
+        Returns:
+
+        """
         yaml = YAML(typ="safe")
         yaml.allow_duplicate_keys = False
         try:
-            docs = list(yaml.load_all(string_content))
+            docs = list(yaml.load_all(value))
         except (ParserError, ScannerError, ConstructorError):
             return False
         return (
