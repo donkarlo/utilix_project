@@ -2,8 +2,8 @@ from typing import Union
 
 from beartype import beartype
 
-from utilityx.network.internet.email.email_address_validator import EmailAddressValidator
-from utilityx.network.internet.email.email_address import EmailAddress
+from utilityx.net.internet.email.email_address_validator import EmailAddressValidator
+from utilityx.net.internet.email.email_address import EmailAddress
 
 
 class ConcereteEmailAddressValidator(EmailAddressValidator):

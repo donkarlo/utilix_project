@@ -3,15 +3,16 @@ from typing import Any, override
 
 from utilityx.data.storage.access.access import Access
 from utilityx.data.storage.decorator.decorator import Decorator as StorageDecorator
+from utilityx.data.storage.interface import Interface
 
 
-class Decorator(StorageInterface):
+class Decorator(Interface):
     """
     Base storage decorator that forwards to an inner StorageInterface.
     """
     __slots__ = ("_inner",)
 
-    def __init__(self, inner: StorageInterface) -> None:
+    def __init__(self, inner: Interface) -> None:
         """
         .__inner is either the most basic object, in this case data.storage.basic.Basic or a decorator
         Args:

@@ -1,7 +1,7 @@
 from typing import Union
 from abc import ABC,abstractmethod
 
-from utilityx.network.internet.email.email_address import EmailAddress
+from utilityx.net.internet.email.email_address import EmailAddress
 from beartype import beartype
 
 class EmailAddressValidator(ABC):

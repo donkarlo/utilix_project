@@ -37,7 +37,7 @@ class Conf(ABC):
     def get_prop(self, key:Union[list, str]):
         '''
         get just one property
-        :param key: can be a str or a list ['level1','level2',...] in first case this method retrns
+        :param key: can be a str or a muti ['level1','level2',...] in first case this method retrns
         self._props[str] and in the second case self._props['level1']['level2']...
         :return:
         '''
@@ -68,7 +68,7 @@ class Conf(ABC):
     def __call__(self, key:Union[list, str]=None):
         """
         Args:
-            key: if the key is none then all _props are returned, if it is a flat list then the related subtree is returned if it is str then the first level node is returned
+            key: if the key is none then all _props are returned, if it is a flat muti then the related subtree is returned if it is str then the first level node is returned
 
         Returns:
 

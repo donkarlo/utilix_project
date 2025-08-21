@@ -1,8 +1,8 @@
 from typing import Union
-from utilityx.network.internet.email.email_address import EmailAddress
+from utilityx.net.internet.email.email_address import EmailAddress
 from beartype import beartype
 
-from utilityx.network.internet.email.email_status import EmailStatus
+from utilityx.net.internet.email.email_status import EmailStatus
 
 
 class Email:

@@ -1,7 +1,7 @@
-from utilityx.network.internet.email.email_address import EmailAddress
+from utilityx.net.internet.email.email_address import EmailAddress
 from beartype import beartype
 
-from utilityx.network.internet.email.email import Email
+from utilityx.net.internet.email.email import Email
 
 
 class Inbox:

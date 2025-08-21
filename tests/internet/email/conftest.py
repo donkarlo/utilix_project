@@ -1,6 +1,6 @@
 import pytest
 
-from utilityx.network.internet.email.concrete_email_address_validator import ConcereteEmailAddressValidator
+from utilityx.net.internet.email.concrete_email_address_validator import ConcereteEmailAddressValidator
 
 
 @pytest.fixture
