@@ -1,18 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import Any, override
-
-from utilityx.data.storage.access.access import Access
-from utilityx.data.storage.decorator.decorator import Decorator as StorageDecorator
-from utilityx.data.storage.interface import Interface
+from utilityx.data.storage.interface import Interface as StorageInterface
 
 
-class Decorator(Interface):
+class Decorator(StorageInterface):
     """
     Base storage decorator that forwards to an inner StorageInterface.
     """
     __slots__ = ("_inner",)
 
-    def __init__(self, inner: Interface) -> None:
+    def __init__(self, inner: StorageInterface) -> None:
         """
         .__inner is either the most basic object, in this case data.storage.basic.Basic or a decorator
         Args:

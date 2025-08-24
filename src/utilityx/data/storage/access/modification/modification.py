@@ -1,9 +1,13 @@
-from utilityx.data.storage.basic import RoleSet
+from utilityx.data.storage.access.modification.permitted_roles import PermittedRoles
 
 
 class Modification:
     """
     Not very useful until each role needs more property and methods
     """
-    def __init__(self, role:RoleSet):
-        self._role = role
+    def __init__(self, permitted_roles:PermittedRoles):
+        """
+        TODO other modificationes will be added later
+        :param roleSet:
+        """
+        self._permitted_roles = permitted_roles

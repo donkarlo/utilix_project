@@ -5,9 +5,9 @@ class VeluesSlice():
         self._values:MutableSequence = values
         self._slice = slc
 
-    def _get_slice(self):
+    def get_slice(self):
         return self._slice
 
-    def _get_values(self):
+    def get_values(self):
         return self._values
 

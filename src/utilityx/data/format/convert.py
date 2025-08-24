@@ -7,7 +7,8 @@ from utilityx.data.format.format import Format
 
 class Conversion(ABC):
     """
-    conversion from one format to another
+    conversion from one format to another.
+    For example from CommentedMap to str
     """
     def __init__(self, from_type:Format, to_type:Format):
         self._from_type = from_type

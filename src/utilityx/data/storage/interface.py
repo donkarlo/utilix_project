@@ -1,44 +1,44 @@
-from abc import ABC, abstractmethod
+from typing import Protocol, Any
 
-
-class Interface(ABC):
+class Interface(Protocol):
     """
-        This class is an interface. Dont add anything other than abstract methods. if you need to add concrete properties and
-        """
+    - This class determines what is it to be a storage. Storage is accessing a static storage on hard and bring it to RAM mememory and write it back to the storage
+    This class is an interface. Dont add anything other than abstract methods. if you need to add concrete properties and
+    """
 
-    @abstractmethod
+    
     def load(self) -> None:
         """
         Loadsfrom storage to RAM
         Returns:
 
         """
-        pass
+        ...
 
-    @abstractmethod
     def save(self)->None:
-        """saves what is inside ram into the storage"""
-        pass
+        """saves what is inside _ram into the storage"""
+        ...
 
-    @abstractmethod
     def earase_storage(self)->None:
         """
-        earase the value of the storage and not the storage i.e. not the file or DB etc
+        earase the value of the storage and not the storage i.e. not the file or DB themselves but their content
         Returns:
 
         """
-        pass
+        ...
 
-    @abstractmethod
+    def  delete_storage(self)->None:
+        """
+        For example deletinga file
+        Returns:
+
+        """
+        ...
+
     def earase_ram(self) -> None:
-        pass
+        ...
 
-    @abstractmethod
-    def set_ram(self)->None:
-        pass
-
-    @abstractmethod
-    def add_to_ram(self)->None:
-        pass
+    def set_ram(self, ram:Any)->None:
+        ...
 
 

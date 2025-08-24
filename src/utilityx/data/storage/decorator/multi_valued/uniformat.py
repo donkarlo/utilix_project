@@ -2,12 +2,12 @@ from typing import override
 
 from utilityx.data.format.format import Format as DataFormat
 from utilityx.data.storage.decorator.decorator import Decorator
-from utilityx.data.storage.decorator.multi_valued.multi_valued import MultiValue
+from utilityx.data.storage.decorator.multi_valued.multi_value import MultiValue
 
 
-class Formatted(Decorator):
+class UniFormat(Decorator):
     """
-    - This meaningful only for multi units
+    - This meaningful only for sliced_values units
     - To check each value to have the same data type as other units.
     - We do not validate when loading, because we expect it tobe validated
     """
@@ -20,10 +20,11 @@ class Formatted(Decorator):
 
     @override
     def save(self) -> bool:
-        for i, value in enumerate(self._inner._ram_values):
+        for i, value in enumerate(self._inner.get_ram_values()):
             if not self._format.validate_value(value):
-                raise ValueError(f"Unit #{i} is not valid for the specified format.")
-        return self._inner.save()
+                raise ValueError(f"Value #{i} is not valid for the specified format.")
+        #it actually runs the inner save
+        super().save()
 
     def add_value(self, value:str)->bool:
         if not self._format.validate_value(value):
