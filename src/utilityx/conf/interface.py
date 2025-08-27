@@ -1,5 +1,6 @@
 from typing import Protocol, Dict, Any
 
 class Interface(Protocol):
-    props:Dict[str, Any]
+    _props:Dict[str, Any]
     def _do_init_props(self): ...
+    def get_props(self): ...

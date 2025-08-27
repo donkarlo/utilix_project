@@ -1,4 +1,4 @@
-from utilityx.data.storage.access.modification.role_set import RoleSet
+from utilityx.data.storage.decorator.protected.modification.role_set import RoleSet
 
 
 class PermittedRoles:

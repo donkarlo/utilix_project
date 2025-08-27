@@ -11,5 +11,10 @@ class FormattedValue(ABC):
         self._value = value
 
     @abstractmethod
-    def __eq__(self, other)->bool:
-        pass
+    def __eq__(self, other:FormattedValue)->bool:
+        if not (self._format == other._format and self._value == other._value):
+            return False
+        return True
+
+    def return_value(self):
+        return self._value

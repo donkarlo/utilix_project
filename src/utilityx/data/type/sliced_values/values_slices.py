@@ -37,6 +37,6 @@ class ValuesSlices:
     def get_values_by_slice(self, slc:slice)->Optional:
         for vs in self._values_slices_list:
             if vs.get_slice() == slc:
-                return vs
+                return vs.get_values()
         return None
 

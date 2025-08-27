@@ -1,16 +1,16 @@
 from abc import ABC,abstractmethod
 from typing import Union, Any
+
+from utilityx.conf.interface import Interface as ConfInterface
 from utilityx.os.path import Path
 from collections.abc import Hashable
-from utilityx.data.source.interface import SourceDecorator
+from utilityx.data.storage.interface import Interface as StorageInterace
 
 
-class Conf(ABC):
+class Basic(ConfInterface):
     '''
-       This is to load configs files. Currently it works only for yaml files
-       @todo: does the path exists?
-       @todo: is it the path to a yaml or json or csv etc file? use the right loader for each case
-       '''
+    to have a nested dictionary of key_values for configuaration
+    '''
     _instance = None
     def __new__(cls, *args, **kwargs):
         '''Defines how __init__ should behave'''
@@ -19,7 +19,7 @@ class Conf(ABC):
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, source:Union[Path, SourceDecorator, str]):
+    def __init__(self, source:str):
         '''
         to load the configs
         :param source:
@@ -27,24 +27,9 @@ class Conf(ABC):
         self._source = source
 
         #init
-        self._props = None
-        self._do_init_props()
+        self._props:Dict[str, Any] = None
+        self._props()
 
-    @abstractmethod
-    def _do_init_props(self):
-        pass
-
-    def _assign_ids(self) -> None:
-        def walk(d: Dict[str, Any], prefix: str = "") -> None:
-            for k, v in d.items():
-                path = f"{prefix}/{k}" if prefix else k
-                if isinstance(v, dict):
-                    walk(v, path)
-                else:
-                    self._ids[path] = self._counter
-                    self._counter += 1
-
-        walk(self._props)
 
     def get_prop(self, key:Union[list, str]):
         '''

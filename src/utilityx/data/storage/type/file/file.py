@@ -20,3 +20,8 @@ class File(Basic):
     def save(self):
         with open(self._path.get_native_absolute_path(), "w", encoding="utf-8") as file:
             file.write(self._path.get_native_absolute_path())
+
+    def get_ram(self)->str:
+        if self._ram is None:
+            self._load()
+        return self._ram

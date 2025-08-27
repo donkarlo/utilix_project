@@ -1,4 +1,4 @@
-from utilityx.data.storage.access.modification.permitted_roles import PermittedRoles
+from utilityx.data.storage.decorator.protected.modification.permitted_roles import PermittedRoles
 
 
 class Modification:
