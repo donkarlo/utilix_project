@@ -46,7 +46,7 @@ class Basic(ConfInterface):
             for index in key:
                 # Check if the current key exists in the dictionary
                 if index in result:
-                    # Update result to the value corresponding to the current key
+                    # Update result to the raw_value corresponding to the current key
                     result = result[index]
                 else:
                     raise KeyError(key)

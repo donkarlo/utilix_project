@@ -1,7 +1,5 @@
 from utilityx.conf.interface import Interface as ConfInterface
 from utilityx.data.storage.factory.single_yaml_file import SingleYamlFile
-from utilityx.os.path import Path
-from utilityx.data.storage.type.file.file import File
 
 
 class UniquedYamlFile(ConfInterface):

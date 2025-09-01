@@ -22,7 +22,7 @@ class Interface(Protocol):
 
     def earase_storage(self)->None:
         """
-        earase the value of the storage and not the storage i.e. not the file or DB themselves but their content
+        earase the raw_value of the storage and not the storage i.e. not the file or DB themselves but their content
         Returns:
 
         """

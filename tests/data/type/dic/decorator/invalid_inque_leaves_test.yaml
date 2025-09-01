@@ -1,0 +1,17 @@
+dimensions:
+  time:
+    units:
+      - millisecond
+      - second
+      - minute
+      - hour
+  distance:
+    units:
+      - millimeter
+      - centimeter
+      - meter
+      - kilometer
+      - millimeter
+  frequency:
+    units:
+      - hertz

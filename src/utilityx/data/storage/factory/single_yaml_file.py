@@ -1,4 +1,3 @@
-from typing import Any
 from utilityx.data.storage.interface import Interface as StorageInterface
 from utilityx.os.path import Path
 from utilityx.data.storage.type.file.file import File
