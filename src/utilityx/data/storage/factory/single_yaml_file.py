@@ -2,6 +2,7 @@ from utilityx.data.storage.interface import Interface as StorageInterface
 from utilityx.os.path import Path
 from utilityx.data.storage.type.file.file import File
 from ruamel.yaml import YAML
+from typing import Dict
 
 class SingleYamlFile(StorageInterface):
     def __init__(self, file_path: str):
@@ -40,7 +41,7 @@ class SingleYamlFile(StorageInterface):
             self.load()
         return self._ram
 
-    def get_ram_dict(self) -> str:
+    def get_ram_dict(self) -> Dict:
         if self._ram_dict is None:
             self.load_dict()
         return self._ram_dict
@@ -51,7 +52,7 @@ class SingleYamlFile(StorageInterface):
 
 if __name__ == "__main__":
     syf = SingleYamlFile("/home/donkarlo/repo/sociomind_project/conf.yaml")
-    print(type(syf.get_ram_dict()))
+    print(syf.get_ram_dict())
 
 
 

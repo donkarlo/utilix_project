@@ -4,8 +4,7 @@ from utilityx.data.storage.type.file.format.format import Format as DataFormat
 from utilityx.data.storage.decorator.decorator import Decorator
 from utilityx.data.storage.decorator.multi_valued.multi_valued import MultiValued
 
-T = TypeVar('T')
-class UniFormat(Decorator, Generic[T]):
+class UniFormated(Decorator):
     """
     - This meaningful only for sliced_value units
     - To check each raw_value to have the same data type as other units.
@@ -26,7 +25,7 @@ class UniFormat(Decorator, Generic[T]):
         #it actually runs the inner save
         super().save()
 
-    def add_value(self, value:T)->bool:
+    def add_value(self, value:str)->bool:
         if not self._format.validate_value(value):
             raise ValueError(f"Unit is not valid for the specified format.")
 

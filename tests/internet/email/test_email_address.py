@@ -12,7 +12,7 @@ class TestEmailAddress:
             {"email":1},
         ]
     )
-    def test___init__(self, input_email:str):
+    def test___init__(self, input_email:str) -> None:
         '''
         for all param values TypeError must be caught
         Args:
@@ -25,21 +25,21 @@ class TestEmailAddress:
             EmailAddress(input_email)  # Passing int should raise TypeError
         assert isinstance(exc_info.value, TypeError)
 
-    def test_get_id_and_domain_for_valid_email(self):
+    def test_get_id_and_domain_for_valid_email(self) -> None:
         email = EmailAddress("mohammad.rahmani.xyz@gmail.com")
         assert email.get_id() == "mohammad.rahmani.xyz"
         assert email.get_domain() == "gmail.com"
 
-    def test_refinement_lowers_case(self):
+    def test_refinement_lowers_case(self) -> None:
         email = EmailAddress("UPPER.CASE@DOMAIN.COM")
         assert email.get_refined() == "upper.case@domain.com"
 
-    def test_get_id_domain_consistency(self):
+    def test_get_id_domain_consistency(self) -> None:
         email = EmailAddress("a.b@x.y")
         assert email.get_id() == "a.b"
         assert email.get_domain() == "x.y"
 
-    def test__get_parts_structure(self):
+    def test__get_parts_structure(self) -> None:
         email = EmailAddress("foo@bar.com")
         parts = email.get_parts()
         assert parts == {"id": "foo", "domain": "bar.com"}
@@ -53,7 +53,7 @@ class TestEmailAddress:
             ("user.test", None, None)
         ]
     )
-    def test_parsing_multiple_emails(self, input_email, expected_id, expected_domain):
+    def test_parsing_multiple_emails(self, input_email, expected_id, expected_domain) -> None:
         email = EmailAddress(input_email)
         assert email.get_id() == expected_id
         assert email.get_domain() == expected_domain
@@ -67,7 +67,7 @@ class TestEmailAddress:
             ("user.test", None)
         ]
     )
-    def test_get_parts(self, input_email, expected_parts:dict[str, str]):
+    def test_get_parts(self, input_email, expected_parts:dict[str, str]) -> None:
         '''
 
         Args:

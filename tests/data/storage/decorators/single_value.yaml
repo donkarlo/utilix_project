@@ -5,14 +5,12 @@ dimensions:
       - second
       - minute
       - hour
-      - second
   distance:
     units:
       - millimeter
       - centimeter
       - meter
       - kilometer
-      - millimeter
   frequency:
     units:
       - hertz

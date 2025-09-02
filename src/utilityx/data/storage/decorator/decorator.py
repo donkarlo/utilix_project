@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, override
+from typing import Any, override, runtime_checkable
 from utilityx.data.storage.interface import Interface as StorageInterface
-
 
 class Decorator(StorageInterface):
     """
@@ -11,7 +10,7 @@ class Decorator(StorageInterface):
 
     def __init__(self, inner: StorageInterface) -> None:
         """
-        .__inner is either the most basic object, in this case data.storage.basic.Basic or a decorator
+        .__inner is either the most basic object, in this case data.storage.basic.Yaml or a decorator
         Args:
             inner:
         """
@@ -27,11 +26,11 @@ class Decorator(StorageInterface):
 
     @override
     def set_ram(self,content:str)->None:
-        self._inner.ram = content
+        self._inner.set_ram(content)
 
     @override
     def add_to_ram(self, content:str) -> None:
-        self._inner.ram = self._inner.ram + content
+        self._inner.set_ram(self._inner.get_ram() + content)
 
     @override
     def earase_storage(self) -> bool:
@@ -39,7 +38,10 @@ class Decorator(StorageInterface):
 
     @override
     def earase_ram(self) -> bool:
-        self._inner.ram = None
+        self._inner.set_ram(None)
+
+    def get_ram(self) -> str:
+        return self._inner.get_ram()
 
     def __getattr__(self, name: str) -> Any:
         """

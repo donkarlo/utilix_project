@@ -11,7 +11,7 @@ class Basic(StorageInterface):
 
     def get_ram(self)->str:
         if self._ram is None:
-            self._ram = self.load()
+            self.load()
         return self._ram
 
     def set_ram(self, content:str):

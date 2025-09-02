@@ -9,7 +9,7 @@ except Exception:
     from yaml import SafeLoader as YamlLoader, SafeDumper as YamlDumper  # fallback
 
 from utilityx.data.storage.type.file.format.type.yaml.yaml import Yaml as YamlFormat
-from utilityx.data.storage.decorator.multi_valued.uniformated import UniFormat
+from utilityx.data.storage.decorator.multi_valued.uniformated import UniFormated
 from utilityx.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilityx.data.storage.type.file.file import File
 from utilityx.os.path import Path
@@ -17,7 +17,7 @@ from utilityx.data.type.sliced_value.values_slice import VeluesSlice
 from utilityx.data.storage.decorator.multi_valued.interface import Interface as MultiValueInterface
 
 
-class UniformatMultiValuedYamlFile(MultiValueInterface):
+class UniformatedMultiValuedYamlFile(MultiValueInterface):
     """
     High-throughput multi-document YAML file using PyYAML (+CLoader/CDumper if available).
     - load(): loads all docs into RAM
@@ -28,10 +28,10 @@ class UniformatMultiValuedYamlFile(MultiValueInterface):
       * Uses explicit_start='---' for multi-doc formatting.
     """
 
-    def __init__(self, file_path: str):
-        file_storage = File(Path(file_path))
+    def __init__(self, path: Path):
+        file_storage = File(path)
         # Keep your existing UniFormat/MultiValued stack and the '---' separator
-        self._storage = UniFormat(MultiValued(file_storage, "---"), YamlFormat)
+        self._storage = UniFormated(MultiValued(file_storage, "---"), YamlFormat)
 
     def load(self) -> None:
         """Load all YAML documents into memory and cache them."""
@@ -56,7 +56,7 @@ class UniformatMultiValuedYamlFile(MultiValueInterface):
                 sort_keys=False,  # keep user insertion order where possible
             )
 
-    def __load_slice(self, slc: slice) -> None:
+    def load_slice(self, slc: slice) -> None:
         """
         Stream only the requested window from disk and cache it as a slice.
         Reads sequentially and stops as soon as the window is complete.
@@ -87,7 +87,7 @@ class UniformatMultiValuedYamlFile(MultiValueInterface):
         """Return a slice view; stream from disk if not cached."""
         if self._storage.get_ram_values_slices().slice_exists(slc):
             return self._storage.get_ram_values_from_values_slices_by_slice(slc)
-        self.__load_slice(slc)
+        self.load_slice(slc)
         return self._storage.get_ram_values_from_values_slices_by_slice(slc)
 
     def __get_path(self) -> str:
@@ -105,11 +105,3 @@ class UniformatMultiValuedYamlFile(MultiValueInterface):
 
     def set_ram(self, ram: Any) -> None:
         pass
-
-
-if __name__ == "__main__":
-    file_path = "/home/donkarlo/Dropbox/projs/research/data/self-aware-drones/ctumrs/two-drones/normal-scenario/uav1-gps-lidar-uav2-gps-lidar.yaml"
-    mvf = UniformatMultiValuedYamlFile(file_path)
-    slc = slice(0, 40000, 1)
-    values = mvf.get_values_by_slice(slc)
-    print(len(values))

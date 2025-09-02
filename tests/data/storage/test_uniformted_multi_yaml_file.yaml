@@ -1,0 +1,130 @@
+---
+base: 1
+info:
+  name: "Base-1"
+  location:
+    country: "Austria"
+    city: "Graz"
+  robots:
+    - id: "R1"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 2
+info:
+  name: "Base-2"
+  location:
+    country: "Austria"
+    city: "Vienna"
+  robots:
+    - id: "R2"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 3
+info:
+  name: "Base-3"
+  location:
+    country: "Austria"
+    city: "Linz"
+  robots:
+    - id: "R3"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 4
+info:
+  name: "Base-4"
+  location:
+    country: "Austria"
+    city: "Salzburg"
+  robots:
+    - id: "R4"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 5
+info:
+  name: "Base-5"
+  location:
+    country: "Austria"
+    city: "Innsbruck"
+  robots:
+    - id: "R5"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 6
+info:
+  name: "Base-6"
+  location:
+    country: "Austria"
+    city: "Klagenfurt"
+  robots:
+    - id: "R6"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 7
+info:
+  name: "Base-7"
+  location:
+    country: "Austria"
+    city: "St. Pölten"
+  robots:
+    - id: "R7"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 8
+info:
+  name: "Base-8"
+  location:
+    country: "Austria"
+    city: "Bregenz"
+  robots:
+    - id: "R8"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 9
+info:
+  name: "Base-9"
+  location:
+    country: "Austria"
+    city: "Eisenstadt"
+  robots:
+    - id: "R9"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
+---
+base: 10
+info:
+  name: "Base-10"
+  location:
+    country: "Austria"
+    city: "Villach"
+  robots:
+    - id: "R10"
+      type: "quadcopter"
+      sensors:
+        lidar: "RP A2"
+        gps: true
