@@ -1,20 +1,20 @@
 from typing import List, Optional
-from utilityx.data.type.sliced_value.values_slice import VeluesSlice
+from utilityx.data.type.sliced_value.values_slice import ValuesSlice
 
 class ValuesSlices:
     """
     To cache slices of situations such as reading yaml files and storing from 233 to 766
     """
     def __init__(self):
-        self._values_slices_list:List[VeluesSlice] = []
+        self._values_slices_list:List[ValuesSlice] = []
 
-    def add_values_slice(self, values_slice:VeluesSlice):
+    def add_values_slice(self, values_slice:ValuesSlice):
         """
         Later
         """
         self._values_slices_list.append(values_slice)
 
-    def get_values_by_slice(self, slc:slice)->VeluesSlice:
+    def get_values_by_slice(self, slc:slice)->ValuesSlice:
         for values_slice in self._values_slices_list:
             if slc == values_slice.get_slice():
                 return values_slice[slc]

@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import override, List
 
 from utilityx.data.storage.decorator.decorator import Decorator
-from utilityx.data.type.sliced_value.values_slice import VeluesSlice
+from utilityx.data.type.sliced_value.values_slice import ValuesSlice
 from utilityx.data.type.sliced_value.values_slices import ValuesSlices
 
 class MultiValued(Decorator):
@@ -61,7 +61,7 @@ class MultiValued(Decorator):
     def add_ram_value(self, value:str):
         self._ram_values.append(value)
 
-    def add_to_ram_values_slices(self, valuesSlice:VeluesSlice):
+    def add_to_ram_values_slices(self, valuesSlice:ValuesSlice):
         self._ram_values_slices.add_values_slice(valuesSlice)
 
     def earase_ram_values(self):

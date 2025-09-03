@@ -1,20 +1,22 @@
 from typing import List, Any
+import io
 
 # --- Fast YAML path: try C extensions, fall back to safe Python loaders ---
 import yaml
 
 try:
-    from yaml import CLoader as YamlLoader, CDumper as YamlDumper  # fastest
+    from yaml import CLoader as YamlCLoader, CDumper as YamlCDumper  # fastest
 except Exception:
-    from yaml import SafeLoader as YamlLoader, SafeDumper as YamlDumper  # fallback
+    from yaml import SafeLoader as YamlCLoader, SafeDumper as YamlCDumper  # fallback
 
 from utilityx.data.storage.type.file.format.type.yaml.yaml import Yaml as YamlFormat
 from utilityx.data.storage.decorator.multi_valued.uniformated import UniFormated
 from utilityx.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilityx.data.storage.type.file.file import File
 from utilityx.os.path import Path
-from utilityx.data.type.sliced_value.values_slice import VeluesSlice
+from utilityx.data.type.sliced_value.values_slice import ValuesSlice
 from utilityx.data.storage.decorator.multi_valued.interface import Interface as MultiValueInterface
+from itertools import islice
 
 
 class UniformatedMultiValuedYamlFile(MultiValueInterface):
@@ -29,15 +31,14 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
     """
 
     def __init__(self, path: Path):
-        file_storage = File(path)
         # Keep your existing UniFormat/MultiValued stack and the '---' separator
-        self._storage = UniFormated(MultiValued(file_storage, "---"), YamlFormat)
+        self._storage = UniFormated(MultiValued(File(path), "---"), YamlFormat)
 
     def load(self) -> None:
         """Load all YAML documents into memory and cache them."""
         with open(self.__get_path(), "r", encoding="utf-8") as stream:
             ram_units: List[dict[str, Any]] = [
-                doc for doc in yaml.load_all(stream, Loader=YamlLoader) if doc is not None
+                doc for doc in yaml.load_all(stream, Loader=YamlCLoader) if doc is not None
             ]
         self._storage.set_ram_units(ram_units)
 
@@ -49,7 +50,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
             yaml.dump_all(
                 values,
                 stream,
-                Dumper=YamlDumper,
+                Dumper=YamlCDumper,
                 explicit_start=True,
                 allow_unicode=True,
                 default_flow_style=False,
@@ -69,18 +70,14 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         step = 1 if slc.step is None else slc.step
 
         selected_docs: List[dict[str, Any]] = []
-        with open(self.__get_path(), "r", encoding="utf-8") as stream:
-            for index, single_yaml_doc in enumerate(yaml.load_all(stream, Loader=YamlLoader)):
-                if single_yaml_doc is None:
-                    continue
-                if index < start:
-                    continue
-                if stop is not None and index >= stop:
-                    break
-                if (index - start) % step == 0:
-                    selected_docs.append(single_yaml_doc)
+        with open(self.__get_path(), "rb", buffering=1024 * 1024) as f_raw:
+            stream = io.BufferedReader(f_raw, buffer_size=8 * 1024 * 1024)
+            docs = yaml.load_all(stream, Loader=YamlCLoader)
+            for doc in islice(docs, start, stop, step):
+                if doc is not None:
+                    selected_docs.append(doc)
 
-        self._storage.add_to_ram_values_slices(VeluesSlice(selected_docs, slc))
+        self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
 
     # @overrides  # keep if your project uses it; otherwise remove
     def get_values_by_slice(self, slc: slice) -> List[dict[str, Any]]:

@@ -1,6 +1,6 @@
 from collections.abc import MutableSequence
 
-class VeluesSlice():
+class ValuesSlice():
     def __init__(self, values:MutableSequence, slc:slice):
         self._values:MutableSequence = values
         self._slice = slc
