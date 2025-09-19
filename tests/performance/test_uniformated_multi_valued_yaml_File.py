@@ -1,8 +1,8 @@
 import time
 
 import pytest
-from utilityx.data.storage.factory.uniformated_multi_valued_yaml_file import UniformatedMultiValuedYamlFile
-from utilityx.os.path import Path
+from utilix.data.storage.factory.uniformated_multi_valued_yaml_file import UniformatedMultiValuedYamlFile
+from utilix.os.path import Path
 
 
 class TestUniformatedMultiValuedYamlFile:

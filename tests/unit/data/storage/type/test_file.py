@@ -1,5 +1,5 @@
-from utilityx.data.storage.type.file.file import File
-from utilityx.os.path import Path
+from utilix.data.storage.type.file.file import File
+from utilix.os.path import Path
 
 class TestFile:
     def test_get_ram(self) -> None:

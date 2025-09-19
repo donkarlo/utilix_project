@@ -1,0 +1,9 @@
+from utilix.data.storage.type.file.format.format import Format
+from utilix.os.path import Path
+
+
+class File(Protocol):
+    path: Path
+    def get_path(self)->Path: ...
+    def get_format(self)->Format: ...
+    def get_data_type(self)->Format: ...

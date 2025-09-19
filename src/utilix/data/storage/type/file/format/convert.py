@@ -1,0 +1,19 @@
+from abc import ABC, abstractmethod
+
+from utilix.data.storage.type.file.format.format import SupportingFormat
+
+from utilix.data.storage.type.file.format.format import Format
+
+
+class Conversion(ABC):
+    """
+    conversion from one format to another.
+    For example from CommentedMap to str
+    """
+    def __init__(self, from_type:Format, to_type:Format):
+        self._from_type = from_type
+        self._to_type = to_type
+
+    @abstractmethod
+    def get_converted_string_content(self, string_content:str)->str:
+        pass
