@@ -1,9 +1,9 @@
 from utilix.data.storage.type.file.format.format import Format
-from utilix.data.storage.basic import Basic
+from utilix.data.storage.storage import Storage
 from utilix.os.path import Path
 
 
-class File(Basic):
+class File(Storage):
     def __init__(self, path:Path):
         self._path:Path = path
         super().__init__()

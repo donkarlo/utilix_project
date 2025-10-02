@@ -50,9 +50,5 @@ class SingleYamlFile(StorageInterface):
         #calls get_native_absolute_path from File
         return self._storage.get_native_absolute_path()
 
-if __name__ == "__main__":
-    syf = SingleYamlFile("/home/donkarlo/repo/sociomind_project/conf.yaml")
-    print(syf.get_ram_dict())
-
 
 

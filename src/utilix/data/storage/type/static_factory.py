@@ -2,7 +2,7 @@ from enum import IntEnum
 from functools import cache
 from typing import Protocol, Any, TypeVar, Callable
 
-from utilix.data.storage.basic import Basic  # base class (assumed)
+from utilix.data.storage.storage import Storage  # base class (assumed)
 
 
 class StaticFactory(IntEnum):
@@ -12,7 +12,7 @@ class StaticFactory(IntEnum):
 
 
 # Storage builder protocol and registry
-TStorage = TypeVar("TStorage", bound=Basic)
+TStorage = TypeVar("TStorage", bound=Storage)
 
 class StorageBuilder(Protocol):
     def __call__(self, *args: Any, **kwargs: Any) -> TStorage: ...
@@ -31,7 +31,7 @@ def register_factory(kind: StaticFactory) -> Callable[[StorageBuilder], StorageB
 
 # Default builders
 @register_factory(StaticFactory.FILE)
-def _build_file(path: str, **kwargs: Any) -> Basic:
+def _build_file(path: str, **kwargs: Any) -> Storage:
     """
     Example:
         get_storage(StaticFactory.FILE, "/tmp/data.bin", mode="rw")
@@ -41,7 +41,7 @@ def _build_file(path: str, **kwargs: Any) -> Basic:
 
 
 @register_factory(StaticFactory.DIR)
-def _build_dir(path: str, **kwargs: Any) -> Basic:
+def _build_dir(path: str, **kwargs: Any) -> Storage:
     """
     Example:
         get_storage("dir", "/var/data", create_if_missing=True)
@@ -51,7 +51,7 @@ def _build_dir(path: str, **kwargs: Any) -> Basic:
 
 
 @register_factory(StaticFactory.DB)
-def _build_db(conn: str, **kwargs: Any) -> Basic:
+def _build_db(conn: str, **kwargs: Any) -> Storage:
     """
     Example:
         get_storage(StaticFactory.DB, "postgresql://user:pass@host/db", pool_size=10)
@@ -61,7 +61,7 @@ def _build_db(conn: str, **kwargs: Any) -> Basic:
 
 
 # Public API
-def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -> Basic:
+def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -> Storage:
     """
     Flexible factory that dispatches to type-specific builders.
 

@@ -1,6 +1,6 @@
-from utilix.data.storage.basic import Basic
+from utilix.data.storage.storage import Storage
 
 
-class Db(Basic):
+class Db(Storage):
     def __init__(self):
         pass
