@@ -1,5 +1,6 @@
 from typing import List, Any
-import io
+from typing import override
+
 
 # --- Fast YAML path: try C extensions, fall back to safe Python loaders ---
 import yaml
@@ -34,6 +35,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         # Keep your existing UniFormat/MultiValued stack and the '---' separator
         self._storage = UniFormated(MultiValued(File(path), "---"), YamlFormat)
 
+    @override
     def load(self) -> None:
         """Load all YAML documents into memory and cache them."""
         with open(self.__get_path(), "r", encoding="utf-8") as stream:
@@ -42,6 +44,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
             ]
         self._storage.set_ram_units(ram_units)
 
+    @override
     def save(self) -> None:
         """Persist the cached documents back to disk as a sliced_value-doc YAML."""
         values = self._storage.get_ram_values()
@@ -79,7 +82,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
 
         self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
 
-    # @overrides  # keep if your project uses it; otherwise remove
+    @override  # keep if your project uses it; otherwise remove
     def get_values_by_slice(self, slc: slice) -> List[dict[str, Any]]:
         """Return a slice view; stream from disk if not cached."""
         if self._storage.get_ram_values_slices().slice_exists(slc):
@@ -91,14 +94,18 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         return self._storage.get_native_absolute_path()
 
     # Unimplemented interface methods (fill as needed)
+    @override
     def earase_storage(self) -> None:
         pass
 
+    @override
     def delete_storage(self) -> None:
         pass
 
+    @override
     def earase_ram(self) -> None:
         pass
 
+    @override
     def set_ram(self, ram: Any) -> None:
         pass
