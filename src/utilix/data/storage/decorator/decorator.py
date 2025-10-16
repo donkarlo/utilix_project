@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, override, runtime_checkable
 from utilix.data.storage.interface import Interface as StorageInterface
+import inspect
 
 class Decorator(StorageInterface):
     """
@@ -38,23 +39,24 @@ class Decorator(StorageInterface):
 
     @override
     def earase_ram(self) -> bool:
-        self._inner.set_ram(None)
+        self._inner.earase_ram()
 
     def get_ram(self) -> str:
         return self._inner.get_ram()
 
     def __getattr__(self, name: str) -> Any:
-        """
-        Walk the inner chain to find missing attributes/methods.
-        This will pass all the arguments
-        """
+        if name.startswith("__") and name.endswith("__"):
+            raise AttributeError(f"{type(self).__name__} has no attribute {name!r}")
+
         target: Any = self._inner
-        while True:
-            if hasattr(target, name):
+        seen = set()
+        while target is not None and id(target) not in seen:
+            seen.add(id(target))
+            try:
+                inspect.getattr_static(target, name)
                 return getattr(target, name)
-            target = getattr(target, "_inner", None)
-            if target is None:
-                break
+            except AttributeError:
+                target = getattr(target, "_inner", None)
         raise AttributeError(
             f"{type(self).__name__} and its inner chain have no attribute {name!r}"
         )

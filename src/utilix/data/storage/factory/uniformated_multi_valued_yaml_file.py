@@ -18,6 +18,7 @@ from utilix.os.path import Path
 from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValueInterface
 from itertools import islice
+import io
 
 
 class UniformatedMultiValuedYamlFile(MultiValueInterface):
@@ -31,9 +32,9 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
       * Uses explicit_start='---' for multi-doc formatting.
     """
 
-    def __init__(self, path: Path):
+    def __init__(self, str_path):
         # Keep your existing UniFormat/MultiValued stack and the '---' separator
-        self._storage = UniFormated(MultiValued(File(path), "---"), YamlFormat)
+        self._storage = UniFormated(MultiValued(File(Path(str_path)), "---"), YamlFormat)
 
     @override
     def load(self) -> None:
@@ -76,9 +77,9 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         with open(self.__get_path(), "rb", buffering=1024 * 1024) as f_raw:
             stream = io.BufferedReader(f_raw, buffer_size=8 * 1024 * 1024)
             docs = yaml.load_all(stream, Loader=YamlCLoader)
-            for doc in islice(docs, start, stop, step):
-                if doc is not None:
-                    selected_docs.append(doc)
+            for dict_doc in islice(docs, start, stop, step):
+                if dict_doc is not None:
+                    selected_docs.append(dict_doc)
 
         self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
 
