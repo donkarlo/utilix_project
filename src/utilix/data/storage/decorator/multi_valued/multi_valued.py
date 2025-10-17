@@ -4,6 +4,7 @@ from typing import override, List
 from utilix.data.storage.decorator.decorator import Decorator
 from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.type.sliced_value.values_slices import ValuesSlices
+from utilix.data.storage.decorator.multi_valued.add_value_observer_protocol import AddValueObserverProtocol
 
 class MultiValued(Decorator):
     """
@@ -20,6 +21,9 @@ class MultiValued(Decorator):
         """
         super().__init__(inner)
 
+        #add_value_observer
+        self._add_value_observers: List[AddValueObserverProtocol] = []
+
         #to hold one ram raw_value
         self._ram_values:List = []
 
@@ -28,6 +32,14 @@ class MultiValued(Decorator):
 
         #how string documents are separated for example in sliced_value yaml files it s ---
         self._separator = separator
+
+    def attach_add_observer(self, add_observer:AddValueObserverProtocol):
+        if add_observer not in self._add_value_observers:
+            self._add_value_observers.append(add_observer)
+
+    def dettach_add_observer(self, add_observer: AddValueObserverProtocol):
+        if add_observer in self._add_value_observers:
+            self._add_value_observers.remove(add_observer)
 
 
     @override
@@ -53,6 +65,9 @@ class MultiValued(Decorator):
     def add_to_ram_values_at(self, index: int, values: List) -> None:
         for offset, value in enumerate(values):
             self._ram_values.insert(index + offset, value)
+            for add_observer in self._add_value_observers:
+                add_observer.update(value)
+
 
 
     def get_ram_values_by_slice(self, slc: slice) -> List:

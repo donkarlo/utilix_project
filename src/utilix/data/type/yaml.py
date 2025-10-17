@@ -1,7 +1,6 @@
-from typing import Any
 import yaml
 from utilix.data.type.type import Type as DataType
-from utilix.data.type.key_value.dic.basic import Basic as BasicDict
+from utilix.data.type.dic.dic import Dic as BasicDict
 
 
 class Yaml(DataType):

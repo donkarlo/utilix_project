@@ -1,6 +1,6 @@
 from typing import Tuple, List, Dict, Any
 
-from utilix.data.type.key_value.dic.decorator.decorator import Decorator as DicDecorator
+from utilix.data.type.dic.decorator.decorator import Decorator as DicDecorator
 
 class UniquenessChecked(DicDecorator):
 

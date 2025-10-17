@@ -1,4 +1,4 @@
-from utilix.data.type.key_value.dic.decorator.decorator import Decorator
+from utilix.data.type.dic.decorator.decorator import Decorator
 
 
 class Objected(Decorator):

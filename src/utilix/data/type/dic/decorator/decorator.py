@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from utilix.data.type.key_value.dic.interface import Interface as DicInterface
+from utilix.data.type.dic.interface import Interface as DicInterface
 
 
 class Decorator(DicInterface):
