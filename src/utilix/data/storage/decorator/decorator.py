@@ -9,7 +9,7 @@ class Decorator(StorageInterface):
     """
     __slots__ = ("_inner",)
 
-    def __init__(self, inner: StorageInterface) -> None:
+    def __init__(self, inner: StorageInterface):
         """
         .__inner is either the most basic object, in this case data.storage.basic.Yaml or a decorator
         Args:
