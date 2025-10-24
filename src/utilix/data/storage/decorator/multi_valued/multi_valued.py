@@ -65,8 +65,8 @@ class MultiValued(Decorator):
     def add_to_ram_values_at(self, index: int, values: List) -> None:
         for offset, value in enumerate(values):
             self._ram_values.insert(index + offset, value)
-            for add_observer in self._add_value_observers:
-                add_observer.update(value)
+            for add_value_observer in self._add_value_observers:
+                add_value_observer.update(value)
 
 
 
@@ -75,6 +75,8 @@ class MultiValued(Decorator):
 
     def add_ram_value(self, value:str):
         self._ram_values.append(value)
+        for add_value_observer in self._add_value_observers:
+            add_value_observer.update(value)
 
     def add_to_ram_values_slices(self, valuesSlice:ValuesSlice):
         self._ram_values_slices.add_values_slice(valuesSlice)

@@ -8,7 +8,7 @@ class Value(ABC):
     """
     def __init__(self):
         self._keys_values:dict= None
-        #everything must be convertable to a string
+        #everything must be message to a string
         self._string_value = None
 
     @abstractmethod

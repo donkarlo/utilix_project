@@ -76,8 +76,8 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         selected_docs: List[dict[str, Any]] = []
         with open(self.__get_path(), "rb", buffering=1024 * 1024) as f_raw:
             stream = io.BufferedReader(f_raw, buffer_size=8 * 1024 * 1024)
-            docs = yaml.load_all(stream, Loader=YamlCLoader)
-            for dict_doc in islice(docs, start, stop, step):
+            dict_docs = yaml.load_all(stream, Loader=YamlCLoader)
+            for dict_doc in islice(dict_docs, start, stop, step):
                 if dict_doc is not None:
                     selected_docs.append(dict_doc)
 
