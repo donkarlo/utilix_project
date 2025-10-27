@@ -19,6 +19,7 @@ from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValueInterface
 from itertools import islice
 import io
+from utilix.data.type.dic.dic import Dic
 
 
 class UniformatedMultiValuedYamlFile(MultiValueInterface):
@@ -79,6 +80,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
             dict_docs = yaml.load_all(stream, Loader=YamlCLoader)
             for dict_doc in islice(dict_docs, start, stop, step):
                 if dict_doc is not None:
+                    dic_doc = Dic(dict_doc)
                     selected_docs.append(dict_doc)
 
         self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
