@@ -4,6 +4,7 @@ from typing import override
 
 # --- Fast YAML path: try C extensions, fall back to safe Python loaders ---
 import yaml
+from utilix.data.storage.decorator.multi_valued.add_value_observer_interface import AddValueObserverInterface
 
 try:
     from yaml import CLoader as YamlCLoader, CDumper as YamlCDumper  # fastest
@@ -36,6 +37,12 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
     def __init__(self, str_path):
         # Keep your existing UniFormat/MultiValued stack and the '---' separator
         self._storage = UniFormated(MultiValued(File(Path(str_path)), "---"), YamlFormat)
+
+    def attach_add_value_observer(self, add_value_observer: AddValueObserverInterface) ->None:
+        self._storage.attach_add_value_observer(add_value_observer)
+
+    def dettach_add_value_observer(self, add_value_observer: AddValueObserverInterface) ->None:
+        self._storage.dettach_add_value_observer(add_value_observer)
 
     @override
     def load(self) -> None:
@@ -81,7 +88,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
             for dict_doc in islice(dict_docs, start, stop, step):
                 if dict_doc is not None:
                     dic_doc = Dic(dict_doc)
-                    selected_docs.append(dict_doc)
+                    selected_docs.append(dic_doc)
 
         self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
 

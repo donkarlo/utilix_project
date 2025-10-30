@@ -6,7 +6,9 @@ from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.type.sliced_value.values_slices import ValuesSlices
 from utilix.data.storage.decorator.multi_valued.add_value_observer_interface import AddValueObserverInterface
 
-class MultiValued(Decorator):
+from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValuedInterface
+
+class MultiValued(Decorator, MultiValuedInterface):
     """
     A kind of source full of  values such as a sliced_value doc yaml file.
     Each raw_value can have a different format
@@ -33,13 +35,13 @@ class MultiValued(Decorator):
         #how string documents are separated for example in sliced_value yaml files it s ---
         self._separator = separator
 
-    def attach_add_observer(self, add_observer:AddValueObserverInterface):
-        if add_observer not in self._add_value_observers:
-            self._add_value_observers.append(add_observer)
+    def attach_add_value_observer(self, add_value_observer:AddValueObserverInterface)->None:
+        if add_value_observer not in self._add_value_observers:
+            self._add_value_observers.append(add_value_observer)
 
-    def dettach_add_observer(self, add_observer: AddValueObserverInterface):
-        if add_observer in self._add_value_observers:
-            self._add_value_observers.remove(add_observer)
+    def dettach_add_value_observer(self, add_value_observer: AddValueObserverInterface)->None:
+        if add_value_observer in self._add_value_observers:
+            self._add_value_observers.remove(add_value_observer)
 
 
     @override
@@ -80,6 +82,9 @@ class MultiValued(Decorator):
 
     def add_to_ram_values_slices(self, valuesSlice:ValuesSlice):
         self._ram_values_slices.add_values_slice(valuesSlice)
+        for add_value_observer in self._add_value_observers:
+            for value in valuesSlice.get_values():
+                add_value_observer.add_value_update(value)
 
     def earase_ram_values(self):
         self._ram_values.clear()

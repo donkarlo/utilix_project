@@ -1,14 +1,25 @@
-from typing import Dict,List,Any, Tuple, override, Union
-
+from typing import Any, Dict, List, Tuple, Union, Sequence
 from utilix.data.type.dic.interface import Interface as DicInterface
+
+Key = Union[str, int]
+KeySeq = Sequence[Key]
 
 
 class Dic(DicInterface):
-    def __init__(self, raw_dict:Dict):
-        self._raw_dict:Dict = raw_dict
+    def __init__(self, raw_dict: Dict):
+        self._raw_dict: Dict = raw_dict
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self._raw_dict})"
+
+    def get_raw_dict(self) -> Dict:
+        return self._raw_dict
+
+    def get_keys_values(self) -> List[Tuple[str, Any]]:
+        return list(self._raw_dict.items())
 
     def has_nested_keys(self, keys: List[str]) -> bool:
-        current = self._raw_dict
+        current: Any = self._raw_dict
         for k in keys:
             if isinstance(current, dict) and k in current:
                 current = current[k]
@@ -16,54 +27,51 @@ class Dic(DicInterface):
                 return False
         return True
 
-    def get_keys_values(self)->List[Tuple[str,Any]]:
-        return self._raw_dict.items()
-
-
-    @override
-    def get_raw_dict(self)->Dict:
-        return self._raw_dict
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}({self._raw_dict})"
-
-    def __getitem__(self, key_or_keys: Union[str, tuple[str, ...]])->"Dic":
-        """
-        raw = {"a": {"b": {"c": 42}}}
-        d = Dic(raw)
-
-        print(d["a"])  # Dic({'b': {'c': 42}})
-        print(d["a"]["b"])  # Dic({'c': 42})
-        print(d["a", "b", "c"])  # 42
-        Args:
-            key_or_keys:
-
-        Returns:
-
-        """
-
-
-        # Normalize input
-        if isinstance(key_or_keys, str):
-            keys = (key_or_keys,)
+    def __getitem__(self, key_or_keys: Union[Key, KeySeq]) -> Any:
+        if isinstance(key_or_keys, (str, int)):
+            keys: Tuple[Key, ...] = (key_or_keys,)
+        elif isinstance(key_or_keys, (list, tuple)):
+            keys = tuple(key_or_keys)
         else:
-            keys = key_or_keys
-        current = self._raw_dict
+            raise TypeError("Key must be str/int or a list/tuple of them.")
+
+        current: Any = self._raw_dict
         for k in keys:
-            if isinstance(current, dict) and k in current:
-                current = current[k]
+            if isinstance(current, Dic):  # <-- unwrap Dic during traversal
+                current = current._raw_dict
+
+            if isinstance(current, dict):
+                if isinstance(k, str):
+                    if k in current:
+                        current = current[k]
+                    else:
+                        raise KeyError(f"Key path {keys} not found.")
+                elif isinstance(k, int):
+                    vals = list(current.values())  # allow dict[int] as i-th value
+                    try:
+                        current = vals[k]
+                    except IndexError:
+                        raise KeyError(f"Dict index {k} out of range.")
+                else:
+                    raise TypeError("Dict key must be str or int.")
+            elif isinstance(current, list):
+                if not isinstance(k, int):
+                    raise TypeError("List indices must be integers.")
+                try:
+                    current = current[k]
+                except IndexError:
+                    raise KeyError(f"List index {k} out of range.")
             else:
-                raise KeyError(f"Key path {keys} not found in dictionary.")
+                raise TypeError(f"Cannot index into {type(current).__name__}.")
 
-        if isinstance(current, dict):
-            return_obj = Dic(current)
-        else:
-            return_obj = current
-        return return_obj
+        if isinstance(current, Dic):  # final unwrap if needed
+            current = current._raw_dict
+        return Dic(current) if isinstance(current, dict) else current
 
-    def add_key_value(self, key:Union[int, str], value:Any, create_if_key_not_exists:bool)->None:
-        if self.has_nested_keys(key) or create_if_key_not_exists== True:
+    def add_key_value(
+            self, key: Union[int, str], value: Any, create_if_key_not_exists: bool = False
+    ) -> None:
+        if create_if_key_not_exists or key in self._raw_dict:
             self._raw_dict[key] = value
         else:
-            raise KeyError(f"the key doesn exist")
-
+            raise KeyError("the key doesn't exist")
