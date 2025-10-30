@@ -1,4 +1,4 @@
-from typing import Dict,List,Any
+from typing import Dict,List,Any, Tuple, override, Union
 
 from utilix.data.type.dic.interface import Interface as DicInterface
 
@@ -27,7 +27,7 @@ class Dic(DicInterface):
     def __repr__(self):
         return f"{self.__class__.__name__}({self._raw_dict})"
 
-    def __getitem__(self, key_or_keys: Union[str, tuple[str, ...]])->Dic:
+    def __getitem__(self, key_or_keys: Union[str, tuple[str, ...]])->"Dic":
         """
         raw = {"a": {"b": {"c": 42}}}
         d = Dic(raw)
@@ -60,3 +60,10 @@ class Dic(DicInterface):
         else:
             return_obj = current
         return return_obj
+
+    def add_key_value(self, key:Union[int, str], value:Any, create_if_key_not_exists:bool)->None:
+        if self.has_nested_keys(key) or create_if_key_not_exists== True:
+            self._raw_dict[key] = value
+        else:
+            raise KeyError(f"the key doesn exist")
+
