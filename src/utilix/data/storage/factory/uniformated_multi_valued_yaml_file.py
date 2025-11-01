@@ -35,7 +35,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
     """
 
     def __init__(self, str_path):
-        # Keep your existing UniFormat/MultiValued stack and the '---' separator
+        # Keep your existing UniFormat/MultiValued decoration and the '---' separator
         self._storage = UniFormated(MultiValued(File(Path(str_path)), "---"), YamlFormat)
 
     def attach_add_value_observer(self, add_value_observer: AddValueObserverInterface) ->None:
