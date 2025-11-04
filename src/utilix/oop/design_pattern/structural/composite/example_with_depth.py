@@ -72,7 +72,7 @@ class Composite(Component):
             yield from ch.walk()
 
 
-# -------- Example usage --------
+# -------- PublisherExample usage --------
 if __name__ == "__main__":
     root = Composite("root")
     a = Composite("a")

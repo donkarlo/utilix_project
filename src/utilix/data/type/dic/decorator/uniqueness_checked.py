@@ -54,7 +54,7 @@ class UniquenessChecked(DicDecorator):
                       ]
                   }
 
-        Example:
+        PublisherExample:
             >>> data = {"dims": {"time": {"units": ["second", "minute", "minute"]}}}
             >>> ok, problems = validate_unique_items_in_lists(data)
             >>> ok
