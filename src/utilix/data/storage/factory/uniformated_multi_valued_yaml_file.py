@@ -4,7 +4,7 @@ from typing import override
 
 # --- Fast YAML path: try C extensions, fall back to safe Python loaders ---
 import yaml
-from utilix.data.storage.decorator.multi_valued.add_value_observer_interface import AddValueObserverInterface
+from utilix.data.storage.decorator.multi_valued.add_value_subscriber import AddValueSubscriber
 
 try:
     from yaml import CLoader as YamlCLoader, CDumper as YamlCDumper  # fastest
@@ -35,13 +35,13 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
     """
 
     def __init__(self, str_path):
-        # Keep your existing UniFormat/MultiValued decoration and the '---' separator
+        # Keep your existing UniFormat/MultiValued decorator and the '---' separator
         self._storage = UniFormated(MultiValued(File(Path(str_path)), "---"), YamlFormat)
 
-    def attach_add_value_observer(self, add_value_observer: AddValueObserverInterface) ->None:
+    def attach_add_value_observer(self, add_value_observer: AddValueSubscriber) ->None:
         self._storage.attach_add_value_observer(add_value_observer)
 
-    def dettach_add_value_observer(self, add_value_observer: AddValueObserverInterface) ->None:
+    def dettach_add_value_observer(self, add_value_observer: AddValueSubscriber) ->None:
         self._storage.dettach_add_value_observer(add_value_observer)
 
     @override

@@ -1,8 +1,10 @@
 from typing import Any, override
-from utilix.data.storage.interface import Interface as StorageInterface
-import inspect
 
-class Decorator(StorageInterface):
+
+from utilix.data.storage.interface import Interface as StorageInterface
+from utilix.oop.design_pattern.structural.decorator.decorator import Decorator as BaseDecorator
+
+class Decorator(BaseDecorator, StorageInterface):
     """
     Base storage decorator that forwards to an inner StorageInterface.
     """
@@ -14,21 +16,21 @@ class Decorator(StorageInterface):
         Args:
             inner:
         """
-        self._inner = inner
+        super(BaseDecorator,self).__init__(inner)
 
-    @override
+    @override(StorageInterface)
     def load(self) -> str:
         return self._inner.load()
 
-    @override
+    @override(StorageInterface)
     def save(self) -> bool:
         return self._inner.save()
 
-    @override
+    @override(StorageInterface)
     def set_ram(self,content:str)->None:
         self._inner.set_ram(content)
 
-    @override
+    @override(StorageInterface)
     def add_to_ram(self, content:str) -> None:
         self._inner.set_ram(self._inner.get_ram() + content)
 
@@ -36,26 +38,10 @@ class Decorator(StorageInterface):
     def earase_storage(self) -> bool:
         self._inner.earase_storage()
 
-    @override
+    @override(StorageInterface)
     def earase_ram(self) -> bool:
         self._inner.earase_ram()
 
+    @override(StorageInterface)
     def get_ram(self) -> str:
         return self._inner.get_ram()
-
-    def __getattr__(self, name: str) -> Any:
-        if name.startswith("__") and name.endswith("__"):
-            raise AttributeError(f"{type(self).__name__} has no attribute {name!r}")
-
-        target: Any = self._inner
-        seen = set()
-        while target is not None and id(target) not in seen:
-            seen.add(id(target))
-            try:
-                inspect.getattr_static(target, name)
-                return getattr(target, name)
-            except AttributeError:
-                target = getattr(target, "_inner", None)
-        raise AttributeError(
-            f"{type(self).__name__} and its inner chain have no attribute {name!r}"
-        )

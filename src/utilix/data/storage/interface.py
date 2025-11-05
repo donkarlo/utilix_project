@@ -1,5 +1,7 @@
-from typing import Protocol, Any
+from typing import Protocol, Any, runtime_checkable
 
+
+@runtime_checkable
 class Interface(Protocol):
     """
     - This class determines what is it to be a storage. Storage is accessing a static storage on hard and bring it to RAM mememory and write it back to the storage
