@@ -1,4 +1,4 @@
-from typing import override, TypeVar, Generic
+from typing import override
 
 from utilix.data.storage.type.file.format.format import Format as DataFormat
 from utilix.data.storage.decorator.decorator import Decorator
@@ -18,8 +18,8 @@ class UniFormated(Decorator):
         super().__init__(inner)
         self._format = format
 
-    @override
-    def save(self) -> bool:
+    @override(Decorator)
+    def save(self) -> None:
         for i, value in enumerate(self._inner.get_ram_values()):
             if not self._format.validate_value(value):
                 raise ValueError(f"Value #{i} is not valid for the specified format.")

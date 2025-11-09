@@ -1,0 +1,9 @@
+from typing import Protocol, runtime_checkable, Any, List
+
+
+@runtime_checkable
+class Interface(Protocol):
+    _members:List[Any]
+    def add_member(self, member:Any)->None: ...
+    def remove_member(self, member:Any)->None: ...
+    def get_members(self, member:Any)->List[Any]: ...

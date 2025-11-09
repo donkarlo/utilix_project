@@ -1,13 +1,13 @@
 from typing import List, runtime_checkable, Protocol
 
-from utilix.data.storage.decorator.multi_valued.add_value_publisher import AddValuePublisher
+from utilix.data.storage.decorator.multi_valued.add_to_ram_values_publisher import AddToRamValuesPublisher
 from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.type.sliced_value.values_slices import ValuesSlices
 
 
 @runtime_checkable
-class Interface(StorageInterface, AddValuePublisher ,Protocol):
+class Interface(StorageInterface, AddToRamValuesPublisher , Protocol):
     def get_values_by_slice(self, slc:slice)->List:
         """
         Retirns a list of strings as document

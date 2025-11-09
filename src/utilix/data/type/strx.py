@@ -1,4 +1,4 @@
-from collection import defaultdict
+from group import defaultdict
 
 
 class Strx:

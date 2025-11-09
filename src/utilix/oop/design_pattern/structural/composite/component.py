@@ -1,36 +1,41 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
+from typing import Iterable, List, Tuple
+
 
 class Component(ABC):
     """Base class for Composite pattern."""
-    def __init__(self, name: str):
+
+    def __init__(self, name: str) -> None:
         self._name = name
 
     @abstractmethod
-    def stringify(self): ...
+    def stringify(self) -> str:
+        """Return a string representation of the subtree."""
+        ...
 
-    def add(self, child: "Component") -> None:
+    # Default leaf-like behavior
+    def add_child(self, child: "Component") -> None:
         raise NotImplementedError
 
-    def remove(self, child: "Component") -> None:
+    def remove_child(self, child: "Component") -> None:
         raise NotImplementedError
 
-    def children(self):
+    def get_children(self) -> Tuple["Component", ...]:
         return ()
 
     def is_leaf(self) -> bool:
         return True
 
-    def depth(self) -> int:
-        """Depth measured as number of levels from this node to the farthest leaf."""
+    def get_depth(self) -> int:
         return 1  # leaf depth = 1
 
-    def size(self) -> int:
-        """Total number of nodes in the subtree rooted here."""
+    def get_size(self) -> int:
         return 1
 
-    def walk(self):
+    def walk(self) -> Iterable["Component"]:
         """Preorder traversal."""
         yield self
 
-    def name(self) -> str:
+    def get_name(self) -> str:
         return self._name

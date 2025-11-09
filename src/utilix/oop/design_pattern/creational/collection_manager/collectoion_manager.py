@@ -10,7 +10,7 @@ Constructor = Callable[..., T] | type[T]
 
 class CollectionManager(Generic[T]):
     """
-    Hold and build a homogeneous collection of objects of type T.
+    Hold and build a homogeneous group of objects of type T.
     - Build many from (args tuples) or (kwargs dicts)
     - Optionally accept ready-made instances
     - Support random generation via a user-supplied generator function
@@ -76,7 +76,7 @@ class CollectionManager(Generic[T]):
 
     # ---------- access ----------
     def get_all(self) -> tuple[T, ...]:
-        """Return an immutable snapshot of the collection."""
+        """Return an immutable snapshot of the group."""
         return tuple(self._objects)
 
     def __iter__(self):

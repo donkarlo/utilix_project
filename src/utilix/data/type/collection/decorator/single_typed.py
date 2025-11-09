@@ -1,2 +1,0 @@
-class SingleTyped(Decorator):
-    pass

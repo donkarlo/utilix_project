@@ -1,5 +1,5 @@
 from typing import Union, Sequence
-from collection import Counter
+from group import Counter
 
 class Counterx:
     def __init__(self, raw_countable:Union[dict,Sequence]):

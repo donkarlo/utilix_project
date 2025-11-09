@@ -4,7 +4,9 @@ from typing import override
 
 # --- Fast YAML path: try C extensions, fall back to safe Python loaders ---
 import yaml
-from utilix.data.storage.decorator.multi_valued.add_value_subscriber import AddValueSubscriber
+from utilix.data.storage.decorator.multi_valued.add_to_ram_values_subscriber import AddToRamValuesSubscriber
+from utilix.data.storage.decorator.multi_valued.add_to_ram_values_publisher import AddToRamValuesPublisher
+from utilix.data.storage.interface import Interface as StorageInterface
 
 try:
     from yaml import CLoader as YamlCLoader, CDumper as YamlCDumper  # fastest
@@ -38,13 +40,15 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         # Keep your existing UniFormat/MultiValued decorator and the '---' separator
         self._storage = UniFormated(MultiValued(File(Path(str_path)), "---"), YamlFormat)
 
-    def attach_add_value_observer(self, add_value_observer: AddValueSubscriber) ->None:
+    @override(AddToRamValuesPublisher)
+    def attach_add_to_ram_values_observer(self, add_value_observer: AddToRamValuesSubscriber) ->None:
         self._storage.attach_add_value_observer(add_value_observer)
 
-    def dettach_add_value_observer(self, add_value_observer: AddValueSubscriber) ->None:
+    @override(AddToRamValuesPublisher)
+    def dettach_add_to_ram_values_observer(self, add_value_observer: AddToRamValuesSubscriber) ->None:
         self._storage.dettach_add_value_observer(add_value_observer)
 
-    @override
+    @override(StorageInterface)
     def load(self) -> None:
         """Load all YAML documents into memory and cache them."""
         with open(self.__get_path(), "r", encoding="utf-8") as stream:
@@ -53,7 +57,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
             ]
         self._storage.set_ram_units(ram_units)
 
-    @override
+    @override(StorageInterface)
     def save(self) -> None:
         """Persist the cached documents back to disk as a sliced_value-doc YAML."""
         values = self._storage.get_ram_values()
@@ -92,7 +96,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
 
         self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
 
-    @override  # keep if your project uses it; otherwise remove
+    @override(MultiValueInterface)  # keep if your project uses it; otherwise remove
     def get_values_by_slice(self, slc: slice) -> List[dict[str, Any]]:
         """Return a slice view; stream from disk if not cached."""
         if self._storage.get_ram_values_slices().slice_exists(slc):
@@ -104,18 +108,18 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         return self._storage.get_native_absolute_path()
 
     # Unimplemented interface methods (fill as needed)
-    @override
+    @override(StorageInterface)
     def earase_storage(self) -> None:
         pass
 
-    @override
+    @override(StorageInterface)
     def delete_storage(self) -> None:
         pass
 
-    @override
+    @override(StorageInterface)
     def earase_ram(self) -> None:
         pass
 
-    @override
+    @override(StorageInterface)
     def set_ram(self, ram: Any) -> None:
         pass
