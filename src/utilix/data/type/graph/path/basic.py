@@ -4,7 +4,7 @@ from utilix.data.type.graph.node import Node
 
 class Basic:
     """
-    This path just has nodes and it assumes that all edges are so equal that it is not necessary to mention them
+    This str_path just has nodes and it assumes that all edges are so equal that it is not necessary to mention them
     """
     def __init__(self, nodes: Optional[Node[List]] = None):
         if nodes is None:

@@ -63,7 +63,7 @@ def _build_db(conn: str, **kwargs: Any) -> Storage:
 # Public API
 def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -> Storage:
     """
-    Flexible factory that dispatches to type-specific builders.
+    Flexible factory that dispatches to kind-specific builders.
 
     Examples:
         f = get_storage(StaticFactory.FILE, "/tmp/a.bin")
@@ -71,7 +71,7 @@ def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -
         db = get_storage(StaticFactory.DB, "sqlite:///x.db", timeout=5)
 
     The required arguments are defined by each registered builder:
-    - FILE, DIR: expect `path: str`
+    - FILE, DIR: expect `str_path: str`
     - DB: expects `conn: str`
     """
     member = _coerce(kind)

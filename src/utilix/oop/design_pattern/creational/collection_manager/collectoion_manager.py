@@ -10,7 +10,7 @@ Constructor = Callable[..., T] | type[T]
 
 class CollectionManager(Generic[T]):
     """
-    Hold and build a homogeneous group of objects of type T.
+    Hold and build a homogeneous group of objects of kind T.
     - Build many from (args tuples) or (kwargs dicts)
     - Optionally accept ready-made instances
     - Support random generation via a user-supplied generator function
@@ -35,12 +35,12 @@ class CollectionManager(Generic[T]):
         created: list[T] = []
         for item in data:
             if isinstance(item, Mapping):
-                obj = self._cls(**item)  # type: ignore[arg-type]
+                obj = self._cls(**item)  # kind: ignore[arg-kind]
             elif isinstance(item, Sequence) and not isinstance(item, (str, bytes)):
-                obj = self._cls(*item)  # type: ignore[misc]
+                obj = self._cls(*item)  # kind: ignore[misc]
             else:
                 # assume it's already an instance of T
-                obj = item  # type: ignore[assignment]
+                obj = item  # kind: ignore[assignment]
             self._objects.append(obj)
             created.append(obj)
         return created

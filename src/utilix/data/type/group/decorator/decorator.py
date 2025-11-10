@@ -1,3 +1,4 @@
+from utilix.data.type.group.decorator.interface import Interface
 from utilix.oop.design_pattern.structural.decorator.decorator import Decorator as BaseDecorator
 
 

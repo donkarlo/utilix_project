@@ -1,6 +1,6 @@
 from typing import Dict
 from utilix.data.storage.type.file.format.format import Format
-from utilix.os.path import Path
+from utilix.os.path.path import Path
 import yaml
 
 

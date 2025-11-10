@@ -47,7 +47,7 @@ class UniquenessChecked(DicDecorator):
                   Each problem dict has the shape:
 
                   {
-                      "path": <str>,             # full path to the list
+                      "str_path": <str>,             # full str_path to the list
                       "duplicates": [
                           {"raw_value": <repr>, "indices": [<int>, ...]},
                           ...
@@ -59,7 +59,7 @@ class UniquenessChecked(DicDecorator):
             >>> ok, problems = validate_unique_items_in_lists(data)
             >>> ok
             False
-            >>> problems[0]["path"]
+            >>> problems[0]["str_path"]
             'dims!time!units'
         """
         data = self.get_raw_dict()
@@ -83,7 +83,7 @@ class UniquenessChecked(DicDecorator):
                     dups = {h: idxs for h, idxs in seen.items() if len(idxs) > 1}
                     if dups:
                         problems.append({
-                            "path": path or "<root>",
+                            "str_path": path or "<root>",
                             "duplicates": [
                                 {"raw_value": node[idxs[0]], "indices": idxs}
                                 for _, idxs in dups.items()

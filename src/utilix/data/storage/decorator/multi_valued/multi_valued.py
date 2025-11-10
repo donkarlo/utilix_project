@@ -43,7 +43,7 @@ class MultiValued(Decorator, MultiValuedInterface):
             self._add_value_subscribers.remove(add_value_observer)
 
 
-    @override(Decorator)
+    @override
     def save(self):
         # for example in core is File then
         if self._separator is not None:
@@ -53,51 +53,51 @@ class MultiValued(Decorator, MultiValuedInterface):
         #call save from decorator
         super().save()
 
-    @override(MultiValuedInterface)
+    @override
     def set_ram_values(self, ram_values:List)->None:
         self._ram_values = ram_values
 
-    @override(MultiValuedInterface)
+    @override
     def get_ram_values(self)->List:
         return self._ram_values
 
-    @override(MultiValuedInterface)
+    @override
     def get_ram_value_at(self, at:int)->None:
         return self._ram_values[at]
 
-    @override(MultiValuedInterface)
+    @override
     def add_to_ram_values_at(self, index: int, values: List) -> None:
         for offset, value in enumerate(values):
             self._ram_values.insert(index + offset, value)
             for add_value_observer in self._add_value_subscribers:
                 add_value_observer.add_to_ram_values_update(value)
 
-    @override(MultiValuedInterface)
+    @override
     def get_ram_values_by_slice(self, slc: slice) -> List:
         return self._ram_values[slc]
 
-    @override(MultiValuedInterface)
+    @override
     def add_to_ram_values(self, value:str)->None:
         self._ram_values.append(value)
         for add_value_observer in self._add_value_subscribers:
             add_value_observer.add_to_ram_values_update(value)
 
-    @override(MultiValuedInterface)
+    @override
     def add_to_ram_values_slices(self, valuesSlice:ValuesSlice)->None:
         self._ram_values_slices.add_values_slice(valuesSlice)
         for add_value_observer in self._add_value_subscribers:
             for value in valuesSlice.get_values():
                 add_value_observer.add_to_ram_values_update(value)
 
-    @override(MultiValuedInterface)
+    @override
     def earase_ram_values(self)->None:
         self._ram_values.clear()
 
-    @override(MultiValuedInterface)
+    @override
     def get_ram_values_slices(self)->ValuesSlices:
         return self._ram_values_slices
 
-    @override(MultiValuedInterface)
+    @override
     def get_ram_values_from_values_slices_by_slice(self,slc:slice)->List[str]:
         return self._ram_values_slices.get_values_by_slice(slc)
 

@@ -8,7 +8,7 @@ class UniFormated(Decorator):
     """
     - Uni formated means all documents in the same file or storage have the same format. for example  a a file full of many yaml documents
     - This meaningful only for sliced_value units
-    - To check each raw_value to have the same data type as other units.
+    - To check each raw_value to have the same data kind as other units.
     - We do not validate when loading, because we expect it tobe validated
     """
     def __init__(self, inner:MultiValued, format:DataFormat):

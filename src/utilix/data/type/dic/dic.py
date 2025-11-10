@@ -7,7 +7,9 @@ KeySeq = Sequence[Key]
 
 class Dic(DicInterface):
     def __init__(self, raw_dict: Dict):
-        self._raw_dict: Dict = raw_dict
+        if not isinstance(raw_dict, dict):
+            raise TypeError(f"Dic expects dict, got {type(raw_dict).__name__}")
+        self._raw_dict = raw_dict
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._raw_dict})"

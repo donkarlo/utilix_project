@@ -2,22 +2,20 @@ from typing import List, Any
 from typing import override
 
 
-# --- Fast YAML path: try C extensions, fall back to safe Python loaders ---
+# --- Fast YAML str_path: try C extensions, fall back to safe Python loaders ---
 import yaml
 from utilix.data.storage.decorator.multi_valued.add_to_ram_values_subscriber import AddToRamValuesSubscriber
-from utilix.data.storage.decorator.multi_valued.add_to_ram_values_publisher import AddToRamValuesPublisher
-from utilix.data.storage.interface import Interface as StorageInterface
 
 try:
     from yaml import CLoader as YamlCLoader, CDumper as YamlCDumper  # fastest
 except Exception:
     from yaml import SafeLoader as YamlCLoader, SafeDumper as YamlCDumper  # fallback
 
-from utilix.data.storage.type.file.format.type.yaml.yaml import Yaml as YamlFormat
+from utilix.data.storage.type.file.format.kind.yaml.yaml import Yaml as YamlFormat
 from utilix.data.storage.decorator.multi_valued.uniformated import UniFormated
 from utilix.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilix.data.storage.type.file.file import File
-from utilix.os.path import Path
+from utilix.os.path.path import Path
 from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValueInterface
 from itertools import islice
@@ -40,15 +38,15 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         # Keep your existing UniFormat/MultiValued decorator and the '---' separator
         self._storage = UniFormated(MultiValued(File(Path(str_path)), "---"), YamlFormat)
 
-    @override(AddToRamValuesPublisher)
+    @override
     def attach_add_to_ram_values_observer(self, add_value_observer: AddToRamValuesSubscriber) ->None:
         self._storage.attach_add_value_observer(add_value_observer)
 
-    @override(AddToRamValuesPublisher)
+    @override
     def dettach_add_to_ram_values_observer(self, add_value_observer: AddToRamValuesSubscriber) ->None:
         self._storage.dettach_add_value_observer(add_value_observer)
 
-    @override(StorageInterface)
+    @override
     def load(self) -> None:
         """Load all YAML documents into memory and cache them."""
         with open(self.__get_path(), "r", encoding="utf-8") as stream:
@@ -57,7 +55,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
             ]
         self._storage.set_ram_units(ram_units)
 
-    @override(StorageInterface)
+    @override
     def save(self) -> None:
         """Persist the cached documents back to disk as a sliced_value-doc YAML."""
         values = self._storage.get_ram_values()
@@ -96,7 +94,7 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
 
         self._storage.add_to_ram_values_slices(ValuesSlice(selected_docs, slc))
 
-    @override(MultiValueInterface)  # keep if your project uses it; otherwise remove
+    @override
     def get_values_by_slice(self, slc: slice) -> List[dict[str, Any]]:
         """Return a slice view; stream from disk if not cached."""
         if self._storage.get_ram_values_slices().slice_exists(slc):
@@ -108,18 +106,18 @@ class UniformatedMultiValuedYamlFile(MultiValueInterface):
         return self._storage.get_native_absolute_path()
 
     # Unimplemented interface methods (fill as needed)
-    @override(StorageInterface)
+    @override
     def earase_storage(self) -> None:
         pass
 
-    @override(StorageInterface)
+    @override
     def delete_storage(self) -> None:
         pass
 
-    @override(StorageInterface)
+    @override
     def earase_ram(self) -> None:
         pass
 
-    @override(StorageInterface)
+    @override
     def set_ram(self, ram: Any) -> None:
         pass

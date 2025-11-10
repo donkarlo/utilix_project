@@ -1,7 +1,7 @@
 from typing import Any, override
 
 from utilix.data.type.group.decorator.decorator import Decorator as GroupDecorator
-from utilix.data.type.group.interface import Interface as GroupInterface
+from utilix.data.type.group.decorator.interface import Interface as GroupInterface
 
 
 class UniqueNamed(GroupDecorator):

@@ -18,19 +18,19 @@ class Decorator(BaseDecorator, StorageInterface):
         """
         super(BaseDecorator,self).__init__(inner)
 
-    @override(StorageInterface)
+    @override
     def load(self) -> str:
         return self._inner.load()
 
-    @override(StorageInterface)
+    @override
     def save(self) -> bool:
         return self._inner.save()
 
-    @override(StorageInterface)
+    @override
     def set_ram(self,content:str)->None:
         self._inner.set_ram(content)
 
-    @override(StorageInterface)
+    @override
     def add_to_ram(self, content:str) -> None:
         self._inner.set_ram(self._inner.get_ram() + content)
 
@@ -38,10 +38,10 @@ class Decorator(BaseDecorator, StorageInterface):
     def earase_storage(self) -> bool:
         self._inner.earase_storage()
 
-    @override(StorageInterface)
+    @override
     def earase_ram(self) -> bool:
         self._inner.earase_ram()
 
-    @override(StorageInterface)
+    @override
     def get_ram(self) -> str:
         return self._inner.get_ram()

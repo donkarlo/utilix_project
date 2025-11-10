@@ -1,9 +1,10 @@
-from typing import Protocol, Any
+from typing import Protocol, Any, runtime_checkable
 
 
+@runtime_checkable
 class Format(Protocol):
     """
-    - format is specific to file, it is not a data type
+    - format is specific to file, it is not a data kind
     - it can not have storage save option. if saving is needed, it should be done through a storage object
     - It is to do the most general things about the format such as validation
     """

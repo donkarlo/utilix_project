@@ -1,6 +1,6 @@
-from __future__ import annotations
+# in component.py
 from abc import ABC, abstractmethod
-from typing import Iterable, List, Tuple
+from typing import Iterable, Tuple
 
 
 class Component(ABC):
@@ -11,10 +11,9 @@ class Component(ABC):
 
     @abstractmethod
     def stringify(self) -> str:
-        """Return a string representation of the subtree."""
         ...
 
-    # Default leaf-like behavior
+    # Leaf-like defaults
     def add_child(self, child: "Component") -> None:
         raise NotImplementedError
 
@@ -28,14 +27,33 @@ class Component(ABC):
         return True
 
     def get_depth(self) -> int:
-        return 1  # leaf depth = 1
+        return 1
 
     def get_size(self) -> int:
         return 1
 
     def walk(self) -> Iterable["Component"]:
-        """Preorder traversal."""
         yield self
 
     def get_name(self) -> str:
         return self._name
+
+    def get_tree(self, prefix: str = "", is_last: bool = True) -> str:
+        """Default leaf drawing."""
+        return prefix + ("└── " if is_last else "├── ") + self.get_name()
+
+    def get_graphviz(self, dot=None, parent_name: str | None = None):
+        """Default leaf node for Graphviz."""
+        from graphviz import Digraph
+        if dot is None:
+            dot = Digraph(comment=f"Tree ({self.get_name()})")
+        dot.node(self.get_name())
+        if parent_name:
+            dot.edge(parent_name, self.get_name())
+        return dot
+
+    def draw(self)->None:
+        self.get_graphviz().render("tree", view=True)
+
+    def draw_tree(self)->None:
+        print(self.get_tree())

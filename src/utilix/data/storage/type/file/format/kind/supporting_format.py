@@ -1,7 +1,7 @@
 from enum import IntEnum
 from typing import Union
 from functools import cache
-from utilix.data.storage.type.file.format.type.supporting_format import SupportingFormat
+from utilix.data.storage.type.file.format.kind.supporting_format import SupportingFormat
 
 class SupportingFormat(IntEnum):
     """

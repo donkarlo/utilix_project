@@ -4,7 +4,7 @@ from utilix.data.storage.interface import Interface as StorageInterface
 
 
 @runtime_checkable
-class AddToRamValuesPublisher(StorageInterface, Protocol):
+class AddToRamValuesPublisher(Protocol):
 
     def attach_add_to_ram_values_observer(self, add_observer: AddToRamValuesSubscriber) -> None:
         ...

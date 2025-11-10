@@ -1,5 +1,5 @@
 from utilix.data.storage.interface import Interface as StorageInterface
-from utilix.os.path import Path
+from utilix.os.path.path import Path
 from utilix.data.storage.type.file.file import File
 from ruamel.yaml import YAML
 from typing import Dict
