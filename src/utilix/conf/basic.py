@@ -1,7 +1,7 @@
 from typing import Union, Any
 
 from utilix.conf.interface import Interface as ConfInterface
-from utilix.os.path.path import Path
+from utilix.os.file_system.path.path import Path
 from collections.abc import Hashable
 
 

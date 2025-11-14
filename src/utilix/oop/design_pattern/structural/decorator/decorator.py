@@ -65,3 +65,17 @@ class Decorator(ABC):
                 return True
             current = getattr(current, "_inner", None)
         return False
+
+    @staticmethod
+    def has_decorator(obj: Any, decorator: Any) -> bool:
+        # Determine the target decorator type
+        if hasattr(decorator, "_inner") and issubclass(decorator.__class__, Decorator):
+            target_type: Type[Decorator] = decorator.__class__
+        elif isinstance(decorator, type) and issubclass(decorator, Decorator):
+            target_type = decorator
+        else:
+            raise TypeError("decorator must be a Decorator instance or subclass")
+
+        # Use the custom __instancecheck__ to walk the decorator chain
+        return isinstance(obj, target_type)
+

@@ -1,6 +1,6 @@
 from typing import List, Any
 
-from utilix.data.type.group.decorator.interface import Interface
+from utilix.data.type.group.interface import Interface
 
 
 class Group(Interface):

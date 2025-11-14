@@ -1,4 +1,4 @@
-from utilix.os.path.path import Path
+from utilix.os.file_system.path.path import Path
 
 
 class Directory(Path):
@@ -6,7 +6,7 @@ class Directory(Path):
         super().__init__(str_path)
 
     def create_directory(self, name: str) -> None:
-        if self.is_directory():
+        if self.directory_exists():
             os.mkdir(self.get_native_os_path_with_trailing_slash() + name)
         else:
             raise TypeError("create_directory() not implemented for non-directory")

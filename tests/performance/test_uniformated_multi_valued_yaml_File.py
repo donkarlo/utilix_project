@@ -1,7 +1,7 @@
 import time
 
 from utilix.data.storage.factory.uniformated_multi_valued_yaml_file import UniformatedMultiValuedYamlFile
-from utilix.os.path.path import Path
+from utilix.os.file_system.path.path import Path
 
 
 class TestUniformatedMultiValuedYamlFile:

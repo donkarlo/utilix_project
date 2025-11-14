@@ -3,6 +3,7 @@ from typing import Iterable, List, Tuple, Optional, override
 from utilix.oop.design_pattern.structural.composite.component import Component
 from utilix.oop.design_pattern.structural.composite.leaf import Leaf
 from graphviz import Digraph
+from utilix.os.file_system.path.path import Path as UtilixPath
 
 
 class Composite(Component):
@@ -12,6 +13,8 @@ class Composite(Component):
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self._children: List[Component] = []
+
+
 
     def _would_create_cycle(self, child: Component) -> bool:
         # Prevent adding an ancestor as a child
@@ -35,10 +38,10 @@ class Composite(Component):
 
     def get_child(self, child: Component) -> Component:
         # If you prefer Optional: change return kind to Optional[Component] and return None instead of raising
-        for c in self._children:
-            if c is child:
-                return c
-        raise ValueError("Child not found.")
+        for current_child in self._children:
+            if current_child is child:
+                return current_child
+        raise ValueError(f"Child {child.get_name()} not found.")
 
     def convert_leaf_to_composite(self, leaf: Leaf) -> "Composite":
         """Promote a direct child Leaf into a Composite with the same name, keeping its position."""

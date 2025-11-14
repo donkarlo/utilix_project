@@ -70,10 +70,27 @@ class Dic(DicInterface):
             current = current._raw_dict
         return Dic(current) if isinstance(current, dict) else current
 
-    def add_key_value(
-            self, key: Union[int, str], value: Any, create_if_key_not_exists: bool = False
-    ) -> None:
+    def add_key_value(self, key: Union[int, str], value: Any, create_if_key_not_exists: bool) -> None:
         if create_if_key_not_exists or key in self._raw_dict:
             self._raw_dict[key] = value
         else:
             raise KeyError("the key doesn't exist")
+
+    def add_values_to_key(self, values:List[Any], create_if_key_not_exists: bool ) -> None:
+        if key in self._raw_dict:
+            if self._raw_dict[key] == None:
+                self._raw_dict[key] = []
+            elif not isinstance(self._raw_dict[key], list):
+                self._raw_dict[key] = [self._raw_dict[key]]
+            self._raw_dict[key].append(values)
+
+
+    def get_keys_and_values(self) -> List[Tuple[str, Any]]:
+        return self._raw_dict.items()
+
+    def get_keys(self)->List[Tuple[str, Any]]:
+        return self._raw_dict.keys()
+
+    def get_values(self)->List[Any]:
+        return self._raw_dict.values()
+

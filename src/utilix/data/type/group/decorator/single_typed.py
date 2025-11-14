@@ -1,7 +1,7 @@
-from typing import Type, Any, TypeVar, Generic, override
+from typing import Type, TypeVar, Generic, override
 
 from utilix.data.type.group.decorator.decorator import Decorator as GroupDecorator
-from utilix.data.type.group.decorator.interface import Interface
+from utilix.data.type.group.interface import Interface
 
 T = TypeVar("T")
 

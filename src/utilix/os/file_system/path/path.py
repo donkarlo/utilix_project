@@ -17,11 +17,10 @@ class Path:
         self._all_abs_file_paths_rec = None
 
     def get_native_path(self) -> str:
-        '''
+        """
         It removes the trailing slashes in case they are folders
-        Converts / or \ to native os paths
-        :return:
-        '''
+        - Converts forward slash (/) or backslash (\\) to native OS paths
+        """
         if self._native_os_path is None:
             self._native_os_path = os.path.normpath(self.__raw_path)
         return self._native_os_path
@@ -35,21 +34,9 @@ class Path:
         :return: str
         '''
         native_path:str = self.get_native_path()
-        if self.is_directory():
+        if self.directory_exists():
             return native_path+os.sep
         return native_path
-
-    def is_file(self)->bool:
-        '''
-        :return:
-        '''
-        return os.path.isfile(self.get_native_absolute_path())
-
-    def is_directory(self)->bool:
-        '''
-        :return:
-        '''
-        return os.path.isdir(self.get_native_absolute_path())
 
     def get_real_file_type_regardless_of_extension(self, path_to_file_type:Union[str, 'Path']) -> bool:
 
@@ -66,7 +53,7 @@ class Path:
     def get_os_path_separator():
         return os.sep
 
-    def get_parent_directory(self) -> str:
+    def get_parent_directory_string_path(self) -> str:
         """
         Returns the parent directory as a Path object.
 
@@ -76,7 +63,7 @@ class Path:
         parent_dir = os.path.dirname(self.get_native_absolute_path())
         return parent_dir
 
-    def dir_exists(self) -> bool:
+    def directory_exists(self) -> bool:
         """
         Returns True only if the str_path exists and is a directory.
         """
@@ -97,6 +84,3 @@ class Path:
 
     def create_missing_directories(self):
         os.makedirs(self.get_native_absolute_path(), exist_ok=True)
-
-
-

@@ -1,13 +1,13 @@
 from typing import List, runtime_checkable, Protocol
 
-from utilix.data.storage.decorator.multi_valued.add_to_ram_values_publisher import AddToRamValuesPublisher
+from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_publisher import AddToRamValuesPublisher
 from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.data.type.sliced_value.values_slice import ValuesSlice
 from utilix.data.type.sliced_value.values_slices import ValuesSlices
 
 
 @runtime_checkable
-class Interface(StorageInterface, AddToRamValuesPublisher , Protocol):
+class Interface(StorageInterface, AddToRamValuesPublisher, GroupRamValuesAdditionFinishedPublisher , Protocol):
     def get_values_by_slice(self, slc:slice)->List:
         """
         Retirns a list of strings as document
@@ -31,7 +31,7 @@ class Interface(StorageInterface, AddToRamValuesPublisher , Protocol):
 
     def add_to_ram_values(self, value: str) -> None: ...
 
-    def add_to_ram_values_slices(self, valuesSlice: ValuesSlice) -> None: ...
+    def add_to_ram_values_slices(self, values_slice: ValuesSlice) -> None: ...
 
     def earase_ram_values(self) -> None: ...
 

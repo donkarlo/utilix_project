@@ -39,21 +39,37 @@ class Component(ABC):
         return self._name
 
     def get_tree(self, prefix: str = "", is_last: bool = True) -> str:
-        """Default leaf drawing."""
+        """Default leaf drawing (ASCII)."""
         return prefix + ("└── " if is_last else "├── ") + self.get_name()
 
     def get_graphviz(self, dot=None, parent_name: str | None = None):
-        """Default leaf node for Graphviz."""
+        """Build a Graphviz graph in-memory only (no files)."""
         from graphviz import Digraph
         if dot is None:
-            dot = Digraph(comment=f"Tree ({self.get_name()})")
+            # 'name' is in-memory identifier; does not force file creation.
+            dot = Digraph(comment=f"Tree ({self.get_name()})", name="in_memory_graph")
+            # Keep format unconstrained here; draw() decides the output format.
         dot.node(self.get_name())
         if parent_name:
             dot.edge(parent_name, self.get_name())
         return dot
 
-    def draw(self)->None:
-        self.get_graphviz().render("tree", view=True)
+    def draw(self, fmt: str = "svg"):
+        """Show Graphviz graph in PyCharm SciView without creating files."""
 
-    def draw_tree(self)->None:
+        import io
+        import matplotlib.pyplot as plt
+
+        dot = self.get_graphviz()
+        png_bytes = dot.pipe(format="png")  # in-memory render, no files
+
+        # Display in PyCharm's SciView
+        img = plt.imread(io.BytesIO(png_bytes), format="png")
+        plt.figure(figsize=(8, 8))
+        plt.imshow(img)
+        plt.axis("off")
+        plt.tight_layout()
+        plt.show()
+
+    def draw_tree(self) -> None:
         print(self.get_tree())

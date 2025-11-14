@@ -1,7 +1,7 @@
 from utilix.data.storage.decorator.single_valued import SingleValued
 from utilix.data.storage.type.file.file import File
 from utilix.data.type.dic.dic import Dic as BasicDict
-from utilix.os.path.path import Path
+from utilix.os.file_system.path.path import Path
 from utilix.data.type.yaml import Yaml as YamlType
 
 

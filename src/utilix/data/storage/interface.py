@@ -12,7 +12,7 @@ class Interface(Protocol):
     
     def load(self) -> None:
         """
-        Loadsfrom storage to RAM
+        Loads from storage to RAM
         Returns:
 
         """
