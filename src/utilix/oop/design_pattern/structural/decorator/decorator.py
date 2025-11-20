@@ -24,7 +24,12 @@ class Decorator(ABC):
             f"{type(self).__name__} and its inner chain have no attribute {name!r}"
         )
 
-    def get_decorator_stack(self) -> List["Decorator"]:
+    def get_decorator_stack(self, inner_to_outer:bool) -> List["Decorator"]:
+        """
+        from the most inner to the most outer
+        Returns:
+
+        """
         stack: List[Decorator] = []
         seen = set()
         current: Any = self
@@ -32,6 +37,7 @@ class Decorator(ABC):
             seen.add(id(current))
             stack.append(current)
             current = getattr(current, "_inner", None)
+
         stack.reverse()
         return stack
 
@@ -68,7 +74,7 @@ class Decorator(ABC):
 
     @staticmethod
     def has_decorator(obj: Any, decorator: Any) -> bool:
-        # Determine the target decorator type
+        # Determine the target decorator kind
         if hasattr(decorator, "_inner") and issubclass(decorator.__class__, Decorator):
             target_type: Type[Decorator] = decorator.__class__
         elif isinstance(decorator, type) and issubclass(decorator, Decorator):
@@ -78,4 +84,23 @@ class Decorator(ABC):
 
         # Use the custom __instancecheck__ to walk the decorator chain
         return isinstance(obj, target_type)
+
+    def get_decorator_pattern_name(self, base_token: str) -> str:
+        if not isinstance(base_token, str):
+            raise TypeError("base_token must be a string")
+
+        stack = self.get_decorator_stack()
+        # stack already inner → outer because of reverse()
+
+        tokens: List[str] = []
+        for decorator in stack:
+            class_name = decorator.__class__.__name__
+            snake = self._camel_to_snake(class_name)
+            tokens.append(snake)
+
+        tokens.append(base_token)
+        return "_".join(tokens)
+
+    def get_meaning_vector(self):
+        pass
 

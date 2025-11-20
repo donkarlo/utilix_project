@@ -1,12 +1,12 @@
 # in component.py
 from abc import ABC, abstractmethod
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Optional
 
 
 class Component(ABC):
     """Base class for Composite pattern."""
 
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: Optional[str]) -> None:
         self._name = name
 
     @abstractmethod

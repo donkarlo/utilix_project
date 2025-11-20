@@ -11,12 +11,31 @@ def _drop_self(sig: inspect.Signature) -> inspect.Signature:
     return inspect.Signature(params, return_annotation=sig.return_annotation)
 
 
+def _normalized_params_without_names(sig: inspect.Signature) -> list[tuple]:
+    """
+    Normalize parameters for comparison in a way that ignores the parameter names.
+    Keeps:
+        - kind (positional, keyword-only, etc.)
+        - annotation
+        - default value
+    Ignores:
+        - parameter name
+    """
+    normalized = []
+    for param in sig.parameters.values():
+        entry = (param.kind, param.annotation, param.default)
+        normalized.append(entry)
+    return normalized
+
+
 class _OverrideDescriptor:
     """Descriptor that validates override against a specific base at class creation."""
 
-    def __init__(self, func: Callable, base: Type):
+    def __init__(self, func: Callable, base: Type, check_signature: bool, check_return: bool):
         self.func = func
         self.base = base
+        self.check_signature = check_signature
+        self.check_return = check_return
         self.name = func.__name__
         update_wrapper(self, func)
 
@@ -31,9 +50,13 @@ class _OverrideDescriptor:
         base_attr = getattr(self.base, name)
 
         # Extract underlying callables in case of descriptors
-        base_callable = base_attr.fget if isinstance(base_attr, property) else (
-            base_attr.__func__ if isinstance(base_attr, (classmethod, staticmethod)) else base_attr
-        )
+        if isinstance(base_attr, property):
+            base_callable = base_attr.fget
+        elif isinstance(base_attr, (classmethod, staticmethod)):
+            base_callable = base_attr.__func__
+        else:
+            base_callable = base_attr
+
         sub_callable = self.func
 
         if not callable(base_callable):
@@ -42,22 +65,27 @@ class _OverrideDescriptor:
                 f"but {self.base.__name__}.{name} is not callable."
             )
 
-        # Compare signatures (excluding self/cls)
         sig_base = _drop_self(inspect.signature(base_callable))
         sig_sub = _drop_self(inspect.signature(sub_callable))
 
-        if sig_sub.parameters != sig_base.parameters:
-            raise TypeError(
-                f"Signature mismatch for {owner.__name__}.{name} overriding "
-                f"{self.base.__name__}.{name}: {sig_sub} != {sig_base}"
-            )
+        # Compare parameter lists (ignoring parameter names, if enabled)
+        if self.check_signature:
+            base_params = _normalized_params_without_names(sig_base)
+            sub_params = _normalized_params_without_names(sig_sub)
+
+            if sub_params != base_params:
+                raise TypeError(
+                    f"Signature mismatch for {owner.__name__}.{name} overriding "
+                    f"{self.base.__name__}.{name}: {sig_sub} != {sig_base}"
+                )
 
         # Optionally check return annotation (enforce exact match)
-        if sig_sub.return_annotation != sig_base.return_annotation:
-            raise TypeError(
-                f"Return type mismatch for {owner.__name__}.{name} overriding "
-                f"{self.base.__name__}.{name}: {sig_sub.return_annotation} != {sig_base.return_annotation}"
-            )
+        if self.check_return:
+            if sig_sub.return_annotation != sig_base.return_annotation:
+                raise TypeError(
+                    f"Return type mismatch for {owner.__name__}.{name} overriding "
+                    f"{self.base.__name__}.{name}: {sig_sub.return_annotation} != {sig_base.return_annotation}"
+                )
 
         # Passed: keep method boundable via descriptor protocol
 
@@ -66,26 +94,30 @@ class _OverrideDescriptor:
         return self.func.__get__(instance, owner)
 
 
-def override_from(base: Type):
+def override_from(base: Type, check_signature: bool = True, check_return: bool = True):
     """Method decorator: perform override checks against `base` at class creation time."""
 
     def _decorate(func: Callable):
-        return _OverrideDescriptor(func, base)
+        return _OverrideDescriptor(func, base, check_signature, check_return)
 
     return _decorate
 
-if __name__== "__main__":
+
+if __name__ == "__main__":
     class A:
         def do(self, x: int, y: int) -> int:
             return x + y
 
+
     class D:
         pass
+
 
     class C(A):
         pass
 
-    class B(D,C):
-        @override_from(D)
-        def do(self, x: int, y: int) -> int:
-            return x - y
+
+    class B(D, C):
+        @override_from(A)
+        def do(self, a: int, b: int) -> int:
+            return a - b

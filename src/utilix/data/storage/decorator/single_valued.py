@@ -2,7 +2,7 @@ from typing import Any
 
 from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.data.storage.decorator.decorator import Decorator as StorageDecorator
-from utilix.data.type.type import Type as DataType
+from utilix.data.kind.kind import Kind as DataType
 
 class SingleValued(StorageDecorator):
     def __init__(self, inner: StorageInterface , data_type: DataType):
@@ -25,4 +25,4 @@ class SingleValued(StorageDecorator):
         super().save(self.get_ram())
 
     def __validate_ram(self, ram:str)->bool:
-        return self._data_type.validate(ram)
+        return self._data_type.is_of_my_kind(ram)

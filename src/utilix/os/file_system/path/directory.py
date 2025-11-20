@@ -7,6 +7,6 @@ class Directory(Path):
 
     def create_directory(self, name: str) -> None:
         if self.directory_exists():
-            os.mkdir(self.get_native_os_path_with_trailing_slash() + name)
+            os.mkdir(self.get_native_os_string_path_with_trailing_slash() + name)
         else:
             raise TypeError("create_directory() not implemented for non-directory")

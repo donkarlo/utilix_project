@@ -8,7 +8,6 @@ class Decorator(BaseDecorator, StorageInterface):
     """
     Base storage decorator that forwards to an inner StorageInterface.
     """
-    __slots__ = ("_inner",)
 
     def __init__(self, inner: StorageInterface):
         """
@@ -16,14 +15,14 @@ class Decorator(BaseDecorator, StorageInterface):
         Args:
             inner:
         """
-        super(BaseDecorator,self).__init__(inner)
+        BaseDecorator.__init__(self, inner)
 
     @override
     def load(self) -> str:
         return self._inner.load()
 
     @override
-    def save(self) -> bool:
+    def save(self) -> None:
         return self._inner.save()
 
     @override
@@ -35,11 +34,11 @@ class Decorator(BaseDecorator, StorageInterface):
         self._inner.set_ram(self._inner.get_ram() + content)
 
     @override
-    def earase_storage(self) -> bool:
+    def earase_storage(self) -> None:
         self._inner.earase_storage()
 
     @override
-    def earase_ram(self) -> bool:
+    def earase_ram(self) -> None:
         self._inner.earase_ram()
 
     @override

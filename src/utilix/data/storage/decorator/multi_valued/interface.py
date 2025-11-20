@@ -1,9 +1,11 @@
 from typing import List, runtime_checkable, Protocol
 
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_publisher import AddToRamValuesPublisher
+from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_publisher import \
+    GroupRamValuesAdditionFinishedPublisher
 from utilix.data.storage.interface import Interface as StorageInterface
-from utilix.data.type.sliced_value.values_slice import ValuesSlice
-from utilix.data.type.sliced_value.values_slices import ValuesSlices
+from utilix.data.kind.sliced_value.values_slice import ValuesSlice
+from utilix.data.kind.sliced_value.values_slices import ValuesSlices
 
 
 @runtime_checkable

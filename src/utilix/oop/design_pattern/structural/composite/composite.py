@@ -36,12 +36,57 @@ class Composite(Component):
     def remove_child(self, child: Component) -> None:
         self._children.remove(child)
 
-    def get_child(self, child: Component) -> Component:
-        # If you prefer Optional: change return kind to Optional[Component] and return None instead of raising
+    def has_direct_child(self, child: Component) -> bool:
         for current_child in self._children:
+            # is for verifying if the two child refer to teh same RAM address
             if current_child is child:
-                return current_child
-        raise ValueError(f"Child {child.get_name()} not found.")
+                return True
+        return False
+
+    def get_child_by_path_parts(self, path_parts: list[str]) -> Component:
+        """
+        Traverse the composite hierarchy following the given path_parts.
+        Example:
+            path_parts = ["A", "B", "C"]
+            returns the component named C under A/B/C
+        """
+        if not path_parts:
+            raise ValueError("Path parts list cannot be empty.")
+        current: Component = self
+        for part in path_parts:
+            found = None
+            for child in current.get_children():
+                if child.get_name() == part:
+                    found = child
+                    break
+            if found is None:
+                raise ValueError(f"Path segment '{part}' not found under '{current.get_name()}'.")
+            current = found
+        return current
+
+    def get_child_by_name(self, name: str) -> Component:
+        """
+        Searches ALL descendants recursively.
+        Raises ValueError if no match or more than one match is found.
+        """
+
+        matches: list[Component] = []
+
+        for node in self.walk():  # walk() already yields full subtree including self
+            if node is self:
+                continue
+            if node.get_name() == name:
+                matches.append(node)
+
+        if len(matches) == 0:
+            raise ValueError(f"No descendant named '{name}' found under '{self.get_name()}'.")
+
+        if len(matches) > 1:
+            raise ValueError(
+                f"Multiple descendants named '{name}' found under '{self.get_name()}'."
+            )
+
+        return matches[0]
 
     def convert_leaf_to_composite(self, leaf: Leaf) -> "Composite":
         """Promote a direct child Leaf into a Composite with the same name, keeping its position."""

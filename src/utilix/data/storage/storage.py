@@ -8,7 +8,7 @@ class Storage(StorageInterface):
     - This is a single object if you want multi raw_value storage then multi_valued decorator
     """
     def __init__(self):
-        # from source to python variable
+        # from os_file to python variable
         self._ram: str |  None = None
 
     def get_ram(self)->Optional[str]:

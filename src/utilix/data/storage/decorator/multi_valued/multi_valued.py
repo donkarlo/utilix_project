@@ -1,10 +1,13 @@
-from typing import override, List
+from typing import override, List, Any
 
 from utilix.data.storage.decorator.decorator import Decorator
+from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_publisher import AddToRamValuesPublisher
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_publisher import \
     GroupRamValuesAdditionFinishedPublisher
-from utilix.data.type.sliced_value.values_slice import ValuesSlice
-from utilix.data.type.sliced_value.values_slices import ValuesSlices
+from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_subscriber import \
+    GroupRamValuesAdditionFinishedSubscriber
+from utilix.data.kind.sliced_value.values_slice import ValuesSlice
+from utilix.data.kind.sliced_value.values_slices import ValuesSlices
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_subscriber import AddToRamValuesSubscriber
 from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValuedInterface
 from utilix.oop.inheritance.overriding.override_from import override_from
@@ -12,10 +15,9 @@ from utilix.oop.inheritance.overriding.override_from import override_from
 
 class MultiValued(Decorator, MultiValuedInterface):
     """
-    A kind of source full of  values such as a sliced_value doc yaml file.
+    A kind of os_file full of  values such as a sliced_value doc yaml file.
     Each raw_value can have a different format
     """
-    __slots__ = ("_ram_values", "_separator", "_ram_values_slices", "_add_value_subscribers")
 
     def __init__(self, inner:Decorator, separator:str):
         """
@@ -23,11 +25,11 @@ class MultiValued(Decorator, MultiValuedInterface):
             inner:
             separator: holds the strategy for breaking string blob in the storage to values
         """
-        super(Decorator, self).__init__(inner)
+        Decorator.__init__(self, inner)
 
         #add_value_subscriber
         self._add_value_subscribers: List[AddToRamValuesSubscriber] = []
-        self._group_ram_values_finished_subscribers = []
+        self._group_ram_values_finished_subscribers:List[GroupRamValuesAdditionFinishedSubscriber] = []
 
         #to hold one ram raw_value TODO: Convert the list to group
         self._ram_values:List = []
@@ -38,20 +40,27 @@ class MultiValued(Decorator, MultiValuedInterface):
         #how string documents are separated for example in sliced_value yaml files it s ---
         self._separator = separator
 
-    @override_from(AddToRamValuesSubscriber)
-    def attach_add_to_ram_values_subscriber(self, add_value_observer:AddToRamValuesSubscriber)->None:
-        if add_value_observer not in self._add_value_subscribers:
-            self._add_value_subscribers.append(add_value_observer)
+    @override_from(AddToRamValuesPublisher)
+    def attach_add_to_ram_values_subscriber(self, add_value_subscriber:AddToRamValuesSubscriber)->None:
+        if add_value_subscriber not in self._add_value_subscribers:
+            self._add_value_subscribers.append(add_value_subscriber)
 
-    @override_from(AddToRamValuesSubscriber)
-    def dettach_add_to_ram_values_subscriber(self, add_value_observer: AddToRamValuesSubscriber)->None:
-        if add_value_observer in self._add_value_subscribers:
-            self._add_value_subscribers.remove(add_value_observer)
+    @override_from(AddToRamValuesPublisher)
+    def dettach_add_to_ram_values_subscriber(self, add_value_subscriber: AddToRamValuesSubscriber)->None:
+        if add_value_subscriber in self._add_value_subscribers:
+            self._add_value_subscribers.remove(add_value_subscriber)
 
     @override_from(GroupRamValuesAdditionFinishedPublisher)
-    def attach_group_ram_values_finished_subscriber(self,
-                                                    add_values_finished_subscriber: GroupRamValuesAdditionFinishedSubscriber):
+    def attach_group_ram_values_addition_finished_subscriber(self, add_values_finished_subscriber: GroupRamValuesAdditionFinishedSubscriber) -> None:
         self._group_ram_values_finished_subscribers.append(add_values_finished_subscriber)
+
+    def notify_add_to_ram_values_subscribers(self, value:Any) -> None:
+        for add_value_observer in self._add_value_subscribers:
+            add_value_observer.do_when_a_new_value_is_added_to_ram(value)
+
+    def notify_group_ram_values_finished_subscribers(self) -> None:
+        for group_ram_values_finished_subscriber in self._group_ram_values_finished_subscribers:
+            group_ram_values_finished_subscriber.do_when_group_ram_values_addition_is_finished()
 
 
     @override
@@ -80,8 +89,7 @@ class MultiValued(Decorator, MultiValuedInterface):
     def add_to_ram_values_at(self, index: int, values: List) -> None:
         for offset, value in enumerate(values):
             self._ram_values.insert(index + offset, value)
-            for add_value_observer in self._add_value_subscribers:
-                add_value_observer.do_when_a_new_value_is_added_to_ram(value)
+        self.notify_add_to_ram_values_subscribers(value)
 
     @override
     def get_ram_values_by_slice(self, slc: slice) -> List:
@@ -90,8 +98,7 @@ class MultiValued(Decorator, MultiValuedInterface):
     @override
     def add_to_ram_values(self, value:str)->None:
         self._ram_values.append(value)
-        for add_value_subscriber in self._add_value_subscribers:
-            add_value_subscriber.do_when_a_new_value_is_added_to_ram(value)
+        self.notify_add_to_ram_values_subscribers(value)
 
     @override
     def add_to_ram_values_slices(self, values_slice:ValuesSlice)->None:
@@ -99,8 +106,7 @@ class MultiValued(Decorator, MultiValuedInterface):
         for add_value_subscriber in self._add_value_subscribers:
             for value in values_slice.get_values():
                 add_value_subscriber.do_when_a_new_value_is_added_to_ram(value)
-        for group_ram_values_finished_subscriber in self._group_ram_values_finished_subscribers:
-            group_ram_values_finished_subscriber.do_when_group_ram_values_addition_is_finished()
+        self.notify_group_ram_values_finished_subscribers()
 
     @override
     def earase_ram_values(self)->None:
