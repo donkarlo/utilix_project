@@ -18,7 +18,7 @@ class Decorator(BaseDecorator, StorageInterface):
         BaseDecorator.__init__(self, inner)
 
     @override
-    def load(self) -> str:
+    def load(self) -> Any:
         return self._inner.load()
 
     @override

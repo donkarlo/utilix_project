@@ -6,10 +6,11 @@ from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_additi
     GroupRamValuesAdditionFinishedPublisher
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_subscriber import \
     GroupRamValuesAdditionFinishedSubscriber
-from utilix.data.kind.sliced_value.values_slice import ValuesSlice
-from utilix.data.kind.sliced_value.values_slices import ValuesSlices
+from utilix.data.kind.indexed_value.sliced_value.values_slice import ValuesSlice
+from utilix.data.kind.indexed_value.sliced_value.group.group import Group as ValuesSliceGroup
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_subscriber import AddToRamValuesSubscriber
 from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValuedInterface
+from utilix.data.storage.decorator.multi_valued.ram.value.startegy.continuous import Continuous
 from utilix.oop.inheritance.overriding.override_from import override_from
 
 
@@ -19,7 +20,7 @@ class MultiValued(Decorator, MultiValuedInterface):
     Each raw_value can have a different format
     """
 
-    def __init__(self, inner:Decorator, separator:str):
+    def __init__(self, inner:Decorator, separator:str, ram_value_strategy: Strategy):
         """
         Args:
             inner:
@@ -35,10 +36,22 @@ class MultiValued(Decorator, MultiValuedInterface):
         self._ram_values:List = []
 
         # To cache ram values slices TODO: sync ram values to
-        self._ram_values_slices = ValuesSlices()
+        self._ram_values_slice_group = ValuesSliceGroup()
 
         #how string documents are separated for example in sliced_value yaml files it s ---
         self._separator = separator
+        self._ram_value_strategy:Strategy = ram_value_strategy
+
+    def get_ram(self) -> List[Any]:
+        """
+        Her we can return either the most broadest slice or the latest slice or the most grained slice
+        Returns:
+
+        """
+        if self._ram_value_strategy.__class__ == Continuous:
+            pass
+        return self._ram_values_slice_group.get_newest_slice_values()
+
 
     @override_from(AddToRamValuesPublisher)
     def attach_add_to_ram_values_subscriber(self, add_value_subscriber:AddToRamValuesSubscriber)->None:
@@ -101,8 +114,8 @@ class MultiValued(Decorator, MultiValuedInterface):
         self.notify_add_to_ram_values_subscribers(value)
 
     @override
-    def add_to_ram_values_slices(self, values_slice:ValuesSlice)->None:
-        self._ram_values_slices.add_values_slice(values_slice)
+    def add_to_ram_values_slice_group(self, values_slice:ValuesSlice)->None:
+        self._ram_values_slice_group.add_values_slice(values_slice)
         for add_value_subscriber in self._add_value_subscribers:
             for value in values_slice.get_values():
                 add_value_subscriber.do_when_a_new_value_is_added_to_ram(value)
@@ -113,11 +126,11 @@ class MultiValued(Decorator, MultiValuedInterface):
         self._ram_values.clear()
 
     @override
-    def get_ram_values_slices(self)->ValuesSlices:
-        return self._ram_values_slices
+    def get_ram_values_slices(self)->ValuesSliceGroup:
+        return self._ram_values_slice_group
 
     @override
     def get_ram_values_from_values_slices_by_slice(self,slc:slice)->List[str]:
-        return self._ram_values_slices.get_values_by_slice(slc)
+        return self._ram_values_slice_group.get_values_by_slice(slc)
 
 

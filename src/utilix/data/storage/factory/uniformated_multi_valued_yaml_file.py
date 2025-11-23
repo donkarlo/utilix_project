@@ -22,7 +22,7 @@ except Exception:
 from utilix.data.storage.decorator.multi_valued.uni_kinded import UniKinded
 from utilix.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilix.data.storage.kind.file.file import File as FileStorage
-from utilix.data.kind.sliced_value.values_slice import ValuesSlice
+from utilix.data.kind.indexed_value.sliced_value.values_slice import ValuesSlice
 from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValueInterface
 from itertools import islice
 import io

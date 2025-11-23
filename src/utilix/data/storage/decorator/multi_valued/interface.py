@@ -4,8 +4,8 @@ from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_publi
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_publisher import \
     GroupRamValuesAdditionFinishedPublisher
 from utilix.data.storage.interface import Interface as StorageInterface
-from utilix.data.kind.sliced_value.values_slice import ValuesSlice
-from utilix.data.kind.sliced_value.values_slices import ValuesSlices
+from utilix.data.kind.indexed_value.sliced_value.values_slice import ValuesSlice
+from utilix.data.kind.indexed_value.sliced_value.group.group import Group
 
 
 @runtime_checkable
@@ -33,11 +33,11 @@ class Interface(StorageInterface, AddToRamValuesPublisher, GroupRamValuesAdditio
 
     def add_to_ram_values(self, value: str) -> None: ...
 
-    def add_to_ram_values_slices(self, values_slice: ValuesSlice) -> None: ...
+    def add_to_ram_values_slice_group(self, values_slice: ValuesSlice) -> None: ...
 
     def earase_ram_values(self) -> None: ...
 
-    def get_ram_values_slices(self) -> ValuesSlices: ...
+    def get_ram_values_slices(self) -> Group: ...
 
     def get_ram_values_from_values_slices_by_slice(self, slc: slice) -> List[str]: ...
 
