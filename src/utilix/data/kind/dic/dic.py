@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Tuple, Union, Sequence, Optional, overload
-
 from utilix.data.kind.dic.interface import Interface as DicInterface
+import io
+import matplotlib.pyplot as plt
 
 Key = Union[str, int]
 KeySeq = Sequence[Key]
@@ -251,18 +252,17 @@ class Dic(DicInterface):
 
         return dot
 
-    def draw(self, fmt: str = "png") -> None:
+    def draw(self, format: str = "png") -> None:
         """
         Render the Graphviz tree in memory and display it using matplotlib.
 
         No files are written to disk.
         """
-        import io
-        import matplotlib.pyplot as plt
+
 
         dot = self.build_graphviz_tree()
-        img_bytes = dot.pipe(format=fmt)
-        img = plt.imread(io.BytesIO(img_bytes), format=fmt)
+        img_bytes = dot.pipe(format=format)
+        img = plt.imread(io.BytesIO(img_bytes), format=format)
 
         plt.figure(figsize=(16, 16), dpi=300)
         plt.imshow(img)

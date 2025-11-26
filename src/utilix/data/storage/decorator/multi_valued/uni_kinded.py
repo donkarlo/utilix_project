@@ -26,7 +26,7 @@ class UniKinded(Decorator):
 
     @override_from(Decorator)
     def save(self) -> None:
-        for counter, value in enumerate(self._inner.get_ram_values()):
+        for counter, value in enumerate(self._inner.get_ram()):
             if self._validate_kind == True:
                 if not isinstance(value, self._expected_kind):
                     raise ValueError(f"value #{counter} is not valid kind for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")

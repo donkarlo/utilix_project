@@ -4,7 +4,7 @@ from utilix.data.kind.dic.dic import Dic
 from utilix.oop.klass.structure.structure import Structure
 
 
-class BasedOnInheritence(Structure):
+class BasedOnRecursiveInitArguments(Structure):
     """
     Builds a Dic tree for a class (or instance) with:
     - An inheritance chain from the top-most base (excluding object) down to the class.

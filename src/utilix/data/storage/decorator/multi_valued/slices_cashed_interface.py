@@ -1,15 +1,15 @@
-from typing import List, runtime_checkable, Protocol, Any
+from typing import List, runtime_checkable, Protocol
 
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_publisher import AddToRamValuesPublisher
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_publisher import \
     GroupRamValuesAdditionFinishedPublisher
-from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.data.kind.indexed_value.sliced_value.sliced_values import SlicedValues
 from utilix.data.kind.indexed_value.sliced_value.group.group import Group
+from utilix.data.storage.decorator.multi_valued.interface import Interface as MultiValuedInterface
 
 
 @runtime_checkable
-class Interface(StorageInterface, AddToRamValuesPublisher, GroupRamValuesAdditionFinishedPublisher , Protocol):
+class SlicesCashedInterface(MultiValuedInterface, AddToRamValuesPublisher, GroupRamValuesAdditionFinishedPublisher , Protocol):
     def get_values_by_slice(self, slc:slice)->List:
         """
         Retirns a list of strings as document
@@ -20,16 +20,11 @@ class Interface(StorageInterface, AddToRamValuesPublisher, GroupRamValuesAdditio
 
         """
         ...
+    def get_ram_values_by_slice(self, slc: slice) -> List: ...
 
-    def set_ram_values(self, ram_values: List) -> None: ...
+    def add_to_ram_values_slice_group(self, values_slice: SlicedValues) -> None: ...
 
-    def get_ram_values(self) -> List: ...
+    def get_ram_values_slices(self) -> Group: ...
 
-    def get_ram_value_at(self, at: int) -> None: ...
-
-    def add_to_ram_values_at(self, index: int, values: List) -> None: ...
-
-    def add_to_ram_values(self, value: Any) -> None: ...
-
-    def earase_ram(self) -> None: ...
+    def get_ram_values_from_values_slices_by_slice(self, slc: slice) -> List[str]: ...
 
