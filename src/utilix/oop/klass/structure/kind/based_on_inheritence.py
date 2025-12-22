@@ -30,7 +30,7 @@ class BasedOnInheritence(Structure):
         else:
             klass = type(target)
 
-        super().__init__(klass)
+        super().__init__(klass, None, None)
         self._klass: type = klass
 
         # Kept for backward compatibility with older call sites.

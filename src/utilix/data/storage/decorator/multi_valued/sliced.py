@@ -1,9 +1,7 @@
 from typing import override, List, Any
-
 from utilix.data.storage.decorator.decorator import Decorator
 from utilix.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilix.data.kind.indexed_value.sliced_value.sliced_values import SlicedValues
-from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_subscriber import AddToRamValuesSubscriber
 from utilix.data.storage.decorator.multi_valued.sliced_interface import SlicedInterface
 from utilix.oop.inheritance.overriding.override_from import override_from
 
@@ -28,7 +26,6 @@ class Sliced(MultiValued, SlicedInterface):
 
 
         # self._ram is not mentioned here as it is the
-        #to hold one ram raw_value TODO: Convert the list to group
         self._inner._ram:SlicedValues = SlicedValues(self._slc, None)
 
 
@@ -36,8 +33,8 @@ class Sliced(MultiValued, SlicedInterface):
 
 
     @override_from(MultiValued, False, False)
-    def set_ram(self, sliced_values:SlicedValues)->None:
-        self._ram = sliced_values
+    def set_ram(self, values:List)->None:
+        Decorator.set_ram(self, SlicedValues(self._slc, values))
 
     @override_from(SlicedInterface)
     def get_ram_values_by_slice(self, slc: slice) -> List:

@@ -1,27 +1,28 @@
-from typing import Optional
+from abc import ABC
+from typing import Optional, Any
 
 from utilix.data.storage.interface import Interface as StorageInterface
 
-class Storage(StorageInterface):
+class Storage(StorageInterface, ABC):
     """
     This is the conceret Object of the Decorator pattern. Here it is not concerete because between what is in kind
     - This is a single object if you want multi raw_value storage then multi_valued decorator
     """
     def __init__(self):
         # from os_file to python variable
-        self._ram: str |  None = None
+        self._ram: Optional[Any] = None
 
-    def get_ram(self)->Optional[str]:
+    def get_ram(self)->Optional[Any]:
         if self._ram is None:
             self.load()
         return self._ram
 
-    def set_ram(self, content:str)->None:
+    def set_ram(self, content:Any)->None:
         self._ram = content
 
-    def add_to_ram(self, content:str)->str:
+    def add_to_ram(self, content:Any)->Any:
         self._ram += content
         return self._ram
 
-    def earase_ram(self):
+    def earase_ram(self)->None:
         self._ram = None

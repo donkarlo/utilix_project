@@ -65,7 +65,7 @@ class UniformatedMultiValuedYamlFile(SlicedInterface):
     @override_from(StorageInterface)
     def load(self) -> None:
         """
-        Stream only the requested window from disk and cache it as a slice.
+        Stream only the requested window from disk and cache it as a slc.
         Reads sequentially and stops as soon as the window is complete.
         """
         slc = self._slice
@@ -105,11 +105,11 @@ class UniformatedMultiValuedYamlFile(SlicedInterface):
 
     # Unimplemented interface methods (fill as needed)
     @override
-    def earase_storage(self) -> None:
+    def earase(self) -> None:
         pass
 
     @override
-    def delete_storage(self) -> None:
+    def delete(self) -> None:
         pass
 
     @override

@@ -22,21 +22,30 @@ class Interface(Protocol):
         """saves what is inside _ram into the storage"""
         ...
 
-    def earase_storage(self)->None:
+    def earase(self)->None:
         """
-        earase the raw_value of the storage and not the storage i.e. not the file or DB themselves but their content
+        earase the content of the storage and not the storage i.e. not the file or DB themselves but their content
         Returns:
 
         """
         ...
 
-    def  delete_storage(self)->None:
+    def  delete(self)->None:
         """
-        For example deletinga file
+        For example deleting a file or the  DB
         Returns:
 
         """
         ...
+
+    def create(self)->None:
+        """
+        TODO: Should support create if nit exists, recreate,
+        Returns:
+
+        """
+        ...
+
 
     def earase_ram(self) -> None:
         ...

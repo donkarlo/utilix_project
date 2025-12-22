@@ -1,0 +1,2 @@
+class BasedOnProperties:
+    pass

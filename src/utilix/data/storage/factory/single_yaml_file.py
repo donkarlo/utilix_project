@@ -24,10 +24,10 @@ class SingleYamlFile(StorageInterface):
     def save(self) -> None:
         pass
 
-    def earase_storage(self) -> None:
+    def earase(self) -> None:
         pass
 
-    def delete_storage(self) -> None:
+    def delete(self) -> None:
         pass
 
     def earase_ram(self) -> None:

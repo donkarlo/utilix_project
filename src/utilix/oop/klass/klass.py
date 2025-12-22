@@ -19,3 +19,11 @@ class Klass:
 
     def draw_inherited_classes(self):
         BasedOnInheritence(self._target_class).draw_graph()
+
+    def assign_name_using_structure(self)->str:
+        """
+        TODO create a nume by the structure
+        Returns:
+
+        """
+        return ""

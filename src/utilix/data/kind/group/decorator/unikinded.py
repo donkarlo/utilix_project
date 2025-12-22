@@ -2,6 +2,7 @@ from typing import Type, TypeVar, Generic, override
 
 from utilix.data.kind.group.decorator.decorator import Decorator as GroupDecorator
 from utilix.data.kind.group.interface import Interface
+from utilix.oop.inheritance.overriding.override_from import override_from
 
 T = TypeVar("T")
 
@@ -20,9 +21,19 @@ class SingleTyped(GroupDecorator, Generic[T]):
     def get_validate_type(self) -> bool:
         return self._validate_type
 
-    @override(GroupDecorator)
+    @override_from(GroupDecorator)
     def add_member(self, member:T, validate_type:bool) ->None:
         if validate_type == True:
             if not isinstance(member, self._type_hint):
                 raise TypeError(f"type {type(member)} is not a {self._type_hint.__name__}")
         self._inner.add_member(member)
+
+    def get_records(self, fileds:List[Any]):
+        """
+        THis should work for decorators        Args:
+            fileds:
+
+        Returns:
+
+        """
+        pass

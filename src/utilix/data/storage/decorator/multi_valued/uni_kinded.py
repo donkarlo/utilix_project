@@ -20,18 +20,19 @@ class UniKinded(Decorator):
         # to make sure that the units match
         if not isinstance(inner, MultiValued):
             raise TypeError(f"UniKinded requires a MultiValued, got {type(inner).__name__}")
-        super().__init__(inner)
+        Decorator.__init__(self, inner)
         self._expected_kind = expected_kind
         self._validate_kind = validate_kind
 
     @override_from(Decorator)
     def save(self) -> None:
-        for counter, value in enumerate(self._inner.get_ram()):
-            if self._validate_kind == True:
+        # since Sliced MultiValue Storage is Iterable, then this will pass fine TODO: But is it the right way?
+        if self._validate_kind == True:
+            for counter, value in enumerate(self.get_ram()):
                 if not isinstance(value, self._expected_kind):
                     raise ValueError(f"value #{counter} is not valid kind for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")
         #it actually runs the inner save
-        super().save()
+        Decorator.save(self)
 
     def add_to_ram_values(self, value:Any)->None:
         if self._validate_kind == True:

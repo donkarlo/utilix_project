@@ -6,7 +6,7 @@ class UniquenessChecked(DicDecorator):
 
     def _to_hashable(self, x: Any) -> Any:
         """
-        Turn nested structures into a hashable form so we can test uniqueness robustly.
+        Turn nested structures.py into a hashable form so we can test uniqueness robustly.
         """
         if isinstance(x, dict):
             return ("dict", tuple(sorted((k, self._to_hashable(v)) for k, v in x.items())))

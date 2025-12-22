@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Tuple, Union, Sequence, Optional, overload
 from utilix.data.kind.dic.interface import Interface as DicInterface
 import io
 import matplotlib.pyplot as plt
+from pprint import pprint
 
 Key = Union[str, int]
 KeySeq = Sequence[Key]
@@ -22,8 +23,8 @@ class Dic(DicInterface):
 
         if isinstance(raw_dict, Dic):
             self._raw_dict = raw_dict.get_raw_dict()
-
-        self._raw_dict = raw_dict
+        else:
+            self._raw_dict = raw_dict
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self._raw_dict})"
@@ -32,9 +33,25 @@ class Dic(DicInterface):
         return self._raw_dict
 
     def get_keys_values(self) -> List[Tuple[Key, Any]]:
-        return self._raw_dict.items()
+        """
+        Always wrap any dict value into Dic.
+        Existing Dic instances are kept.
+        """
+        items: List[Tuple[Key, Any]] = []
 
-    def get_items(self)->List[Tuple[Key, Any]]:
+        for key, value in self._raw_dict.items():
+            # wrap dict into Dic
+            if isinstance(value, Dic):
+                wrapped = value
+            elif isinstance(value, dict):
+                wrapped = Dic(value)
+            else:
+                wrapped = value
+            items.append((key, wrapped))
+
+        return items
+
+    def get_items(self) -> List[Tuple[Key, Any]]:
         return self.get_keys_values()
 
     def has_nested_keys(self, keys: List[Key]) -> bool:
@@ -109,9 +126,6 @@ class Dic(DicInterface):
             self._raw_dict[key] = [existing]
 
         self._raw_dict[key].extend(values)
-
-    def get_keys_and_values(self) -> List[Tuple[Key, Any]]:
-        return list(self._raw_dict.items())
 
     def get_keys(self) -> List[Key]:
         return self._raw_dict.keys()
@@ -269,3 +283,12 @@ class Dic(DicInterface):
         plt.axis("off")
         plt.tight_layout()
         plt.show()
+
+    def __contains__(self, key: Key) -> bool:
+        return key in self._raw_dict
+
+    def __iter__(self):
+        return iter(self._raw_dict)
+
+    def print(self)->None:
+        pprint(self._raw_dict)

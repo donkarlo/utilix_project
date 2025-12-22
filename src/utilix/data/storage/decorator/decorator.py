@@ -26,21 +26,21 @@ class Decorator(BaseDecorator, StorageInterface):
         return self._inner.save()
 
     @override
-    def set_ram(self,content:str)->None:
+    def set_ram(self,content:Any)->None:
         self._inner.set_ram(content)
 
     @override
-    def add_to_ram_values(self, content:str) -> None:
+    def add_to_ram_values(self, content:Any) -> None:
         self._inner.set_ram(self._inner.get_ram() + content)
 
     @override
-    def earase_storage(self) -> None:
-        self._inner.earase_storage()
+    def earase(self) -> None:
+        self._inner.earase()
 
     @override
     def earase_ram(self) -> None:
         self._inner.earase_ram()
 
     @override
-    def get_ram(self) -> str:
+    def get_ram(self) -> Any:
         return self._inner.get_ram()

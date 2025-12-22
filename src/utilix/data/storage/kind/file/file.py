@@ -30,6 +30,7 @@ class File(Storage, StorageInterface):
             raise FileNotFoundError("File not exist")
 
         self._path = path
+        Storage.__init__(self)
 
     def get_path(self) -> FilePath:
         return self._path
