@@ -19,7 +19,9 @@ class Interface(Protocol):
         ...
 
     def save(self)->None:
-        """saves what is inside _ram into the storage"""
+        """
+        saves what is inside _ram into the storage
+        """
         ...
 
     def earase(self)->None:

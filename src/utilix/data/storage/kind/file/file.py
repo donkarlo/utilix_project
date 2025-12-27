@@ -27,7 +27,7 @@ class File(Storage, StorageInterface):
                 with open(path.get_native_absolute_string_path(), "w", encoding="utf-8"):
                     pass
         elif create_directory_structure == False and not path.file_exists():
-            raise FileNotFoundError("File not exist")
+            raise FileNotFoundError(f"File {path.get_native_absolute_string_path()} not exist")
 
         self._path = path
         Storage.__init__(self)
