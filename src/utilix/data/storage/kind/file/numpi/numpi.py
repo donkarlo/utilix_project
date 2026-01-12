@@ -1,14 +1,16 @@
 import pickle
 from typing import Any
-
+import numpy as np
 from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.os.file_system.file.file import File as OsFile
 from utilix.data.storage.kind.file.file import File as FileStorage
 
-class Pkl(FileStorage, StorageInterface):
+
+class Numpi(FileStorage, StorageInterface):
     """
     """
-    def __init__(self, os_file:OsFile, create_directory_structure: bool):
+
+    def __init__(self, os_file: OsFile, create_directory_structure: bool):
         FileStorage.__init__(self, os_file, create_directory_structure)
 
     def load(self) -> Any:

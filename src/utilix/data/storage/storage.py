@@ -1,6 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Optional, Any
 
+from utilix.data.kind.empty.empty import Empty
 from utilix.data.storage.interface import Interface as StorageInterface
 
 class Storage(StorageInterface, ABC):
@@ -13,7 +14,7 @@ class Storage(StorageInterface, ABC):
         self._ram: Optional[Any] = None
 
     def get_ram(self)->Optional[Any]:
-        if self._ram is None:
+        if Empty(self._ram).is_empty():
             self.load()
         return self._ram
 
@@ -26,3 +27,10 @@ class Storage(StorageInterface, ABC):
 
     def earase_ram(self)->None:
         self._ram = None
+
+    @abstractmethod
+    def load(self) -> None:
+        ...
+
+
+

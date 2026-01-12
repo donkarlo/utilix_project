@@ -9,11 +9,11 @@ from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_additi
 from utilix.data.kind.indexed_value.sliced_value.sliced_values import SlicedValues
 from utilix.data.kind.indexed_value.sliced_value.group.group import Group as ValuesSliceGroup
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_subscriber import AddToRamValuesSubscriber
-from utilix.data.storage.decorator.multi_valued.slices_cashed_interface import SlicesCashedInterface as MultiValuedInterface
+from utilix.data.storage.decorator.multi_valued.decorator.sliced.cashed.interface import Interface as MultiValuedInterface
 from utilix.oop.inheritance.overriding.override_from import override_from
 
 
-class SlicesCashed(MultiValued, Decorator, MultiValuedInterface):
+class Cashed(MultiValued, Decorator, MultiValuedInterface):
     """
     A kind of os_file full of  values such as a sliced_value doc yaml file.
     Each raw_value can have a different format
@@ -77,7 +77,7 @@ class SlicesCashed(MultiValued, Decorator, MultiValuedInterface):
         super().save()
 
     @override
-    def set_ram_values(self, ram_values:List)->None:
+    def set_ram(self, ram_values:List)->None:
         self._ram_values = ram_values
 
     @override
@@ -85,26 +85,26 @@ class SlicesCashed(MultiValued, Decorator, MultiValuedInterface):
         return self._ram_values
 
     @override
-    def get_ram_value_at(self, at:int)->None:
+    def get_ram_at(self, at:int)->None:
         return self._ram_values[at]
 
     @override
-    def add_to_ram_values_at(self, index: int, values: List) -> None:
+    def add_to_ram_at(self, index: int, values: List) -> None:
         for offset, value in enumerate(values):
             self._ram_values.insert(index + offset, value)
         self.notify_add_to_ram_values_subscribers(value)
 
     @override
-    def get_ram_values_by_slice(self, slc: slice) -> List:
+    def get_ram_by_slice(self, slc: slice) -> List:
         return self._ram_values[slc]
 
     @override
-    def add_to_ram_values(self, value:str)->None:
+    def add_to_ram(self, value:str)->None:
         self._ram_values.append(value)
         self.notify_add_to_ram_values_subscribers(value)
 
     @override
-    def add_to_ram_values_slice_group(self, values_slice:SlicedValues)->None:
+    def add_to_ram_slice_group(self, values_slice:SlicedValues)->None:
         self._ram_values_slice_group.add_values_slice(values_slice)
         for add_value_subscriber in self._add_value_subscribers:
             for value in values_slice.get_values():
@@ -120,7 +120,7 @@ class SlicesCashed(MultiValued, Decorator, MultiValuedInterface):
         return self._ram_values_slice_group
 
     @override
-    def get_ram_values_from_values_slices_by_slice(self,slc:slice)->List[str]:
+    def get_ram_from_values_slices_by_slice(self, slc:slice)->List[str]:
         return self._ram_values_slice_group.get_values_by_slice(slc)
 
 

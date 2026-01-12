@@ -14,7 +14,7 @@ class ModulePathRemappingUnpickler(pickle.Unpickler):
         return dotted_path
 
     def find_class(self, module: str, name: str) -> Any:
-        # A) Normalize rare case: pickle sometimes stores name like "a.b.ClassName"
+        # A) Normalize rare case: pickle sometimes stores name like "a.b.Kinds"
         if "." in name:
             name_module_part, name_class_part = name.rsplit(".", 1)
             module = module + "." + name_module_part

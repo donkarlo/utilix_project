@@ -1,8 +1,8 @@
-from utilix.data.storage.decorator.protected.modification.role_set import RoleSet
+from utilix.data.storage.decorator.protected.modificationed.role.core.kinds import Kinds
 
 
-class PermittedRoles:
-    def __init__(self, role_set: set[RoleSet]):
+class Kind:
+    def __init__(self, role_set: set[Kinds]):
         """
         The minimum Permitted rule is read. other than that permission is not necessary
         Args:
@@ -10,13 +10,13 @@ class PermittedRoles:
         """
         self._role_set = role_set  # trust the caller
 
-    def add(self, role: RoleSet) -> None:
+    def add(self, role: Kinds) -> None:
         self._role_set.add(role)
 
-    def remove(self, role: RoleSet) -> None:
+    def remove(self, role: Kinds) -> None:
         self._role_set.discard(role)
 
-    def has(self, role: RoleSet) -> bool:
+    def has(self, role: Kinds) -> bool:
         return role in self._role_set
 
     def __str__(self) -> str:

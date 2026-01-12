@@ -2,7 +2,7 @@ from typing import Any
 
 from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.data.storage.decorator.decorator import Decorator as StorageDecorator
-from utilix.data.kind.kind import Kind as DataType
+from utilix.data.kind.core.kind import Kind as DataType
 
 class SingleValued(StorageDecorator):
     def __init__(self, inner: StorageInterface , data_type: DataType):

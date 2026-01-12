@@ -7,7 +7,7 @@ class Interface(Protocol):
     - This class determines what is it to be a storage. Storage is accessing a static storage on hard and bring it to RAM mememory and write it back to the storage
     This class is an interface. Dont add anything other than abstract methods. if you need to add concrete properties and
     """
-    _ram: str
+    _ram: Any
 
     
     def load(self) -> None:
@@ -52,10 +52,10 @@ class Interface(Protocol):
     def earase_ram(self) -> None:
         ...
 
-    def set_ram(self, ram:str)->None:
+    def set_ram(self, ram:Any)->None:
         ...
 
-    def get_ram(self)->str:
+    def get_ram(self)->Any:
         ...
 
 

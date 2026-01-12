@@ -1,0 +1,2 @@
+class TagsDatabase:
+    pass

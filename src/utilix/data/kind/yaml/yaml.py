@@ -1,8 +1,8 @@
 from typing import Any, overload, Dict
 
 from utilix.data.kind.dic.dic import Dic
-from utilix.data.kind.kind import Kind
-from utilix.data.kind.kinds import Kinds
+from utilix.data.kind.core.kind import Kind
+from utilix.data.kind.core.kinds import Kinds
 
 
 class Yaml(Kind):

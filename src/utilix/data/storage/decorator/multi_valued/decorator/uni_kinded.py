@@ -34,10 +34,10 @@ class UniKinded(Decorator):
         #it actually runs the inner save
         Decorator.save(self)
 
-    def add_to_ram_values(self, value:Any)->None:
+    def add_to_ram(self, value:Any)->None:
         if self._validate_kind == True:
             if not isinstance(value, self._expected_kind):
                 raise ValueError(
                     f"value {str(value)} is not valid kind for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")
-        self._inner.add_to_ram_values(value)
+        self._inner.add_to_ram(value)
 

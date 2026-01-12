@@ -8,8 +8,8 @@ from utilix.data.storage.interface import Interface as StorageInterface
 
 
 @runtime_checkable
-class SlicedInterface(MultiValuedInterface, AddToRamValuesPublisher, GroupRamValuesAdditionFinishedPublisher,
-                      Protocol):
+class Interface(MultiValuedInterface, AddToRamValuesPublisher, GroupRamValuesAdditionFinishedPublisher,
+                Protocol):
     def get_values_by_slice(self, slc: slice) -> List:
         """
         Retirns a list of strings as document
@@ -23,5 +23,5 @@ class SlicedInterface(MultiValuedInterface, AddToRamValuesPublisher, GroupRamVal
 
     def get_slice(self)->slice: ...
 
-    def get_ram_values_by_slice(self, slc:slice)->List: ...
+    def get_ram_by_slice(self, slc:slice)->List: ...
 

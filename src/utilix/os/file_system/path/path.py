@@ -57,7 +57,7 @@ class Path:
         If the current str_path is a file or a folder, this always returns
         the directory immediately above it.
         """
-        parent_dir = os.path.dirname(self.get_native_absolute_string_path())
+        parent_dir = os.path.dirname(self.get_native_absolute_string_path())+os.sep
         return parent_dir
 
     def directory_exists(self) -> bool:

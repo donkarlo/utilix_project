@@ -3,6 +3,7 @@ from utilix.data.kind.dic.interface import Interface as DicInterface
 import io
 import matplotlib.pyplot as plt
 from pprint import pprint
+from collections import deque
 
 Key = Union[str, int]
 KeySeq = Sequence[Key]
@@ -136,63 +137,119 @@ class Dic(DicInterface):
     # -----------------------------
     # NEW: shortest path in nested dict
     # -----------------------------
-    def get_shortest_path(self, start: Key, target: Key, separator: Optional[str] = None) -> Union[str, List]:
+    def get_unique_shortest_path_from_top_to_bottom(self, top: Key, bottom: Key, separator: Optional[str] = None) -> \
+    Union[str, List]:
         """
-        Find the shortest path (in number of edges) from the node `start`
-        down to a descendant key `target` in the nested dict structure.
-        Returns a string like 'memory/long_term/explicit/episodic/experience'.
+        Find a unique shortest path (fewest edges) from a node `top` to a descendant key `bottom`.
+        Unlike the previous version, `top` may appear anywhere in the tree, not only at top-level.
 
-        The search assumes that the structure under this Dic is primarily
-        nested dicts. Sets, lists and tuples are also handled in a minimal way:
-        - For sets/tuples/lists, each element is treated as a child key with
-          an empty dict as its subtree.
+        If multiple different paths share the same shortest length, a ValueError is raised
+        because the path is not unique.
         """
-        if start not in self._raw_dict:
-            raise KeyError(f"Start key {start!r} not found at the top level.")
 
-        subtree = self._raw_dict[start]
-        current_path: List[Key] = [start]
-
-        best_path: List[List[Key]] = []
-
-        def add_candidate_path(candidate: List[Key]) -> None:
-            if len(best_path) == 0:
-                best_path.append(candidate)
-            else:
-                if len(candidate) < len(best_path[0]):
-                    best_path[0] = candidate
+        def unwrap(node: Any) -> Any:
+            if isinstance(node, Dic):
+                return node.get_raw_dict()
+            return node
 
         def iter_children(node: Any):
-            # Yield (child_key, child_subtree)
+            node = unwrap(node)
+
             if isinstance(node, dict):
-                for child_key, child_val in node.items():
-                    yield child_key, child_val
-            elif isinstance(node, (set, list, tuple)):
-                # Treat elements as keys with empty dict as subtree
-                for child_key in node:
-                    yield child_key, {}
-            else:
-                # No children
+                for child_key, child_subtree in node.items():
+                    yield child_key, child_subtree
                 return
 
-        def dfs(node: Any, path_so_far: List[Key]) -> None:
-            for child_key, child_subtree in iter_children(node):
-                new_path = path_so_far + [child_key]
-                if child_key == target:
-                    add_candidate_path(new_path)
-                dfs(child_subtree, new_path)
+            if isinstance(node, (set, list, tuple)):
+                for child_key in node:
+                    yield child_key, {}
+                return
 
-        dfs(subtree, current_path)
+            return
 
-        if len(best_path) == 0:
-            raise KeyError(f"No path from start={start!r} to target={target!r} was found.")
+        def find_all_start_occurrences() -> List[Tuple[List[Key], Any]]:
+            occurrences: List[Tuple[List[Key], Any]] = []
 
-        parts_as_str = [str(p) for p in best_path[0]]
+            root_node = self._raw_dict
+            root_node = unwrap(root_node)
 
+            if isinstance(root_node, dict):
+                initial_items = list(root_node.items())
+            else:
+                initial_items = []
+
+            stack: List[Tuple[Any, List[Key]]] = []
+            for top_key, top_subtree in initial_items:
+                stack.append((top_subtree, [top_key]))
+                if top_key == top:
+                    occurrences.append(([top_key], top_subtree))
+
+            while len(stack) > 0:
+                node, path_to_node = stack.pop()
+                for child_key, child_subtree in iter_children(node):
+                    child_path = path_to_node + [child_key]
+                    if child_key == top:
+                        occurrences.append((child_path, child_subtree))
+                    stack.append((child_subtree, child_path))
+
+            return occurrences
+
+        def shortest_path_from_subtree(start_subtree: Any) -> Optional[List[Key]]:
+            queue = deque()
+            queue.append((start_subtree, [top]))
+
+            best_path: Optional[List[Key]] = None
+
+            while len(queue) > 0:
+                node, path_so_far = queue.popleft()
+
+                if best_path is not None:
+                    if len(path_so_far) >= len(best_path):
+                        continue
+
+                for child_key, child_subtree in iter_children(node):
+                    new_path = path_so_far + [child_key]
+                    if child_key == bottom:
+                        if best_path is None:
+                            best_path = new_path
+                        else:
+                            if len(new_path) < len(best_path):
+                                best_path = new_path
+                            elif len(new_path) == len(best_path) and new_path != best_path:
+                                raise ValueError(
+                                    f"Shortest path is not unique from top={top!r} to bottom={bottom!r}.")
+                        continue
+                    queue.append((child_subtree, new_path))
+
+            return best_path
+
+        start_occurrences = find_all_start_occurrences()
+        if len(start_occurrences) == 0:
+            raise KeyError(f"Start key {top!r} was not found anywhere in the tree.")
+
+        global_best: Optional[List[Key]] = None
+
+        for _, start_subtree in start_occurrences:
+            candidate = shortest_path_from_subtree(start_subtree)
+            if candidate is None:
+                continue
+
+            if global_best is None:
+                global_best = candidate
+            else:
+                if len(candidate) < len(global_best):
+                    global_best = candidate
+                elif len(candidate) == len(global_best) and candidate != global_best:
+                    raise ValueError(
+                        f"Shortest path is not unique from top={top!r} to bottom={bottom!r} across multiple top occurrences.")
+
+        if global_best is None:
+            raise KeyError(f"No path from top={top!r} to bottom={bottom!r} was found.")
+
+        parts_as_str = [str(p) for p in global_best]
         if separator is None:
             return parts_as_str
-        else:
-            return separator.join(parts_as_str)
+        return separator.join(parts_as_str)
 
     def wrap_as_parent(self, parent_key: Key, child_key: Optional[Key] = None) -> None:
         """

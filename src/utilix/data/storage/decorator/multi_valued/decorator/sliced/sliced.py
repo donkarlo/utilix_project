@@ -1,12 +1,12 @@
-from typing import override, List, Any
+from typing import List, Any
 from utilix.data.storage.decorator.decorator import Decorator
 from utilix.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilix.data.kind.indexed_value.sliced_value.sliced_values import SlicedValues
-from utilix.data.storage.decorator.multi_valued.sliced_interface import SlicedInterface
+from utilix.data.storage.decorator.multi_valued.decorator.sliced.interface import Interface
 from utilix.oop.inheritance.overriding.override_from import override_from
 
 
-class Sliced(MultiValued, SlicedInterface):
+class Sliced(MultiValued, Interface):
     """
     A kind of os_file full of  values such as a sliced_value doc yaml file.
     Each raw_value can have a different format
@@ -36,17 +36,17 @@ class Sliced(MultiValued, SlicedInterface):
     def set_ram(self, values:List)->None:
         Decorator.set_ram(self, SlicedValues(self._slc, values))
 
-    @override_from(SlicedInterface)
-    def get_ram_values_by_slice(self, slc: slice) -> List:
+    @override_from(Interface)
+    def get_ram_by_slice(self, slc: slice) -> List:
         values = self._ram.get_values()[slc]
         return values
 
-    @override_from(SlicedInterface)
+    @override_from(Interface)
     def get_slice(self)->slice:
         return self._slc
 
-    @override_from(SlicedInterface)
-    def add_to_ram_values(self, value:Any)->None:
+    @override_from(Interface)
+    def add_to_ram(self, value:Any)->None:
         self._ram.add_value(value)
         self.notify_add_to_ram_values_subscribers(value)
 

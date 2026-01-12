@@ -6,10 +6,8 @@ from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_additi
     GroupRamValuesAdditionFinishedPublisher
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_subscriber import \
     GroupRamValuesAdditionFinishedSubscriber
-from utilix.data.kind.indexed_value.sliced_value.sliced_values import SlicedValues
-from utilix.data.kind.indexed_value.sliced_value.group.group import Group as ValuesSliceGroup
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_subscriber import AddToRamValuesSubscriber
-from utilix.data.storage.decorator.multi_valued.slices_cashed_interface import SlicesCashedInterface as MultiValuedInterface
+from utilix.data.storage.decorator.multi_valued.decorator.sliced.cashed.interface import Interface as MultiValuedInterface
 from utilix.oop.inheritance.overriding.override_from import override_from
 
 
@@ -22,6 +20,7 @@ class MultiValued(Decorator, MultiValuedInterface):
     def __init__(self, inner:Decorator, separator:str):
         """
         Args:
+
             inner:
             separator: holds the strategy for breaking string blob in the storage to values
         """
@@ -64,25 +63,25 @@ class MultiValued(Decorator, MultiValuedInterface):
 
 
     @override
-    def get_ram_value_at(self, at:int)->None:
-        return self._ram[at]
+    def get_ram_at(self, at:int)->None:
+        return self._inner._ram[at]
 
     @override
-    def add_to_ram_values_at(self, index: int, values: List) -> None:
+    def add_to_ram_at(self, index: int, values: List) -> None:
         for offset, value in enumerate(values):
-            self._ram.insert(index + offset, value)
+            self._ram._inner.insert(index + offset, value)
         self.notify_add_to_ram_values_subscribers(value)
 
 
     @override
-    def add_to_ram_values(self, value:str)->None:
-        self._ram.append(value)
+    def add_to_ram(self, value:str)->None:
+        self._inner._ram.append(value)
         self.notify_add_to_ram_values_subscribers(value)
 
 
     @override
     def earase_ram(self)->None:
-        self._ram.clear()
+        self._inner._ram.clear()
 
 
 

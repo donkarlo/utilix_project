@@ -74,7 +74,7 @@ class Decorator(ABC):
 
     @staticmethod
     def has_decorator(obj: Any, decorator: Any) -> bool:
-        # Determine the target decorator kind
+        # Determine the bottom decorator kind
         if hasattr(decorator, "_inner") and issubclass(decorator.__class__, Decorator):
             target_type: Type[Decorator] = decorator.__class__
         elif isinstance(decorator, type) and issubclass(decorator, Decorator):

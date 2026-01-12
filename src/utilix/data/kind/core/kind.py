@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-from utilix.data.kind.kinds import Kinds
+from utilix.data.kind.core.kinds import Kinds
 
 
 class Kind(ABC):

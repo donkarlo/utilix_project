@@ -1,20 +1,18 @@
-from typing import List, Any
+from typing import Any
 from typing import override
 
 
 # --- Fast YAML str_path: try C extensions, fall back to safe Python loaders ---
 import yaml
-from utilix.data.kind.indexed_value.sliced_value.sliced_values import SlicedValues
 
 from utilix.data.kind.yaml.yaml import Yaml
-from utilix.data.storage.decorator.multi_valued.multi_valued import MultiValued
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_publisher import AddToRamValuesPublisher
 from utilix.data.storage.decorator.multi_valued.observer.add_to_ram_values_subscriber import AddToRamValuesSubscriber
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_publisher import \
     GroupRamValuesAdditionFinishedPublisher
 from utilix.data.storage.decorator.multi_valued.observer.group_ram_values_addition_finished_subscriber import \
     GroupRamValuesAdditionFinishedSubscriber
-from utilix.data.storage.decorator.multi_valued.sliced_interface import SlicedInterface
+from utilix.data.storage.decorator.multi_valued.decorator.sliced.interface import Interface
 from utilix.data.storage.interface import Interface as StorageInterface
 from utilix.oop.inheritance.overriding.override_from import override_from
 
@@ -23,8 +21,8 @@ try:
 except Exception:
     from yaml import SafeLoader as YamlCLoader, SafeDumper as YamlCDumper  # fallback
 
-from utilix.data.storage.decorator.multi_valued.uni_kinded import UniKinded
-from utilix.data.storage.decorator.multi_valued.sliced import Sliced
+from utilix.data.storage.decorator.multi_valued.decorator.uni_kinded import UniKinded
+from utilix.data.storage.decorator.multi_valued.decorator.sliced.sliced import Sliced
 from utilix.data.storage.kind.file.file import File as FileStorage
 from itertools import islice
 import io
@@ -32,7 +30,7 @@ from utilix.data.kind.dic.dic import Dic
 from utilix.os.file_system.file.file import File as OsFile
 from utilix.os.file_system.path.file import File as FilePath
 
-class UniformatedMultiValuedYamlFile(SlicedInterface):
+class UniKindedMultiValuedYamlFile(Interface):
     """
     High-throughput multi-document YAML file using PyYAML (+CLoader/CDumper if available).
     - load(): loads all docs into RAM
@@ -93,7 +91,7 @@ class UniformatedMultiValuedYamlFile(SlicedInterface):
             for dict_doc in islice(dict_docs, start, stop, step):
                 if dict_doc is not None:
                     dic_doc = Dic(dict_doc)
-                    self._storage.add_to_ram_values(dic_doc)
+                    self._storage.add_to_ram(dic_doc)
             self._storage.notify_group_ram_values_addition_finished_subscribers()
 
     @override

@@ -30,7 +30,7 @@ class Decorator(BaseDecorator, StorageInterface):
         self._inner.set_ram(content)
 
     @override
-    def add_to_ram_values(self, content:Any) -> None:
+    def add_to_ram(self, content:Any) -> None:
         self._inner.set_ram(self._inner.get_ram() + content)
 
     @override
