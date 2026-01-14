@@ -40,7 +40,7 @@ class Group:
         Step is set to 1.
         """
         if not self._sliced_values_list:
-            raise ValueError("No SlicedValues in Group.")
+            raise ValueError("No SlicedValues in Finite.")
 
         min_start = None
         max_stop = None
@@ -69,7 +69,7 @@ class Group:
         Later slices overwrite earlier ones on overlaps.
         """
         if not self._sliced_values_list:
-            raise ValueError("No SlicedValues in Group.")
+            raise ValueError("No SlicedValues in Finite.")
 
         broadest = self.get_the_broadest_one().get_slice()
         start = broadest.start if broadest.start is not None else 0
@@ -101,7 +101,7 @@ class Group:
             return self._combined_values_slice
 
         if not self._sliced_values_list:
-            raise ValueError("No SlicedValues in Group.")
+            raise ValueError("No SlicedValues in Finite.")
 
         steps: List[int] = []
         residues: List[int] = []

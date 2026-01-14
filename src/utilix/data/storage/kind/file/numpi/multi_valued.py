@@ -16,7 +16,7 @@ class MultiValued(FileStorage, MultiValuedBaseStorageInterface):
     def load(self) -> Any:
         file_path = self.get_path().get_native_absolute_string_path()
         ram = np.load(file_path)
-        FileStorage.set_ram(self, ram)
+        FileStorage.set_ram(self, ram["arr_0"])
         return self._ram
 
     def save(self) -> None:
