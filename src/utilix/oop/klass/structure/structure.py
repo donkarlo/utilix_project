@@ -14,7 +14,7 @@ class Structure(ABC):
 
         Args:
             klass:
-            exclude_structures: for example explude [utilix.data.storage, ...]
+            exclude_structures: for example explude [utilix.data_set.storage, ...]
         """
         self._klass = klass
 

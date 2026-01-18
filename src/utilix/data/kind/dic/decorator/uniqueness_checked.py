@@ -30,7 +30,7 @@ class UniquenessChecked(DicDecorator):
         on all lists.
 
         Args:
-            data (Dict[str, Any]):
+            data_set (Dict[str, Any]):
                 The nested dictionary structure to validate_kind.
             path_sep (str, optional):
                 Separator used in paths when reporting problems. Defaults to ``"!"``.
@@ -55,8 +55,8 @@ class UniquenessChecked(DicDecorator):
                   }
 
         PublisherExample:
-            >>> data = {"dims": {"time": {"units": ["second", "minute", "minute"]}}}
-            >>> ok, problems = validate_unique_items_in_lists(data)
+            >>> data_set = {"dims": {"time": {"units": ["second", "minute", "minute"]}}}
+            >>> ok, problems = validate_unique_items_in_lists(data_set)
             >>> ok
             False
             >>> problems[0]["str_path"]

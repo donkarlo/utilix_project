@@ -12,7 +12,7 @@ experimnets:
 senarios:
   type: "identical_robots"
   maneuvers:
-    shared_topic_data_dir: "/home/donkarlo/Dropbox/projs/research/data/self-aware-drones/ctumrs/two-drones/"
+    shared_topic_data_dir: "/home/donkarlo/Dropbox/projs/research/data_set/self-aware-drones/ctumrs/two-drones/"
     file_name: "uav1-gps-lidar-uav2-gps-lidar.yaml"
     two_drone_moving_next_to_each_other:
       topic_data_dir: "normal-scenario/"
