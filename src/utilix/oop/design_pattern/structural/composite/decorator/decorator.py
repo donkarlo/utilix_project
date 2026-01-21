@@ -4,4 +4,4 @@ from utilix.oop.design_pattern.structural.decorator.decorator import Decorator a
 
 class Decorator(BaseDecorator, Component):
     def __init__(self, inner:Component):
-        super().__init__(inner)
+        BaseDecorator.__init__(self, inner)

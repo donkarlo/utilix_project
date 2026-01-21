@@ -1,6 +1,6 @@
-from typing import Any, List, Type
 import inspect
 from abc import ABC
+from typing import Any, List, Type
 
 
 class Decorator(ABC):
@@ -24,7 +24,7 @@ class Decorator(ABC):
             f"{type(self).__name__} and its inner chain have no attribute {name!r}"
         )
 
-    def get_decorator_stack(self, inner_to_outer:bool) -> List["Decorator"]:
+    def get_decorator_stack(self, inner_to_outer: bool) -> List["Decorator"]:
         """
         from the most inner to the most outer
         Returns:
@@ -101,6 +101,8 @@ class Decorator(ABC):
         tokens.append(base_token)
         return "_".join(tokens)
 
+    def get_inner(self)->"Decorator":
+        return self._inner
+
     def get_meaning_vector(self):
         pass
-

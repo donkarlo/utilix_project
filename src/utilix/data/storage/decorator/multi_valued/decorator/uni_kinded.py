@@ -7,7 +7,7 @@ class UniKinded(Decorator):
     """
     - Uni formated means all documents in the same file or storage have the same format. for example  a a file full of many yaml documents
     - This meaningful only for sliced_value units
-    - To check each raw_value to have the same data_set kind as other units.
+    - To check each raw_value to have the same pair_set kind as other units.
     """
     def __init__(self, inner:MultiValued, expected_kind:type, validate_kind:bool):
         """
