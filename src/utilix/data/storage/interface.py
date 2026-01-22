@@ -9,7 +9,7 @@ class Interface(Protocol):
     """
     _ram: Any
 
-    
+
     def load(self) -> None:
         """
         Loads from storage to RAM
