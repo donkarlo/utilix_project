@@ -30,6 +30,11 @@ class Storage(StorageInterface, ABC):
 
     @abstractmethod
     def load(self) -> None:
+        """
+        TODO: The menimim previlidge is to load into memory so that only the coputer works with it
+        Returns:
+
+        """
         ...
 
 
