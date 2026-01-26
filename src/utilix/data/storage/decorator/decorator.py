@@ -11,7 +11,7 @@ class Decorator(BaseDecorator, StorageInterface):
 
     def __init__(self, inner: StorageInterface):
         """
-        .__inner is either the most basic object, in this case pair_set.storage.basic.Yaml or a decorator
+        .__inner is either the most basic object, in this case group.storage.basic.Yaml or a decorator
         Args:
             inner:
         """

@@ -34,7 +34,7 @@ def register_factory(kind: StaticFactory) -> Callable[[StorageBuilder], StorageB
 def _build_file(path: str, **kwargs: Any) -> Storage:
     """
     Example:
-        get_storage(StaticFactory.FILE, "/tmp/pair_set.bin", mode="rw")
+        get_storage(StaticFactory.FILE, "/tmp/group.bin", mode="rw")
     """
     from utilix.data.storage.type import File
     return File(path=path, **kwargs)
@@ -44,7 +44,7 @@ def _build_file(path: str, **kwargs: Any) -> Storage:
 def _build_dir(path: str, **kwargs: Any) -> Storage:
     """
     Example:
-        get_storage("dir", "/var/pair_set", create_if_missing=True)
+        get_storage("dir", "/var/group", create_if_missing=True)
     """
     from utilix.data.storage.type import Dir
     return Dir(path=path, **kwargs)
@@ -67,7 +67,7 @@ def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -
 
     Examples:
         f = get_storage(StaticFactory.FILE, "/tmp/a.bin")
-        d = get_storage("dir", "/pair_set", create_if_missing=True)
+        d = get_storage("dir", "/group", create_if_missing=True)
         db = get_storage(StaticFactory.DB, "sqlite:///x.db", timeout=5)
 
     The required arguments are defined by each registered builder:
