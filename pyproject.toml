@@ -1,12 +1,12 @@
 [project.scripts]
-utilix = "utilix.__main__:main"
+utilix = "nd_utility.__main__:main"
 
 [build-system]
 requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "utilix"
+name = "nd_utility"
 version = "1.0.0"
 dependencies = [
   "ruamel.yaml>=0.17.40,<0.18",
@@ -29,7 +29,7 @@ ignore_missing_imports = true
 mypy_path = ["./src"]
 namespace_packages = true
 explicit_package_bases = true
-files = ["utilix", "tests"]
+files = ["nd_utility", "tests"]
 exclude = '(^|/)conftest\.py$'
 
 [tool.setuptools]

@@ -1,5 +1,5 @@
-from utilix.data.storage.factory.uni_kinded_multi_valued_yaml_file import UniKindedMultiValuedYamlFile
-from utilix.os.file_system.path.path import Path
+from nd_utility.data.storage.factory.uni_kinded_multi_valued_yaml_file import UniKindedMultiValuedYamlFile
+from nd_utility.os.file_system.path.path import Path
 
 
 class TestUniformatedMultiValuedYamlFile:

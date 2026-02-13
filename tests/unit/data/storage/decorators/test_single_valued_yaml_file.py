@@ -1,8 +1,8 @@
-from utilix.data.storage.decorator.single_valued import SingleValued
-from utilix.data.storage.type.file.file import File
-from utilix.data.kind.dic.dic import Dic as BasicDict
-from utilix.os.file_system.path.path import Path
-from utilix.data.kind.yaml import Yaml as YamlType
+from nd_utility.data.storage.decorator.single_valued import SingleValued
+from nd_utility.data.storage.type.file.file import File
+from nd_utility.data.kind.dic.dic import Dic as BasicDict
+from nd_utility.os.file_system.path.path import Path
+from nd_utility.data.kind.yaml import Yaml as YamlType
 
 
 class TestSingleValuedYamlFile:
