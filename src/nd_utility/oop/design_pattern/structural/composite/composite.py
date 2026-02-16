@@ -12,7 +12,7 @@ class Composite(Component):
     Composite node that can hold other Components.
     """
 
-    def __init__(self, leaf: Leaf, name: str) -> None:
+    def __init__(self, leaf: Leaf, name: str):
         """
         This name is useful, it can be used as path parts
         Args:

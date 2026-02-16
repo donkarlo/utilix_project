@@ -33,6 +33,49 @@ class Dic(DicInterface):
     def get_raw_dict(self) -> Dict:
         return self._raw_dict
 
+    def merge_dic(self, merging_dic: "Dic") -> "Dic":
+        """
+        Deep-merge `merging_dic` into `self`.
+
+        - If the same key-path exists in both trees and both values are dict-like, merge recursively.
+        - Otherwise, the value from `merging_dic` overwrites the value in `self`.
+        """
+        if not isinstance(merging_dic, Dic):
+            raise TypeError(f"merging_dic must be Dic, got {type(merging_dic).__name__}")
+
+        def unwrap(node: Any) -> Any:
+            if isinstance(node, Dic):
+                return node.get_raw_dict()
+            return node
+
+        def deep_merge(target: Any, incoming: Any) -> Any:
+            target_unwrapped = unwrap(target)
+            incoming_unwrapped = unwrap(incoming)
+
+            if isinstance(target_unwrapped, dict) and isinstance(incoming_unwrapped, dict):
+                for key, incoming_value in incoming_unwrapped.items():
+                    if key in target_unwrapped:
+                        target_value = target_unwrapped[key]
+                        target_value_unwrapped = unwrap(target_value)
+                        incoming_value_unwrapped = unwrap(incoming_value)
+
+                        if isinstance(target_value_unwrapped, dict) and isinstance(incoming_value_unwrapped, dict):
+                            deep_merge(target_value_unwrapped, incoming_value_unwrapped)
+                            target_unwrapped[key] = target_value_unwrapped
+                        else:
+                            target_unwrapped[key] = incoming_value_unwrapped
+                    else:
+                        target_unwrapped[key] = unwrap(incoming_value)
+                return target_unwrapped
+
+            return incoming_unwrapped
+
+        merged = deep_merge(self._raw_dict, merging_dic.get_raw_dict())
+        if not isinstance(merged, dict):
+            raise TypeError("merge_dic can only produce a dict at the root.")
+        self._raw_dict = merged
+        return self
+
     def get_keys_values(self) -> List[Tuple[Key, Any]]:
         """
         Always wrap any dict value into Dic.
@@ -394,3 +437,22 @@ class Dic(DicInterface):
                 stack.append((child, iter(child.items())))
 
         raise KeyError(f"Key {name!r} was not found in the tree.")
+
+    # -----------------------------
+    # Mapping protocol (for **kwargs)
+    # -----------------------------
+    def keys(self):
+        # Enables: func(**dic_obj)
+        return self._raw_dict.keys()
+
+    def items(self):
+        return self._raw_dict.items()
+
+    def values(self):
+        return self._raw_dict.values()
+
+    def __len__(self) -> int:
+        return len(self._raw_dict)
+
+    def get(self, key: Key, default: Any = None) -> Any:
+        return self._raw_dict.get(key, default)
