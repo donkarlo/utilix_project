@@ -1,4 +1,4 @@
-from nd_utility.oop.design_pattern.structural.composite.component import Component
+from nd_utility.oop.design_pattern.structural.composition.component import Component
 from nd_utility.oop.design_pattern.structural.decorator.decorator import Decorator as BaseDecorator
 from nd_utility.os.file_system.file.file import File
 

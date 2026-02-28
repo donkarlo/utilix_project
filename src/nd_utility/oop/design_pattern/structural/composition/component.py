@@ -6,12 +6,15 @@ from typing import Iterable, Tuple, Optional
 class Component(ABC):
     """Base class for Composite pattern."""
 
-    def __init__(self, name: Optional[str]) -> None:
-        self._name = name
+    def __init__(self) -> None:
+        ...
 
     @abstractmethod
     def stringify(self) -> str:
         ...
+
+    def set_name(self, name) -> None:
+        self._name = name
 
     # Leaf-like defaults
     def add_child(self, child: "Component") -> None:
@@ -20,7 +23,7 @@ class Component(ABC):
     def remove_child(self, child: "Component") -> None:
         raise NotImplementedError
 
-    def get_children(self) -> Tuple["Component", ...]:
+    def get_child_group_members(self) -> Tuple["Component", ...]:
         return ()
 
     def is_leaf(self) -> bool:
@@ -36,6 +39,8 @@ class Component(ABC):
         yield self
 
     def get_name(self) -> str:
+        if self._name is None:
+            self._name = self.__class__.__name__
         return self._name
 
     def get_tree(self, prefix: str = "", is_last: bool = True) -> str:

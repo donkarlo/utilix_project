@@ -1,5 +1,5 @@
-from nd_utility.oop.design_pattern.structural.composite.component import Component
-from nd_utility.oop.design_pattern.structural.composite.composite import Composite
+from nd_utility.oop.design_pattern.structural.composition.component import Component
+from nd_utility.oop.design_pattern.structural.composition.composite import Composite
 
 
 class Root(Composite):

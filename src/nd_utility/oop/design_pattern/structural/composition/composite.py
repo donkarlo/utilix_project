@@ -1,10 +1,12 @@
-# in composite.py
-from typing import Iterable, List, Tuple, override
+# in composition.py
+from typing import Iterable, Tuple, override, Optional
 
 from graphviz import Digraph
 
-from nd_utility.oop.design_pattern.structural.composite.component import Component
-from nd_utility.oop.design_pattern.structural.composite.leaf import Leaf
+from nd_utility.data.kind.group.group import Group
+from nd_utility.data.kind.group.kind.UniKind import UniKind as UniKindGroup
+from nd_utility.oop.design_pattern.structural.composition.component import Component
+from nd_utility.oop.design_pattern.structural.composition.leaf import Leaf
 
 
 class Composite(Component):
@@ -12,16 +14,14 @@ class Composite(Component):
     Composite node that can hold other Components.
     """
 
-    def __init__(self, leaf: Leaf, name: str):
+    def __init__(self):
         """
         This name is useful, it can be used as path parts
         Args:
-            leaf:
             name:
         """
-        Component.__init__(self, name)
-        self._leaf = leaf
-        self._children: List[Component] = []
+        Component.__init__(self)
+        self._children = Group()
 
     def _would_create_cycle(self, child: Component) -> bool:
         # Prevent adding an ancestor as a child
@@ -38,10 +38,10 @@ class Composite(Component):
         # Optional: forbid duplicates
         if child in self._children:
             return
-        self._children.append(child)
+        self._children.add_member(child)
 
     def remove_child(self, child: Component) -> None:
-        self._children.remove(child)
+        self._children.remove_member(child)
 
     def has_direct_child(self, child: Component) -> bool:
         for current_child in self._children:
@@ -52,7 +52,7 @@ class Composite(Component):
 
     def get_child_by_path_parts(self, path_parts: list[str]) -> Component:
         """
-        Traverse the composite hierarchy following the given path_parts.
+        Traverse the composition hierarchy following the given path_parts.
         Example:
             path_parts = ["A", "B", "C"]
             returns the component named C under A/B/C
@@ -62,7 +62,7 @@ class Composite(Component):
         current: Component = self
         for part in path_parts:
             found = None
-            for child in current.get_children():
+            for child in current.get_child_group_members():
                 if child.get_name() == part:
                     found = child
                     break
@@ -99,10 +99,10 @@ class Composite(Component):
         """Promote a direct child Leaf into a Composite with the same name, keeping its position."""
         # Ensure the argument is a direct child of self
         if leaf not in self._children:
-            raise ValueError("Given leaf is not a direct child of this composite.")
+            raise ValueError("Given leaf is not a direct child of this composition.")
         # Remove first to avoid transient inconsistent states
         self.remove_child(leaf)
-        composite = Composite(leaf.get_name())
+        composite = Composite()
         composite.add_child(leaf)
         self.add_child(composite)
         return composite
@@ -110,7 +110,7 @@ class Composite(Component):
     @override
     def get_tree(self, prefix: str = "", is_last: bool = True) -> str:
         lines = [prefix + ("└── " if is_last else "├── ") + self.get_name()]
-        children = list(self.get_children())
+        children = list(self.get_child_group_members())
         for i, child in enumerate(children):
             is_child_last = (i == len(children) - 1)
             new_prefix = prefix + ("    " if is_last else "│   ")
@@ -124,12 +124,15 @@ class Composite(Component):
         dot.node(self.get_name())
         if parent_name:
             dot.edge(parent_name, self.get_name())
-        for child in self.get_children():
+        for child in self.get_child_group_members():
             child.get_graphviz(dot, self.get_name())
         return dot
 
-    def get_children(self) -> Tuple[Component, ...]:
+    def get_child_group_members(self) -> Tuple[Component, ...]:
         return tuple(self._children)
+
+    def get_children(self)-> UniKindGroup[Leaf]:
+        return self._children
 
     def is_leaf(self) -> bool:
         return False
@@ -158,6 +161,3 @@ class Composite(Component):
             for ln in child.stringify().splitlines():
                 lines.append("  " + ln)
         return "\n".join(lines)
-
-    def get_leaf(self)->Leaf:
-        return self._leaf

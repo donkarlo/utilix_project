@@ -80,7 +80,7 @@ class Composite(Component):
         self._children: List[Component] = []
 
     """
-    A composite object can add or remove other components (both simple or
+    A composition object can add or remove other components (both simple or
     complex) to or from its child list.
     """
 
@@ -99,7 +99,7 @@ class Composite(Component):
         """
         The Composite executes its primary logic in a particular way. It
         traverses recursively through all its children, collecting and summing
-        their results. Since the composite's children pass these calls to their
+        their results. Since the composition's children pass these calls to their
         children and so forth, the whole object tree is traversed as a result.
         """
 
@@ -150,7 +150,7 @@ if __name__ == "__main__":
     tree.add(branch1)
     tree.add(branch2)
 
-    print("Client: Now I've got a composite tree:")
+    print("Client: Now I've got a composition tree:")
     client_code(tree)
     print("\n")
 

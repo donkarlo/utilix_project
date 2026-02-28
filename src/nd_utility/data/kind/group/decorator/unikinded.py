@@ -1,4 +1,4 @@
-from typing import Type, TypeVar, Generic, override
+from typing import Type, TypeVar, Generic, List, Any
 
 from nd_utility.data.kind.group.decorator.decorator import Decorator as GroupDecorator
 from nd_utility.data.kind.group.interface import Interface
@@ -6,7 +6,7 @@ from nd_utility.oop.inheritance.overriding.override_from import override_from
 
 T = TypeVar("T")
 
-class SingleTyped(GroupDecorator, Generic[T]):
+class Unikinded(GroupDecorator, Generic[T]):
     def __init__(self, inner: Interface, type_hint:Type[T], validate_type:bool)->None:
         super().__init__(inner)
         self._type_hint = type_hint
@@ -30,7 +30,8 @@ class SingleTyped(GroupDecorator, Generic[T]):
 
     def get_records(self, fileds:List[Any]):
         """
-        THis should work for decorators        Args:
+        THis should work for decorators
+         Args:
             fileds:
 
         Returns:

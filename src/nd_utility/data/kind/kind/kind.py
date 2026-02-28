@@ -1,4 +1,4 @@
-from nd_utility.oop.design_pattern.structural.composite.composite import Composite
+from nd_utility.oop.design_pattern.structural.composition.composite import Composite
 from typing import List
 
 class Kind:

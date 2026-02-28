@@ -1,30 +1,37 @@
-from typing import List, Any, Optional
+from typing import Any, Iterator, Optional, TypeVar, Union
+from collections.abc import Container, Iterable, Sized, Sequence
+
 from nd_utility.data.kind.group.interface import Interface
-from typing import Any, Iterator, List, Optional
-from collections.abc import Iterable, Container, Sized
+
+T = TypeVar("T")
 
 
-class Group(Interface, Iterable, Container, Sized):
-    def __init__(self, members: Optional[List[Any]]) -> None:
+class Group(Interface, Sequence, Iterable, Container, Sized):
+    """
+    If group = Group()
+    then you can use 'in' operator on group and also do group[index]
+    """
+
+    def __init__(self, members: Optional[list[Any]] = None) -> None:
         if members is None:
-            members = []
-        self.__init(members)
+            self._members: list[Any] = []
+        else:
+            self._members = list(members)
 
-    def __init(self, members:List[Any]) -> None:
-        self._members = members
-
-
-    def get_members(self) -> List[Any]:
+    def get_members(self) -> list[Any]:
         return self._members
 
-    def add_member(self, member:Any) -> None:
+    def add_member(self, member: Any) -> None:
         self._members.append(member)
 
-    def remove_member(self, member:Any) -> None:
+    def remove_member(self, member: Any) -> None:
         self._members.remove(member)
 
-    def reset_members(self, members:List) -> None:
-        self.__init(members)
+    def reset_members(self, members: Optional[list[Any]] = None) -> None:
+        if members is None:
+            self._members = []
+        else:
+            self._members = list(members)
 
     def __iter__(self) -> Iterator[Any]:
         return iter(self._members)
@@ -35,4 +42,5 @@ class Group(Interface, Iterable, Container, Sized):
     def __contains__(self, item: object) -> bool:
         return item in self._members
 
-
+    def __getitem__(self, index: Union[int, slice]) -> Any:
+        return self._members[index]
