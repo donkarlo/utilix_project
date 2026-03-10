@@ -1,22 +1,46 @@
-# in component.py
 from abc import ABC, abstractmethod
-from typing import Iterable, Tuple, Optional
+from typing import Iterable, Optional, Tuple
 
 
 class Component(ABC):
-    """Base class for Composite pattern."""
+    """
+    Base class for the Composite pattern.
+
+    Rendering policy:
+        - Prefer SVG shown in a Qt window (no file is written automatically).
+        - Provide a "Save As..." button in the Qt toolbar (user-triggered save only).
+        - If Qt is unavailable, fall back to matplotlib (PNG in-memory) which has a Save button.
+    """
 
     def __init__(self) -> None:
-        ...
+        self.__name: Optional[str] = None
+        self.__is_name_explicit: bool = False
 
     @abstractmethod
     def stringify(self) -> str:
-        ...
+        raise NotImplementedError
 
-    def set_name(self, name) -> None:
-        self._name = name
+    def set_name(self, name: str) -> None:
+        if not isinstance(name, str):
+            raise TypeError("name must be a str.")
+        if len(name.strip()) == 0:
+            raise ValueError("name must not be empty.")
+        self.__name = name
+        self.__is_name_explicit = True
 
-    # Leaf-like defaults
+    def has_explicit_name(self) -> bool:
+        return self.__is_name_explicit
+
+    def has_name(self) -> bool:
+        return self.__name is not None
+
+    def set_auto_name_if_missing(self, name: str) -> None:
+        if self.has_explicit_name():
+            return
+        if self.has_name():
+            return
+        self.__name = name
+
     def add_child(self, child: "Component") -> None:
         raise NotImplementedError
 
@@ -39,42 +63,209 @@ class Component(ABC):
         yield self
 
     def get_name(self) -> str:
-        if self._name is None:
-            self._name = self.__class__.__name__
-        return self._name
+        if self.__name is None:
+            return self.__class__.__name__
+        return self.__name
 
     def get_tree(self, prefix: str = "", is_last: bool = True) -> str:
-        """Default leaf drawing (ASCII)."""
-        return prefix + ("└── " if is_last else "├── ") + self.get_name()
+        branch = "└── "
+        if not is_last:
+            branch = "├── "
+        return prefix + branch + self.get_name()
 
-    def get_graphviz(self, dot=None, parent_name: str | None = None):
-        """Build a Graphviz graph in-memory only (no files)."""
+    def get_graphviz_node_identifier(self) -> str:
+        """
+        Unique node identifier for Graphviz.
+        Avoid ':' because Graphviz interprets it as a port separator.
+        """
+        return self.__class__.__name__ + "_" + str(id(self))
+
+    def get_graphviz_node_label(self) -> str:
+        """
+        Human readable label shown in the graph.
+        - Explicit name is shown as-is.
+        - Otherwise show only the class name (hide auto suffix like _1).
+        """
+        if self.has_explicit_name():
+            return self.get_name()
+        return self.__class__.__name__
+
+    def _create_default_graphviz_dot(self):
         from graphviz import Digraph
-        if dot is None:
-            # 'name' is in-memory identifier; does not force file creation.
-            dot = Digraph(comment=f"Tree ({self.get_name()})", name="in_memory_graph")
-            # Keep format unconstrained here; draw() decides the output format.
-        dot.node(self.get_name())
-        if parent_name:
-            dot.edge(parent_name, self.get_name())
+
+        dot = Digraph(comment="Composite Tree")
+        dot.engine = "dot"
+
+        dot.graph_attr.update({
+            "rankdir": "TB",
+            "nodesep": "0.10",
+            "ranksep": "0.18",
+            "concentrate": "true",
+            "splines": "spline",
+            "overlap": "false",
+            "pack": "true",
+            "newrank": "true",
+            "pad": "0.02",
+            "margin": "0.02",
+            "ratio": "compress"
+        })
+
+        dot.node_attr.update({
+            "shape": "ellipse",
+            "fontsize": "10",
+            "margin": "0.03,0.02"
+        })
+
+        dot.edge_attr.update({
+            "arrowsize": "0.6",
+            "penwidth": "0.7"
+        })
+
         return dot
 
-    def draw(self, fmt: str = "svg"):
-        """Show Graphviz graph in PyCharm SciView without creating files."""
+    def get_graphviz(self, dot=None, parent_identifier: Optional[str] = None):
+        if dot is None:
+            dot = self._create_default_graphviz_dot()
 
+        node_identifier = self.get_graphviz_node_identifier()
+        dot.node(node_identifier, label=self.get_graphviz_node_label())
+
+        if parent_identifier is not None:
+            dot.edge(parent_identifier, node_identifier)
+
+        return dot
+
+    def _show_svg_in_qt_pyside6(self, svg_bytes: bytes, window_title: str) -> bool:
+        try:
+            from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QToolBar
+            from PySide6.QtGui import QAction
+            from PySide6.QtSvgWidgets import QSvgWidget
+            from PySide6.QtCore import QByteArray
+        except Exception:
+            return False
+
+        application = QApplication.instance()
+        created_application = False
+        if application is None:
+            application = QApplication([])
+            created_application = True
+
+        main_window = QMainWindow()
+        main_window.setWindowTitle(window_title)
+
+        svg_widget = QSvgWidget()
+        svg_widget.load(QByteArray(svg_bytes))
+        main_window.setCentralWidget(svg_widget)
+
+        toolbar = QToolBar("Tools")
+        main_window.addToolBar(toolbar)
+
+        def save_as_action_triggered() -> None:
+            file_path, _ = QFileDialog.getSaveFileName(main_window, "Save SVG", "", "SVG Files (*.svg)")
+            if file_path is None:
+                return
+            if len(str(file_path)) == 0:
+                return
+            if not str(file_path).lower().endswith(".svg"):
+                file_path = str(file_path) + ".svg"
+            with open(file_path, "wb") as file:
+                file.write(svg_bytes)
+
+        save_action = QAction("Save As…", main_window)
+        save_action.triggered.connect(save_as_action_triggered)
+        toolbar.addAction(save_action)
+
+        main_window.resize(1400, 700)
+        main_window.show()
+
+        if created_application:
+            application.exec()
+
+        return True
+
+    def _show_svg_in_qt_pyqt5(self, svg_bytes: bytes, window_title: str) -> bool:
+        try:
+            from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QToolBar
+            from PyQt5.QtWidgets import QAction
+            from PyQt5.QtSvg import QSvgWidget
+            from PyQt5.QtCore import QByteArray
+        except Exception:
+            return False
+
+        application = QApplication.instance()
+        created_application = False
+        if application is None:
+            application = QApplication([])
+            created_application = True
+
+        main_window = QMainWindow()
+        main_window.setWindowTitle(window_title)
+
+        svg_widget = QSvgWidget()
+        svg_widget.load(QByteArray(svg_bytes))
+        main_window.setCentralWidget(svg_widget)
+
+        toolbar = QToolBar("Tools")
+        main_window.addToolBar(toolbar)
+
+        def save_as_action_triggered() -> None:
+            file_path, _ = QFileDialog.getSaveFileName(main_window, "Save SVG", "", "SVG Files (*.svg)")
+            if file_path is None:
+                return
+            if len(str(file_path)) == 0:
+                return
+            if not str(file_path).lower().endswith(".svg"):
+                file_path = str(file_path) + ".svg"
+            with open(file_path, "wb") as file:
+                file.write(svg_bytes)
+
+        save_action = QAction("Save As…", main_window)
+        save_action.triggered.connect(save_as_action_triggered)
+        toolbar.addAction(save_action)
+
+        main_window.resize(1400, 700)
+        main_window.show()
+
+        if created_application:
+            application.exec()
+
+        return True
+
+    def _show_png_in_matplotlib(self) -> None:
         import io
         import matplotlib.pyplot as plt
 
         dot = self.get_graphviz()
-        png_bytes = dot.pipe(format="png")  # in-memory render, no files
+        png_bytes = dot.pipe(format="png")
+        image = plt.imread(io.BytesIO(png_bytes), format="png")
 
-        # Display in PyCharm's SciView
-        img = plt.imread(io.BytesIO(png_bytes), format="png")
-        plt.figure(figsize=(8, 8))
-        plt.imshow(img)
+        height_pixels = image.shape[0]
+        width_pixels = image.shape[1]
+        aspect_ratio = width_pixels / float(height_pixels)
+
+        figure_height = 4.0
+        figure_width = figure_height * aspect_ratio
+
+        plt.figure(figsize=(figure_width, figure_height), dpi=300)
+        plt.imshow(image, interpolation="none")
         plt.axis("off")
-        plt.tight_layout()
+        plt.tight_layout(pad=0.0)
         plt.show()
+
+    def draw(self) -> None:
+        dot = self.get_graphviz()
+        svg_bytes = dot.pipe(format="svg")
+        window_title = "nd_graph"
+
+        shown = self._show_svg_in_qt_pyside6(svg_bytes=svg_bytes, window_title=window_title)
+        if shown:
+            return
+
+        shown = self._show_svg_in_qt_pyqt5(svg_bytes=svg_bytes, window_title=window_title)
+        if shown:
+            return
+
+        self._show_png_in_matplotlib()
 
     def draw_tree(self) -> None:
         print(self.get_tree())

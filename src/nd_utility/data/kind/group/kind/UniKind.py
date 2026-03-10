@@ -40,11 +40,11 @@ class UniKind(Group, Generic[T]):
     def __getitem__(self, index: Union[int, slice]) -> T:
         return self._members[index]  # type: ignore[return-value]
 
-    def _ensure_member_type(self, member: Any) -> None:
+    def _ensure_member_type(self, member: T) -> None:
         if not isinstance(member, self._member_type):
             raise TypeError(
                 f"UniKind expects members of type {self._member_type.__name__}, got {type(member).__name__}")
 
-    def _ensure_members_type(self, members: list[Any]) -> None:
+    def _ensure_members_type(self, members: list[T]) -> None:
         for member in members:
             self._ensure_member_type(member)

@@ -6,7 +6,7 @@ from nd_utility.data.kind.group.interface import Interface
 T = TypeVar("T")
 
 
-class Group(Interface, Sequence, Iterable, Container, Sized):
+class Group(Interface, Sequence):
     """
     If group = Group()
     then you can use 'in' operator on group and also do group[index]
@@ -23,6 +23,10 @@ class Group(Interface, Sequence, Iterable, Container, Sized):
 
     def add_member(self, member: Any) -> None:
         self._members.append(member)
+
+    def add_members(self, members: list[Any]) -> None:
+        for member in members:
+            self.add_member(member)
 
     def remove_member(self, member: Any) -> None:
         self._members.remove(member)
