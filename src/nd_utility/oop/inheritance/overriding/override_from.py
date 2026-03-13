@@ -15,7 +15,7 @@ def _normalized_params_without_names(sig: inspect.Signature) -> list[tuple]:
     """
     Normalize parameters for comparison in a way that ignores the parameter names.
     Keeps:
-        - kind (positional, keyword-only, etc.)
+        - kinds (positional, keyword-only, etc.)
         - annotation
         - default value
     Ignores:
@@ -95,7 +95,7 @@ class _OverrideDescriptor:
 
 
 def override_from(base: Type, check_signature: bool = True, check_return: bool = True):
-    """Method decorator: perform override checks against `base` at class creation time."""
+    """Method decoration: perform override checks against `base` at class creation time."""
 
     def _decorate(func: Callable):
         return _OverrideDescriptor(func, base, check_signature, check_return)

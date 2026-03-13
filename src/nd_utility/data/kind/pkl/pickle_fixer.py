@@ -37,27 +37,27 @@ if __name__ == "__main__":
 
     # Prefix remaps (more specific first)
     fixer.add_prefix_remap("robotix.mind.memory.trace", "robotix.trace")
-    fixer.add_prefix_remap("robotix.mind.memory", "robotix.mind.cognition.process.kind.memory")
+    fixer.add_prefix_remap("robotix.mind.memory", "robotix.mind.cognition.process.kinds.memory")
 
     # Qualified class remap(s): cover both possible module spellings that may appear
     # 1) After prefix remap (what you were trying)
     fixer.add_qualified_class_remap(
-        old_module="robotix.trace.kind.gaussianed_quaternion_kinematic",
+        old_module="robotix.trace.kinds.gaussianed_quaternion_kinematic",
         class_name="GaussianedQuaternionKinematic",
-        new_module="robotix.trace.kind.gaussianed_quaternion_kinematic.gaussianed_quaternion_kinematic",
+        new_module="robotix.trace.kinds.gaussianed_quaternion_kinematic.gaussianed_quaternion_kinematic",
     )
 
     # # 2) If the pickle actually stores the pre-remap module path
     # fixer.add_qualified_class_remap(
-    #     old_module="robotix.mind.memory.trace.kind.lidar_scan_ranges",
+    #     old_module="robotix.mind.memory.trace.kinds.lidar_scan_ranges",
     #     class_name="LidarScanRanges",
-    #     new_module="robotix.trace.kind.lidar_scan_ranges.lidar_scan_ranges",
+    #     new_module="robotix.trace.kinds.lidar_scan_ranges.lidar_scan_ranges",
     # )
     #
     # # Optional: keep prefix too (harmless)
     # fixer.add_prefix_remap(
-    #     "robotix.trace.kind.lidar_scan_ranges",
-    #     "robotix.trace.kind.lidar_scan_ranges.lidar_scan_ranges",
+    #     "robotix.trace.kinds.lidar_scan_ranges",
+    #     "robotix.trace.kinds.lidar_scan_ranges.lidar_scan_ranges",
     # )
 
     fixer.run()

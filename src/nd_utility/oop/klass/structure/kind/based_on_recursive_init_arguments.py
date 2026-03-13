@@ -11,7 +11,7 @@ class BasedOnRecursiveInitArguments(Structure):
     - Downward edges from the given class based on:
         * __init__ type hints (parameter types).
         * Protected attributes of the root instance (if an instance is provided),
-          scanned recursively to discover nested classes (e.g. inner, formatted_data, etc.).
+          scanned recursively to discover nested classes (e.g. inner_composite, formatted_data, etc.).
     """
 
     def __init__(self, target: Any) -> None:

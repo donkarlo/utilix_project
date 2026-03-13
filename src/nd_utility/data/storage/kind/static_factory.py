@@ -22,7 +22,7 @@ _REGISTRY: dict[StaticFactory, StorageBuilder] = {}
 
 
 def register_factory(kind: StaticFactory) -> Callable[[StorageBuilder], StorageBuilder]:
-    """Decorator to register a builder function for a specific kind."""
+    """Decorator to register a builder function for a specific kinds."""
     def _wrap(fn: StorageBuilder) -> StorageBuilder:
         _REGISTRY[kind] = fn
         return fn
@@ -63,7 +63,7 @@ def _build_db(conn: str, **kwargs: Any) -> Storage:
 # Public API
 def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -> Storage:
     """
-    Flexible factory that dispatches to kind-specific builders.
+    Flexible factory that dispatches to kinds-specific builders.
 
     Examples:
         f = get_storage(StaticFactory.FILE, "/tmp/a.bin")
@@ -76,11 +76,11 @@ def get_storage(kind: int | str | StaticFactory, /, *args: Any, **kwargs: Any) -
     """
     member = _coerce(kind)
     if member is None:
-        raise ValueError(f"Unsupported kind: {kind!r}")
+        raise ValueError(f"Unsupported kinds: {kind!r}")
 
     builder = _REGISTRY.get(member)
     if builder is None:
-        raise RuntimeError(f"No builder registered for kind: {member.name}")
+        raise RuntimeError(f"No builder registered for kinds: {member.name}")
 
     try:
         return builder(*args, **kwargs)

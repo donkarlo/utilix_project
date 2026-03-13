@@ -8,7 +8,7 @@ from nd_utility.oop.inheritance.overriding.override_from import override_from
 
 class Sliced(MultiValued, Interface):
     """
-    A kind of os_file full of  values such as a sliced_value doc yaml file.
+    A kinds of os_file full of  values such as a sliced_value doc yaml file.
     Each raw_value can have a different format
     """
 

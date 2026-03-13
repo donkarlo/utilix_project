@@ -7,7 +7,7 @@ class UniKinded(Decorator):
     """
     - Uni formated means all documents in the same file or storage have the same format. for example  a a file full of many yaml documents
     - This meaningful only for sliced_value units
-    - To check each raw_value to have the same group kind as other units.
+    - To check each raw_value to have the same group kinds as other units.
     """
     def __init__(self, inner:MultiValued, expected_kind:type, validate_kind:bool):
         """
@@ -30,14 +30,14 @@ class UniKinded(Decorator):
         if self._validate_kind == True:
             for counter, value in enumerate(self.get_ram()):
                 if not isinstance(value, self._expected_kind):
-                    raise ValueError(f"value #{counter} is not valid kind for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")
-        #it actually runs the inner save
+                    raise ValueError(f"value #{counter} is not valid kinds for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")
+        #it actually runs the inner_composite save
         Decorator.save(self)
 
     def add_to_ram(self, value:Any)->None:
         if self._validate_kind == True:
             if not isinstance(value, self._expected_kind):
                 raise ValueError(
-                    f"value {str(value)} is not valid kind for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")
+                    f"value {str(value)} is not valid kinds for the specified format. We need {self._expected_kind.__name__} but {type(value)} is given")
         self._inner.add_to_ram(value)
 

@@ -21,12 +21,12 @@ class Decorator(ABC):
             except AttributeError:
                 target = getattr(target, "_inner", None)
         raise AttributeError(
-            f"{type(self).__name__} and its inner chain have no attribute {name!r}"
+            f"{type(self).__name__} and its inner_composite chain have no attribute {name!r}"
         )
 
     def get_decorator_stack(self, inner_to_outer: bool) -> List["Decorator"]:
         """
-        from the most inner to the most outer
+        from the most inner_composite to the most outer
         Returns:
 
         """
@@ -47,7 +47,7 @@ class Decorator(ABC):
         elif isinstance(decorator, type) and issubclass(decorator, Decorator):
             target_type = decorator
         else:
-            raise TypeError("decorator must be a Decorator instance or subclass")
+            raise TypeError("decoration must be a Decorator instance or subclass")
 
         seen = set()
         current: Any = self
@@ -74,15 +74,15 @@ class Decorator(ABC):
 
     @staticmethod
     def has_decorator(obj: Any, decorator: Any) -> bool:
-        # Determine the bottom decorator kind
+        # Determine the bottom decoration kinds
         if hasattr(decorator, "_inner") and issubclass(decorator.__class__, Decorator):
             target_type: Type[Decorator] = decorator.__class__
         elif isinstance(decorator, type) and issubclass(decorator, Decorator):
             target_type = decorator
         else:
-            raise TypeError("decorator must be a Decorator instance or subclass")
+            raise TypeError("decoration must be a Decorator instance or subclass")
 
-        # Use the custom __instancecheck__ to walk the decorator chain
+        # Use the custom __instancecheck__ to walk the decoration chain
         return isinstance(obj, target_type)
 
     def get_decorator_pattern_name(self, base_token: str) -> str:
@@ -90,7 +90,7 @@ class Decorator(ABC):
             raise TypeError("base_token must be a string")
 
         stack = self.get_decorator_stack()
-        # stack already inner → outer because of reverse()
+        # stack already inner_composite → outer because of reverse()
 
         tokens: List[str] = []
         for decorator in stack:

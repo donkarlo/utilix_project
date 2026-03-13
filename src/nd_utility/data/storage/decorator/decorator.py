@@ -6,12 +6,12 @@ from nd_utility.oop.design_pattern.structural.decorator.decorator import Decorat
 
 class Decorator(BaseDecorator, StorageInterface):
     """
-    Base storage decorator that forwards to an inner StorageInterface.
+    Base storage decoration that forwards to an inner_composite StorageInterface.
     """
 
     def __init__(self, inner: StorageInterface):
         """
-        .__inner is either the most basic object, in this case group.storage.basic.Yaml or a decorator
+        .__inner is either the most basic object, in this case group.storage.basic.Yaml or a decoration
         Args:
             inner:
         """

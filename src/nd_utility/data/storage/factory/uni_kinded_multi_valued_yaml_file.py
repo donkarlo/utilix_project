@@ -42,7 +42,7 @@ class UniKindedMultiValuedYamlFile(Interface):
     """
 
     def __init__(self, str_path, slc:slice ,create_if_not_exist:bool):
-        # Keep your existing UniFormat/SlicedValues decorator and the '---' separator
+        # Keep your existing UniFormat/SlicedValues decoration and the '---' separator
         yaml_data_kind = YamlDataKind()
         self._slice = slc
         file_storage = FileStorage(OsFile.init_from_path(FilePath(str_path)), create_if_not_exist)

@@ -6,8 +6,8 @@ from nd_utility.data.storage.interface import Interface as StorageInterface
 
 class Storage(StorageInterface, ABC):
     """
-    This is the conceret Object of the Decorator pattern. Here it is not concerete because between what is in kind
-    - This is a single object if you want multi raw_value storage then multi_valued decorator
+    This is the conceret Object of the Decorator pattern. Here it is not concerete because between what is in kinds
+    - This is a single object if you want multi raw_value storage then multi_valued decoration
     """
     def __init__(self):
         # from os_file to python variable

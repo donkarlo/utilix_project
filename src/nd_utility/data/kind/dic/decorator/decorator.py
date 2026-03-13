@@ -12,7 +12,7 @@ class Decorator(DicInterface):
 
     def __getattr__(self, name: str) -> Any:
         """
-        Walk the inner chain to find missing attributes/methods.
+        Walk the inner_composite chain to find missing attributes/methods.
         This will pass all the arguments
         """
         target: Any = self._inner
@@ -23,5 +23,5 @@ class Decorator(DicInterface):
             if target is None:
                 break
         raise AttributeError(
-            f"{type(self).__name__} and its inner chain have no attribute {name!r}"
+            f"{type(self).__name__} and its inner_composite chain have no attribute {name!r}"
         )

@@ -15,7 +15,7 @@ from nd_utility.oop.inheritance.overriding.override_from import override_from
 
 class Cashed(MultiValued, Decorator, MultiValuedInterface):
     """
-    A kind of os_file full of  values such as a sliced_value doc yaml file.
+    A kinds of os_file full of  values such as a sliced_value doc yaml file.
     Each raw_value can have a different format
     """
 
@@ -73,7 +73,7 @@ class Cashed(MultiValued, Decorator, MultiValuedInterface):
             self._inner.set_ram(self._separator.join(self._ram_values))
         else:
             self._inner.set_ram("".join(self._ram_values))
-        #call save from decorator
+        #call save from decoration
         super().save()
 
     @override
